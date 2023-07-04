@@ -28,8 +28,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         _binding = FragmentLoginBinding.bind(view)
         _auth = Firebase.auth
 
+        firebaseUser = auth.currentUser
+
         if (firebaseUser != null) {
-            Toast.makeText(activity, "Firebase User isn't null!", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.nav_from_login_to_container)
         }
 
         setUp()
