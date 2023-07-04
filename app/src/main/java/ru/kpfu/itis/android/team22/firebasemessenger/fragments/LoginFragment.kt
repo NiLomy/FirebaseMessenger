@@ -1,19 +1,16 @@
-package ru.kpfu.itis.android.team22.firebasemessenger
+package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentLoginBinding
-import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpBinding
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -69,6 +66,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 if (task.isSuccessful) {
                     clearInputFields()
                     showToast(getString(R.string.login_success))
+                    findNavController().navigate(R.id.nav_from_login_to_users)
                 } else {
                     showToast(getString(R.string.invalid_credentials))
                 }
@@ -82,5 +80,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun showToast(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

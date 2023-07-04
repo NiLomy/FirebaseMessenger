@@ -7,21 +7,41 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="ru.kpfu.itis.android.team22.firebasemessenger.SignUpFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SignUpFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/nav_from_signup_to_login"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/nav_from_signup_to_users"
+            app:destination="@id/usersFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/loginFragment"
-        android:name="ru.kpfu.itis.android.team22.firebasemessenger.LoginFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/nav_from_login_to_signup"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/nav_from_login_to_users"
+            app:destination="@id/usersFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.UsersFragment"
+        android:label="UsersFragment"
+        tools:layout="@layout/fragment_users">
+        <action
+            android:id="@+id/nav_from_users_to_signup"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/nav_from_users_to_login"
+            app:destination="@id/loginFragment" />
     </fragment>
 
 </navigation>

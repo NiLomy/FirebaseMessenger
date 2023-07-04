@@ -1,10 +1,8 @@
-package ru.kpfu.itis.android.team22.firebasemessenger
+package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpBinding
 
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
@@ -110,7 +109,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 if (task.isSuccessful) {
                     clearFields()
                     showToast(getString(R.string.registration_success))
-                    // TODO: написать логику перехода на экран пользователя
+                    findNavController().navigate(R.id.nav_from_signup_to_users)
                 }
             }
     }
