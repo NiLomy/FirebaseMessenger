@@ -3,7 +3,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -28,8 +27,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         _binding = FragmentLoginBinding.bind(view)
         _auth = Firebase.auth
 
+        firebaseUser = auth.currentUser
+
         if (firebaseUser != null) {
-            Toast.makeText(activity, "Firebase User isn't null!", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.nav_from_login_to_container)
         }
 
         setUp()

@@ -27,4 +27,5 @@
     <string name="registration_success">Registration success</string>
     <string name="messages">Messsages</string>
     <string name="profile">Profile</string>
+    <string name="log_out">Log out</string>
 </resources>

@@ -21,11 +21,19 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private var _auth: FirebaseAuth? = null
     private val auth get() = _auth!!
     private var context : Context? = null
+    private var firebaseUser: FirebaseUser? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSignUpBinding.bind(view)
         _auth = Firebase.auth
         context = requireContext().applicationContext
+
+        firebaseUser = auth.currentUser
+
+        if (firebaseUser != null) {
+            findNavController().navigate(R.id.nav_from_signup_to_container)
+        }
 
         setUp()
     }
