@@ -3,9 +3,9 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -49,27 +49,27 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private fun onSignUpClicked(userName: String, email: String, password: String, confirmPassword: String) {
         if (userName.isEmpty()) {
-            showToast(getString(R.string.user_name_must_be_non_empty))
+            showSnackbar(getString(R.string.user_name_must_be_non_empty))
             return
         }
         if (email.isEmpty()) {
-            showToast(getString(R.string.email_must_be_non_empty))
+            showSnackbar(getString(R.string.email_must_be_non_empty))
             return
         }
         if (password.isEmpty()) {
-            showToast(getString(R.string.password_must_be_non_empty))
+            showSnackbar(getString(R.string.password_must_be_non_empty))
             return
         }
         if (password.length < 6) {
-            showToast(getString(R.string.password_length_is_to_short))
+            showSnackbar(getString(R.string.password_length_is_to_short))
             return
         }
         if (confirmPassword.isEmpty()) {
-            showToast(getString(R.string.confirm_password))
+            showSnackbar(getString(R.string.confirm_password))
             return
         }
         if (password != confirmPassword) {
-            showToast(getString(R.string.passwords_dont_match))
+            showSnackbar(getString(R.string.passwords_dont_match))
             return
         }
 
@@ -96,8 +96,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
-                        showToast(getString(R.string.check_email))
-                        binding.etEmail.error = ""
+                        val errorMessage: String? = task.exception?.message
+                        if (errorMessage != null) {
+                            showSnackbar(errorMessage)
+                            binding.etEmail.error = errorMessage
+                        }
                     }
                 }
         }
@@ -107,22 +110,14 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    clearFields()
-                    showToast(getString(R.string.registration_success))
-                    findNavController().navigate(R.id.nav_from_signup_to_users)
+                    showSnackbar(getString(R.string.registration_success))
+                    findNavController().navigate(R.id.nav_from_signup_to_container)
                 }
             }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun clearFields() {
-        binding.etName.setText("")
-        binding.etEmail.setText("")
-        binding.etPassword.setText("")
-        binding.etConfirmPassword.setText("")
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
