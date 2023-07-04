@@ -33,6 +33,10 @@
         android:id="@+id/containerFragment"
         android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.ContainerFragment"
         android:label="ContainerFragment"
-        tools:layout="@layout/fragment_container"/>
+        tools:layout="@layout/fragment_container">
+        <action
+            android:id="@+id/nav_from_container_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
 </navigation>
