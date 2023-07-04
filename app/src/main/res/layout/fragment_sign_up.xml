@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".SignUpFragment">
+    tools:context=".fragments.SignUpFragment">
 
     <TextView
         android:id="@+id/tv_sign_up"
