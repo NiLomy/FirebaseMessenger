@@ -7,20 +7,28 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".SignUpFragment">
+    
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@drawable/background_color"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/tv_sign_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="12dp"
-        android:fontFamily="@font/gilroy_bold"
+        android:fontFamily="@font/archivo_regular"
         android:text="@string/label_sign_up"
-        android:textSize="20sp"
+        android:textSize="35sp"
+        android:gravity="center"
+        android:paddingBottom="20dp"
         android:textStyle="bold"
+        android:textColor="@color/colorWhite"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/iv_background"/>
 
 
     <EditText
@@ -28,14 +36,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/colorTextBackground"
         android:fontFamily="@font/gilroy_light"
         android:hint="@string/enter_name"
         android:inputType="text"
         android:padding="12dp"
         android:textColor="@color/colorText"
+        android:drawableStart="@drawable/custom_name"
+        android:drawablePadding="12dp"
+        android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_sign_up" />
@@ -47,12 +57,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/colorTextBackground"
         android:fontFamily="@font/gilroy_light"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
         android:padding="12dp"
         android:textColor="@color/colorText"
+        android:drawableStart="@drawable/custom_mail"
+        android:drawablePadding="12dp"
+        android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_name" />
@@ -64,12 +76,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/colorTextBackground"
         android:fontFamily="@font/gilroy_light"
         android:hint="@string/enter_password"
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="@color/colorText"
+        android:drawableStart="@drawable/custom_lock"
+        android:drawablePadding="12dp"
+        android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_email" />
@@ -81,12 +95,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/colorTextBackground"
         android:fontFamily="@font/gilroy_light"
         android:hint="@string/enter_confirm_password"
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="@color/colorText"
+        android:drawableStart="@drawable/custom_lock"
+        android:drawablePadding="12dp"
+        android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_password" />
@@ -95,10 +111,12 @@
         android:id="@+id/btn_sign_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@color/colorPrimary"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/custom_button"
         android:text="@string/btn_sign_up"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_confirm_password" />
@@ -107,14 +125,15 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/colorDarkGray"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/custom_button_2"
         android:text="@string/btn_login"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorGreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_sign_up" />
+        app:layout_constraintTop_toBottomOf="@id/btn_sign_up"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
