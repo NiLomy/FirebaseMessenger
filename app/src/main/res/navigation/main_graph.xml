@@ -10,6 +10,18 @@
         android:name="ru.kpfu.itis.android.team22.firebasemessenger.SignUpFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/nav_from_signup_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/nav_from_login_to_signup"
+            app:destination="@id/signUpFragment" />
     </fragment>
 
 </navigation>
