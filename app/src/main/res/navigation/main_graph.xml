@@ -7,9 +7,32 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="ru.kpfu.itis.android.team22.firebasemessenger.SignUpFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SignUpFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/nav_from_signup_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/nav_from_signup_to_container"
+            app:destination="@id/containerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/nav_from_login_to_signup"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/nav_from_login_to_container"
+            app:destination="@id/containerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/containerFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.ContainerFragment"
+        android:label="ContainerFragment"
+        tools:layout="@layout/fragment_container"/>
 
 </navigation>
