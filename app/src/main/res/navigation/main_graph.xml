@@ -13,6 +13,9 @@
         <action
             android:id="@+id/nav_from_signup_to_login"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -23,5 +26,9 @@
             android:id="@+id/nav_from_login_to_signup"
             app:destination="@id/signUpFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.SettingsFragment"
+        android:label="SettingsFragment" />
 
 </navigation>

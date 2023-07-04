@@ -39,12 +39,18 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         val etConfirmPassword = binding.etConfirmPassword
         val btnLogin = binding.btnLogin
 
+        val button = binding.buttonnn
+
         btnSignUp.setOnClickListener {
             onSignUpClicked(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etConfirmPassword.text.toString())
         }
 
         btnLogin.setOnClickListener {
             findNavController().navigate(R.id.nav_from_signup_to_login)
+        }
+
+        button.setOnClickListener {
+            findNavController().navigate(R.id.action_signUpFragment_to_settingsFragment)
         }
     }
 
