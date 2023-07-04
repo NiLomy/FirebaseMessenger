@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -17,11 +16,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.UserAdapter
-import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentUsersBinding
+import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentMessagesBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
-class UsersFragment: Fragment(R.layout.fragment_users) {
-    private var _binding: FragmentUsersBinding? = null
+class MessagesFragment: Fragment(R.layout.fragment_messages) {
+    private var _binding: FragmentMessagesBinding? = null
     private val binding get() = _binding!!
     private var adapter: UserAdapter? = null
     private var context : Context? = null
@@ -29,12 +28,17 @@ class UsersFragment: Fragment(R.layout.fragment_users) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentUsersBinding.bind(view)
+        _binding = FragmentMessagesBinding.bind(view)
         context = requireContext().applicationContext
         getUsersList()
     }
 
     private fun initAdapter() {
+        if (!isAdded || isDetached || activity == null) {
+            // The fragment is not yet linked to the activity
+            return
+        }
+
         adapter = UserAdapter(
             list = userList,
             glide = Glide.with(this),

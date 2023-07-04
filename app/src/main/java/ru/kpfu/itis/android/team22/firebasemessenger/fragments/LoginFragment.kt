@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -47,7 +48,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             if (validateEmailAndPassword(email, password)) {
                 signInWithEmailAndPassword(email, password)
             } else {
-                showToast(getString(R.string.something_went_wrong))
+                showSnackbar(getString(R.string.something_went_wrong))
             }
         }
 
@@ -65,10 +66,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     clearInputFields()
-                    showToast(getString(R.string.login_success))
-                    findNavController().navigate(R.id.nav_from_login_to_users)
+                    showSnackbar(getString(R.string.login_success))
+                    findNavController().navigate(R.id.nav_from_login_to_container)
                 } else {
-                    showToast(getString(R.string.invalid_credentials))
+                    showSnackbar(getString(R.string.invalid_credentials))
                 }
             }
     }
@@ -78,8 +79,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.etPassword.setText("")
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
