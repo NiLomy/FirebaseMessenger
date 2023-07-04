@@ -2,8 +2,11 @@ package ru.kpfu.itis.android.team22.firebasemessenger
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -12,22 +15,39 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpB
 
 class SignUpFragment: Fragment(R.layout.fragment_sign_up) {
     private var binding: FragmentSignUpBinding? = null
+    private var _auth: FirebaseAuth? = null
+    private var etName: EditText? = null
+    private var etEmail: EditText? = null
+    private var etPassword: EditText? = null
+    private var etConfirmPassword: EditText? = null
+    private val auth get() = _auth!!
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSignUpBinding.bind(view)
 
         val context = requireContext().applicationContext
-        val auth = Firebase.auth
+        _auth = Firebase.auth
 
         val btnSignUp = binding?.btnSignUp
-        val etName = binding?.etName
-        val etEmail = binding?.etEmail
-        val etPassword = binding?.etPassword
-        val etConfirmPassword = binding?.etConfirmPassword
         val btnLogin = binding?.btnLogin
 
 
-        btnSignUp?.setOnClickListener {
+        if (btnSignUp != null) {
+            userSignUp(btnSignUp)
+        }
+
+        // TODO: переписать на переход на фрагмент логина
+        btnLogin?.setOnClickListener {
+            Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun userSignUp(btnSignUp: Button) {
+        etName = binding?.etName
+        etEmail = binding?.etEmail
+        etPassword = binding?.etPassword
+        etConfirmPassword = binding?.etConfirmPassword
+        btnSignUp.setOnClickListener {
             val userName = etName?.text.toString()
             val email = etEmail?.text.toString()
             val password = etPassword?.text.toString()
@@ -67,44 +87,46 @@ class SignUpFragment: Fragment(R.layout.fragment_sign_up) {
             }
 
             // TODO: если пароль слабый, то без объявления ошибки не регает пользователя - починить
-            // TODO: как-то уведомлять если пользователь с такой почтой уже есть
-            // Initial task failed for action RecaptchaAction(action=signUpPassword)with exception - The given password is invalid
 
-            activity?.let { fragmentActivity ->
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(fragmentActivity) {
-                        if (it.isSuccessful) {
-                            val user: FirebaseUser? = auth.currentUser
-                            val userId: String = user!!.uid
+            registerUser(userName, email, password)
 
-                            val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+        }
+    }
 
-                            val hashMap: HashMap<String, String> = HashMap()
-                            hashMap.put("userId", userId)
-                            hashMap.put("userName", userName)
-                            hashMap.put("profileImage", "")
-                            Toast.makeText(context, "aaa!", Toast.LENGTH_SHORT).show()
+    private fun registerUser(userName: String, email: String, password: String) {
+        activity?.let { fragmentActivity ->
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(fragmentActivity) {
+                    if (it.isSuccessful) {
+                        val user: FirebaseUser? = auth.currentUser
+                        val userId: String = user!!.uid
 
-                            databaseReference.setValue(hashMap).addOnCompleteListener(fragmentActivity) {
+                        val databaseReference =
+                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
+
+                        val hashMap: HashMap<String, String> = HashMap()
+                        hashMap.put("userId", userId)
+                        hashMap.put("userName", userName)
+                        hashMap.put("profileImage", "")
+                        Toast.makeText(context, "aaa!", Toast.LENGTH_SHORT).show()
+
+                        databaseReference.setValue(hashMap)
+                            .addOnCompleteListener(fragmentActivity) {
                                 if (it.isSuccessful) {
-                                    etName?.setText("")
-                                    etEmail?.setText("")
-                                    etPassword?.setText("")
-                                    etConfirmPassword?.setText("")
+                                etName?.setText("")
+                                etEmail?.setText("")
+                                etPassword?.setText("")
+                                etConfirmPassword?.setText("")
 
                                     // TODO: написать логику перехода на экран пользователя
                                     Toast.makeText(context, "OK!", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                        }
+                    } else {
+                        Toast.makeText(context, "This account is already exists", Toast.LENGTH_SHORT).show()
+                        etEmail?.error = "This email is already exists"
                     }
-            }
-
-        }
-
-        // TODO: переписать на переход на фрагмент логина
-        btnLogin?.setOnClickListener {
-            Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
