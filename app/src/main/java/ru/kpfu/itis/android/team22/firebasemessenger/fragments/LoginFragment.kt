@@ -65,7 +65,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    clearInputFields()
                     showSnackbar(getString(R.string.login_success))
                     findNavController().navigate(R.id.nav_from_login_to_container)
                 } else {
@@ -74,10 +73,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
     }
 
-    private fun clearInputFields() {
-        binding.etEmail.setText("")
-        binding.etPassword.setText("")
-    }
 
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()

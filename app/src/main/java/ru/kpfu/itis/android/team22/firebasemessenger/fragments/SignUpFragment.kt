@@ -3,7 +3,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -97,8 +96,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
-                        showSnackbar(getString(R.string.check_email))
-                        binding.etEmail.error = ""
+                        val errorMessage: String? = task.exception?.message
+                        if (errorMessage != null) {
+                            showSnackbar(errorMessage)
+                            binding.etEmail.error = errorMessage
+                        }
                     }
                 }
         }
@@ -108,7 +110,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    clearFields()
                     showSnackbar(getString(R.string.registration_success))
                     findNavController().navigate(R.id.nav_from_signup_to_container)
                 }
@@ -117,13 +118,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun clearFields() {
-        binding.etName.setText("")
-        binding.etEmail.setText("")
-        binding.etPassword.setText("")
-        binding.etConfirmPassword.setText("")
     }
 
     override fun onDestroyView() {
