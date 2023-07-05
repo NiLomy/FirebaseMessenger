@@ -3,6 +3,11 @@
     <style name="Base.Theme.FirebaseMessenger" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorOnPrimary">@color/colorWhite</item>
+        
+        <item name="android:statusBarColor" tools:targetIpi="l">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.FirebaseMessenger" parent="Base.Theme.FirebaseMessenger" />
