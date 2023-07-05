@@ -17,10 +17,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import ru.kpfu.itis.android.team22.firebasemessenger.R
-import ru.kpfu.itis.android.team22.firebasemessenger.adapters.ChatAdapter
+import ru.kpfu.itis.android.team22.firebasemessenger.adapters.MessageAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentChatBinding
-import ru.kpfu.itis.android.team22.firebasemessenger.entities.Chat
+import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import java.time.LocalDateTime
 
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
@@ -48,8 +49,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var _userID: String? = null
     private val userID get() = _userID!!
 
-    private var chatList = ArrayList<Chat>()
-    private var adapter: ChatAdapter? = null
+    private var mMessageList = ArrayList<Message>()
+    private var adapter: MessageAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,7 +96,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 Snackbar.make(binding.root, "Message is empty!", Snackbar.LENGTH_SHORT).show()
                 etMessage.setText("")
             } else {
-                sendMessage(firebaseUser.uid, userID, message)
+                sendMessage(firebaseUser.uid, userID, message, LocalDateTime.now().toString())
                 etMessage.setText("")
             }
         }
@@ -105,31 +106,32 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
     }
 
-    private fun sendMessage(senderId: String, receiverId: String, message: String) {
+    private fun sendMessage(senderId: String, receiverId: String, message: String, time : String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
 
         val hashMap: HashMap<String, String> = HashMap()
-        hashMap["senderId"] = senderId
-        hashMap["receiverId"] = receiverId
+        hashMap["senderID"] = senderId
+        hashMap["receiverID"] = receiverId
         hashMap["message"] = message
+        hashMap["time"] = time
 
-        reference.child("Chat").push().setValue(hashMap)
+        reference.child("Messages").push().setValue(hashMap)
     }
 
     private fun updateChat(senderId: String, receiverId: String) {
         val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Chat")
+            FirebaseDatabase.getInstance().getReference("Messages")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                chatList.clear()
+                mMessageList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val chat = dataSnapShot.getValue(Chat::class.java)
+                    val message = dataSnapShot.getValue(Message::class.java)
 
-                    if (chat!!.senderId == senderId && chat.receiverId == receiverId ||
-                        chat.senderId == receiverId && chat.receiverId == senderId
+                    if (message!!.senderID == senderId && message.receiverID == receiverId ||
+                        message.senderID == receiverId && message.receiverID == senderId
                     ) {
-                        chatList.add(chat)
+                        mMessageList.add(message)
                     }
                 }
                 initAdapter()
@@ -142,9 +144,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun initAdapter() {
-        adapter = ChatAdapter(
+        adapter = MessageAdapter(
             context = requireContext(),
-            list = chatList
+            list = mMessageList
         )
 
         binding.rvMessages.adapter = adapter
