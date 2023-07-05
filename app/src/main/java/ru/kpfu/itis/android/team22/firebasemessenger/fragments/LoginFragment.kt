@@ -16,7 +16,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentLoginBi
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
     private var _auth: FirebaseAuth? = null
     private val auth get() = _auth!!
     private var firebaseUser: FirebaseUser? = null

@@ -50,6 +50,4 @@
             android:id="@+id/nav_from_chat_to_container"
             app:destination="@id/containerFragment" />
     </fragment>
-
-
 </navigation>

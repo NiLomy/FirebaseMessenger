@@ -34,6 +34,7 @@ class MessagesFragment: Fragment(R.layout.fragment_messages) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentMessagesBinding.bind(view)
         context = requireContext().applicationContext
+
         getUsersList()
     }
 
@@ -61,6 +62,16 @@ class MessagesFragment: Fragment(R.layout.fragment_messages) {
         databaseReference.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
+
+//                val currentUser: User? = snapshot.getValue(User::class.java)
+//                binding.run {
+//                    val context = requireContext().applicationContext
+//                    Glide.with(context)
+//                        .load(currentUser?.profileImage)
+//                        .placeholder(R.drawable.loading)
+//                        .error(R.drawable.error)
+//                        .into(currentUser?.profileImage)
+
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user: User? = dataSnapshot.getValue(User::class.java)
                     if (user?.userId != firebase?.uid) {
