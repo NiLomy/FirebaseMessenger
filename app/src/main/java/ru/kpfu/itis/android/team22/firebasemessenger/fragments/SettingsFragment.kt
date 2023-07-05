@@ -47,7 +47,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val user = FirebaseAuth.getInstance().currentUser
             user?.run {
                 updateName(etNewName?.text.toString(), databaseReference, user)
-                Toast.makeText(context, user.displayName, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -62,7 +61,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
             ) {
-                Toast.makeText(context, "NE NADO TAK GOVORIT", Toast.LENGTH_SHORT).show()
                 if (it.resultCode == Activity.RESULT_OK) {
                     val data = it.data
                     imageUri = data?.data
@@ -78,7 +76,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         newName?.let {hashMap.put("userName", it)}
         user?.let {
             hashMap.put("userId", it.uid)
-            newName?.let {hashMap.put("userName", it)}
+            newName?.let {name -> hashMap.put("userName", name)}
+            //хз сработает ли
             hashMap.put("profileImage", it.photoUrl.toString())
         }
 
