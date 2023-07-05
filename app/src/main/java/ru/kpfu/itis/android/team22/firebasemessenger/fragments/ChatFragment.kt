@@ -17,119 +17,97 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import ru.kpfu.itis.android.team22.firebasemessenger.R
-import ru.kpfu.itis.android.team22.firebasemessenger.adapters.ChatAdapter
+import ru.kpfu.itis.android.team22.firebasemessenger.adapters.MessageAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentChatBinding
-import ru.kpfu.itis.android.team22.firebasemessenger.entities.Chat
+import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import java.time.LocalDateTime
 
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-    private var _firebaseUser: FirebaseUser? = null
-    private val firebaseUser get() = _firebaseUser!!
+    private var firebaseUser: FirebaseUser? = null
 
-    private var _reference: DatabaseReference? = null
-    private val reference get() = _reference!!
+    private var reference: DatabaseReference? = null
 
-    private var _tvUserName: TextView? = null
-    private val tvUserName get() = _tvUserName!!
-
-    private var _btnSendMessage: ImageButton? = null
-    private val btnSendMessage get() = _btnSendMessage!!
-
-    private var _btnReturn: ImageButton? = null
-    private val btnReturn get() = _btnReturn!!
-
-    private var _etMessage: EditText? = null
-    private val etMessage get() = _etMessage!!
-
-    private var _userID: String? = null
-    private val userID get() = _userID!!
-
-    private var chatList = ArrayList<Chat>()
-    private var adapter: ChatAdapter? = null
+    private var userID: String? = null
+    private var mMessageList = ArrayList<Message>()
+    private var adapter: MessageAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViews(view)
-        setUserName()
-        setOnClickListeners()
-        updateChat(firebaseUser.uid, userID)
-    }
-
-    private fun initViews(view: View) {
         _binding = FragmentChatBinding.bind(view)
 
-        _tvUserName = binding.tvUserName
-        _btnSendMessage = binding.btnSendMsg
-        _btnReturn = binding.backButton
-        _etMessage = binding.etSendMsg
+        setUserName()
+        setOnClickListeners()
+        updateChat(firebaseUser!!.uid, userID!!)
     }
 
     private fun setUserName() {
-        _userID = arguments?.getString("id")
+        userID = arguments?.getString("id")
 
-        _firebaseUser = FirebaseAuth.getInstance().currentUser
-        _reference = FirebaseDatabase.getInstance().getReference("Users").child(userID)
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(userID!!)
 
-        reference.addValueEventListener(object : ValueEventListener {
+        reference!!.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                tvUserName.text = user!!.userName
+                binding.tvUserName.text = user!!.userName
             }
         })
     }
 
     private fun setOnClickListeners() {
-        btnSendMessage.setOnClickListener {
-            val message: String = etMessage.text.toString()
+        binding.btnSendMsg.setOnClickListener {
+            val message: String = binding.etSendMsg.text.toString()
 
             if (message.isEmpty()) {
                 Snackbar.make(binding.root, "Message is empty!", Snackbar.LENGTH_SHORT).show()
-                etMessage.setText("")
+                binding.etSendMsg.setText("")
             } else {
-                sendMessage(firebaseUser.uid, userID, message)
-                etMessage.setText("")
+                sendMessage(firebaseUser!!.uid, userID!!, message, LocalDateTime.now().toString())
+                binding.etSendMsg.setText("")
             }
         }
 
-        btnReturn.setOnClickListener {
+        binding.backButton.setOnClickListener {
             findNavController().navigate(R.id.nav_from_chat_to_container)
         }
     }
 
-    private fun sendMessage(senderId: String, receiverId: String, message: String) {
+    private fun sendMessage(senderId: String, receiverId: String, message: String, time : String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
 
         val hashMap: HashMap<String, String> = HashMap()
-        hashMap["senderId"] = senderId
-        hashMap["receiverId"] = receiverId
+        hashMap["senderID"] = senderId
+        hashMap["receiverID"] = receiverId
         hashMap["message"] = message
+        hashMap["time"] = time
 
-        reference.child("Chat").push().setValue(hashMap)
+        reference.child("Messages").push().setValue(hashMap)
     }
 
     private fun updateChat(senderId: String, receiverId: String) {
         val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Chat")
+            FirebaseDatabase.getInstance().getReference("Messages")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                chatList.clear()
+                mMessageList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val chat = dataSnapShot.getValue(Chat::class.java)
+                    val message = dataSnapShot.getValue(Message::class.java)
 
-                    if (chat!!.senderId == senderId && chat.receiverId == receiverId ||
-                        chat.senderId == receiverId && chat.receiverId == senderId
+                    if (message!!.senderID == senderId && message.receiverID == receiverId ||
+                        message.senderID == receiverId && message.receiverID == senderId
                     ) {
-                        chatList.add(chat)
+                        mMessageList.add(message)
                     }
                 }
                 initAdapter()
@@ -142,9 +120,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun initAdapter() {
-        adapter = ChatAdapter(
+        adapter = MessageAdapter(
             context = requireContext(),
-            list = chatList
+            list = mMessageList
         )
 
         binding.rvMessages.adapter = adapter

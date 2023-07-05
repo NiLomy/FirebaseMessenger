@@ -81,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"
         android:text="@string/log_out"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/colorWhite"
+        android:background="@drawable/custom_button_3"
+        android:textColor="@color/colorGreenDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

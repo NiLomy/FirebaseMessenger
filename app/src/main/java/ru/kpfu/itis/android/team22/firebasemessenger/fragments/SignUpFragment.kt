@@ -95,9 +95,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun signUpUser(email: String, password: String, userName: String) {
-        // TODO: если пароль слабый, то без объявления ошибки не регает пользователя - починить
-        // TODO: как-то уведомлять, если пользователь с такой почтой уже есть
-        // Initial task failed for action RecaptchaAction(action=signUpPassword)with exception - The given password is invalid
         activity?.let { fragmentActivity ->
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(fragmentActivity) { task ->
