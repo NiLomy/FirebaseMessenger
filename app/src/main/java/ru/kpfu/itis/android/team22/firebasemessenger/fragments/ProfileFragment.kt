@@ -58,7 +58,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         })
 
-        val settings = binding.imgSettings
+        val settings = binding.fabSettings
         settings.setOnClickListener {
             findNavController().navigate(R.id.nav_from_container_to_settings)
         }

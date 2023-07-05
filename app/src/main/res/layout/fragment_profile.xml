@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
-
     <TextView
         android:id="@+id/tv_profile"
         android:layout_width="match_parent"
@@ -32,14 +31,12 @@
         android:src="@drawable/ic_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tv_profile"/>
-
-
+  
     <androidx.cardview.widget.CardView
         android:id="@+id/cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="42dp"
         android:padding="10dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
@@ -80,6 +77,7 @@
         android:id="@+id/btn_log_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
         android:text="@string/log_out"
         android:layout_marginBottom="150dp"
         android:background="@drawable/custom_button_3"
@@ -87,5 +85,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="84dp"
+        android:clickable="true"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/label_settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
