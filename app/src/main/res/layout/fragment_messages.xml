@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MessagesFragment">
-    
+
     <TextView
         android:id="@+id/tv_profile"
         android:layout_width="match_parent"
@@ -29,12 +29,11 @@
         android:id="@+id/rv_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_profile"
         tools:itemCount="18"
-        android:layout_marginBottom="15dp"
         tools:listitem="@layout/item_user" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

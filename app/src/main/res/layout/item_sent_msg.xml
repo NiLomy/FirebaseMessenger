@@ -14,9 +14,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="12dp"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_msg"
@@ -33,5 +33,4 @@
         app:layout_constraintEnd_toStartOf="@id/iv_user_img"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Sent msg" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
