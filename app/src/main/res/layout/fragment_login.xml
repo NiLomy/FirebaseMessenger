@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".fragments.SignUpFragment">
+    tools:context=".fragments.LoginFragment">
 
     <ImageView
         android:id="@+id/iv_background"
@@ -15,15 +15,14 @@
         android:background="@drawable/background_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_sign_up"
+        android:id="@+id/tv_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/archivo_regular"
-        android:text="@string/label_sign_up"
+        android:text="@string/label_sign_in"
         android:textSize="35sp"
         android:gravity="center"
         android:paddingBottom="20dp"
@@ -33,33 +32,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/iv_background"/>
 
-
-    <EditText
-        android:id="@+id/et_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/gilroy_light"
-        android:hint="@string/enter_name"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColor="@color/colorText"
-        android:drawableStart="@drawable/custom_name"
-        android:drawablePadding="12dp"
-        android:background="@drawable/custom_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_sign_up" />
-
     <EditText
         android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="64dp"
         android:fontFamily="@font/gilroy_light"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
@@ -70,7 +49,7 @@
         android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_name" />
+        app:layout_constraintTop_toBottomOf="@id/tv_login" />
 
     <EditText
         android:id="@+id/et_password"
@@ -91,21 +70,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_email" />
 
-    <EditText
-        android:id="@+id/et_confirm_password"
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/gilroy_light"
-        android:hint="@string/enter_confirm_password"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:textColor="@color/colorText"
-        android:drawableStart="@drawable/custom_lock"
-        android:drawablePadding="12dp"
-        android:background="@drawable/custom_input"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/btn_login"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_password" />
@@ -114,29 +89,13 @@
         android:id="@+id/btn_sign_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginStart="64dp"
-        android:background="@drawable/custom_button"
-        android:text="@string/btn_sign_up"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_confirm_password" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
         android:layout_marginStart="64dp"
         android:background="@drawable/custom_button_2"
-        android:text="@string/btn_login"
+        android:text="@string/btn_sign_up"
         android:textColor="@color/colorGreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_sign_up"
-        />
-
+        app:layout_constraintTop_toBottomOf="@id/btn_login"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

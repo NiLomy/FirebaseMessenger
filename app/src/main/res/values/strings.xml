@@ -7,9 +7,30 @@
     <string name="btn_sign_up">Sign Up</string>
     <string name="btn_login">Login</string>
     <string name="btn_save">Save</string>
-    <string name="label_sign_in">Sign In</string>
+    <string name="label_sign_in">Login</string>
     <string name="label_message">Message</string>
     <string name="label_profile">Profile</string>
     <string name="enter_password">Enter Password</string>
     <string name="enter_confirm_password">Enter Confirm Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="something_went_wrong">Something went wrong…</string>
+    <string name="login_success">Login success!</string>
+    <string name="invalid_credentials">Email or password is invalid…</string>
+    <string name="user_name_must_be_non_empty">User name must be non-empty</string>
+    <string name="email_must_be_non_empty">Email must be non-empty</string>
+    <string name="password_must_be_non_empty">Password must be non-empty</string>
+    <string name="password_length_is_to_short">Password must be longer than 6 characters</string>
+    <string name="confirm_password">Confirm your password!</string>
+    <string name="passwords_dont_match">Passwords don\'t match…</string>
+    <string name="check_email">Please check your email input</string>
+    <string name="registration_success">Registration success</string>
+    <string name="messages">Messsages</string>
+    <string name="profile">Profile</string>
+    <string name="log_out">Log out</string>
+    <string name="enter_new_name">Enter New Name</string>
+    <string name="new_profile_picture">New Profile Picture</string>
+    <string name="browse_gallery">Browse gallery</string>
+    <string name="apply_changes">Apply Changes</string>
+    <string name="label_settings">Settings</string>
 </resources>
