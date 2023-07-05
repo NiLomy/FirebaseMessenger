@@ -49,7 +49,7 @@ class ChatAdapter(private val context: Context, private val list: ArrayList<Chat
 
     override fun getItemViewType(position: Int): Int {
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        return if (list[position].senderID == firebaseUser!!.uid) {
+        return if (list[position].senderId == firebaseUser!!.uid) {
             RECIEVED_MSG
         } else {
             SEND_MSG

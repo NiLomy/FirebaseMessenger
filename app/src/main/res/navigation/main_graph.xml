@@ -40,14 +40,27 @@
         <action
             android:id="@+id/nav_from_container_to_chat"
             app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/nav_from_container_to_settings"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
         android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.ChatFragment"
-        android:label="Chat"
+        android:label="ChatFragment"
         tools:layout="@layout/fragment_chat">
         <action
             android:id="@+id/nav_from_chat_to_container"
             app:destination="@id/containerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/nav_from_settings_to_container"
+            app:destination="@id/containerFragment" />
+    </fragment>
+
 </navigation>

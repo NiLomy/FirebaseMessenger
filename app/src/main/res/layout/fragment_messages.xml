@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MessagesFragment">
-
-
+    
     <TextView
         android:id="@+id/tv_profile"
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
         android:gravity="center"
         android:text="@string/messages"
         android:textColor="@color/colorWhite"
-        android:textSize="32dp"
+        android:textSize="32sp"
         android:translationZ="@dimen/cardview_compat_inset_shadow"
         app:layout_constraintBottom_toTopOf="@id/rv_user"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +30,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_profile"
-        tools:itemCount="8"
+        tools:itemCount="18"
+        android:layout_marginBottom="15dp"
         tools:listitem="@layout/item_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
