@@ -23,6 +23,8 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class MessagesFragment: Fragment(R.layout.fragment_messages) {
     private var _binding: FragmentMessagesBinding? = null
+
+    // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
     private val binding get() = _binding!!
     private var adapter: UserAdapter? = null
     private var context : Context? = null
@@ -45,8 +47,7 @@ class MessagesFragment: Fragment(R.layout.fragment_messages) {
             list = userList,
             glide = Glide.with(this),
             onItemClick = { user ->
-                //TODO: добавить логику перехода на конкретный чат
-                val bundle : Bundle = bundleOf("id" to user.userId, "name" to user.userName)
+                val bundle : Bundle = bundleOf("id" to user.userId)
                 findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
             }
         )

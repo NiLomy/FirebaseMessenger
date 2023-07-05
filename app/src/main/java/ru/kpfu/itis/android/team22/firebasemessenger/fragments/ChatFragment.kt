@@ -1,11 +1,11 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -17,7 +17,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import ru.kpfu.itis.android.team22.firebasemessenger.R
+import ru.kpfu.itis.android.team22.firebasemessenger.adapters.ChatAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentChatBinding
+import ru.kpfu.itis.android.team22.firebasemessenger.entities.Chat
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 
@@ -46,20 +48,20 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var _userID: String? = null
     private val userID get() = _userID!!
 
-    private var context: Context? = null
-    private var topic = ""
+    private var chatList = ArrayList<Chat>()
+    private var adapter: ChatAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        init(view)
-        getUserData()
+        initViews(view)
+        setUserName()
         setOnClickListeners()
+        updateChat(firebaseUser.uid, userID)
     }
 
-    private fun init(view: View) {
+    private fun initViews(view: View) {
         _binding = FragmentChatBinding.bind(view)
-        context = requireContext().applicationContext
 
         _tvUserName = binding.tvUserName
         _btnSendMessage = binding.btnSendMsg
@@ -67,7 +69,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         _etMessage = binding.etSendMsg
     }
 
-    private fun getUserData() {
+    private fun setUserName() {
         _userID = arguments?.getString("id")
 
         _firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -75,7 +77,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                // Nothing
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -95,7 +97,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             } else {
                 sendMessage(firebaseUser.uid, userID, message)
                 etMessage.setText("")
-                topic = "/topics/$userID"
             }
         }
 
@@ -115,9 +116,47 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         reference.child("Chat").push().setValue(hashMap)
     }
 
+    private fun updateChat(senderId: String, receiverId: String) {
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Chat")
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                chatList.clear()
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val chat = dataSnapShot.getValue(Chat::class.java)
+
+                    if (chat!!.senderID == senderId && chat.receiverID == receiverId ||
+                        chat.senderID == receiverId && chat.receiverID == senderId
+                    ) {
+                        chatList.add(chat)
+                    }
+                }
+                initAdapter()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun initAdapter() {
+        adapter = ChatAdapter(
+            context = requireContext(),
+            list = chatList
+        )
+
+        binding.rvMessages.adapter = adapter
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        adapter = null
     }
+
+    // TODO: разобраться с onBackPressed(),
+    //  запретить переход на предыдущий фрагмент,
+    //  но позволить возвращаться с текущей переписки на главный экран
 }
