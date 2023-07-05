@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -21,6 +23,8 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class MessagesFragment: Fragment(R.layout.fragment_messages) {
     private var _binding: FragmentMessagesBinding? = null
+
+    // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
     private val binding get() = _binding!!
     private var adapter: UserAdapter? = null
     private var context : Context? = null
@@ -44,11 +48,8 @@ class MessagesFragment: Fragment(R.layout.fragment_messages) {
             list = userList,
             glide = Glide.with(this),
             onItemClick = { user ->
-                //TODO добавить логику перехода на конкретный чат
-//                findNavController().navigate(
-//                    R.id.action_mainFragment_to_infoFragment,
-//                    InfoFragment.createBundle(planet.id)
-//                )
+                val bundle : Bundle = bundleOf("id" to user.userId)
+                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
             }
         )
         binding.rvUser.adapter = adapter

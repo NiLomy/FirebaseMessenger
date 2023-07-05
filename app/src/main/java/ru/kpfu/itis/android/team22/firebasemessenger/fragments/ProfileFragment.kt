@@ -41,15 +41,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         databaseReference?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
-                    binding.run {
-                        userName.text = user?.userName
-                        val context = requireContext().applicationContext
-                        Glide.with(context)
-                            .load(user?.profileImage)
-                            .placeholder(R.drawable.loading)
-                            .error(R.drawable.error)
-                            .into(ivImage)
-                    }
+                binding.run {
+                    userName.text = user?.userName
+                    val context = requireContext().applicationContext
+                    Glide.with(context)
+                        .load(user?.profileImage)
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.error)
+                        .into(ivImage)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
