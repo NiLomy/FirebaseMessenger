@@ -126,8 +126,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val chat = dataSnapShot.getValue(Chat::class.java)
 
-                    if (chat!!.senderID == senderId && chat.receiverID == receiverId ||
-                        chat.senderID == receiverId && chat.receiverID == senderId
+                    if (chat!!.senderId == senderId && chat.receiverId == receiverId ||
+                        chat.senderId == receiverId && chat.receiverId == senderId
                     ) {
                         chatList.add(chat)
                     }
