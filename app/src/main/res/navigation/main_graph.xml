@@ -16,6 +16,9 @@
         <action
             android:id="@+id/nav_from_signup_to_container"
             app:destination="@id/containerFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -28,6 +31,9 @@
         <action
             android:id="@+id/nav_from_login_to_container"
             app:destination="@id/containerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/containerFragment"
@@ -38,5 +44,17 @@
             android:id="@+id/nav_from_container_to_login"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
 
 </navigation>
