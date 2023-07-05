@@ -28,6 +28,7 @@ class ContainerFragment : Fragment(R.layout.fragment_container) {
                     handleNavigation(MessagesFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
+
                 R.id.item_profile -> {
                     handleNavigation(ProfileFragment())
                     return@setOnNavigationItemSelectedListener true
