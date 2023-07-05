@@ -58,9 +58,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         })
 
-        val settings = binding.imgSettings
+        val settings = binding.fabSettings
         settings.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
+            findNavController().navigate(R.id.action_containerFragment_to_settingsFragment)
         }
 
         val btnLogOut = binding.btnLogOut

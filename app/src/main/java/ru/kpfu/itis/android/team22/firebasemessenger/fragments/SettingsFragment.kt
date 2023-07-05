@@ -19,7 +19,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val galleryButton = binding.galleryButton
     private val changesButton = binding.applyChangesButton
     private val etNewName = binding.etNewName
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
@@ -27,7 +26,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         galleryButton.setOnClickListener {
             newImageUri = setProfilePicture()
         }
-        changesButton.setOnClickListener {
+        /*changesButton.setOnClickListener {
             val user = FirebaseAuth.getInstance().currentUser
 
             user?.run {
@@ -46,14 +45,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     }
                 Toast.makeText(context, etNewName.text.toString(), Toast.LENGTH_SHORT).show()
             }
-        }
+        }*/
     }
 
     private fun setProfilePicture() : Uri?{
         //TODO: заставить эту штуку работать
         val intent = Intent(Intent.ACTION_PICK)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        Toast.makeText(context, "YA EBAL", Toast.LENGTH_SHORT).show()
         val imageUri : Uri? = null
         return imageUri
         //с кодом сверху хотя бы не вылетает
