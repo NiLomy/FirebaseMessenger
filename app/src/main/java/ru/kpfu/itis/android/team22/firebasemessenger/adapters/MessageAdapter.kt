@@ -10,10 +10,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import de.hdodenhof.circleimageview.CircleImageView
 import ru.kpfu.itis.android.team22.firebasemessenger.R
-import ru.kpfu.itis.android.team22.firebasemessenger.entities.Chat
+import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class ChatAdapter(private val context: Context, private val list: ArrayList<Chat>) :
-    RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+class MessageAdapter(private val context: Context, private val list: ArrayList<Message>) :
+    RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     private val SEND_MSG = 0
     private val RECIEVED_MSG = 1
@@ -22,6 +24,7 @@ class ChatAdapter(private val context: Context, private val list: ArrayList<Chat
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val tvMsg: TextView = view.findViewById(R.id.tv_msg)
+        val tvTime : TextView = view.findViewById(R.id.tv_time)
         val ivUserImage: CircleImageView = view.findViewById(R.id.iv_user_img)
     }
 
@@ -35,13 +38,17 @@ class ChatAdapter(private val context: Context, private val list: ArrayList<Chat
         }
     }
 
+
     override fun getItemCount(): Int {
         return list.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val chat = list[position]
-        holder.tvMsg.text = chat.message
+        val msg = list[position]
+        holder.tvMsg.text = msg.message
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+
+        holder.tvTime.text = LocalDateTime.parse(msg.time).format(formatter)
 
         // TODO: поменять на аватарку собеседника
         //Glide.with(context).load(user.profileImage).placeholder(R.drawable.profile_image).into(holder.imgUser)
@@ -49,7 +56,7 @@ class ChatAdapter(private val context: Context, private val list: ArrayList<Chat
 
     override fun getItemViewType(position: Int): Int {
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        return if (list[position].senderId == firebaseUser!!.uid) {
+        return if (list[position].senderID == firebaseUser!!.uid) {
             RECIEVED_MSG
         } else {
             SEND_MSG

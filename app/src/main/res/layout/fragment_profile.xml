@@ -79,7 +79,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"
         android:text="@string/log_out"
-        android:layout_marginBottom="150dp"
         android:background="@drawable/custom_button_3"
         android:textColor="@color/colorGreenDark"
         app:layout_constraintBottom_toBottomOf="parent"
