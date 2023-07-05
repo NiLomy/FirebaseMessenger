@@ -28,4 +28,9 @@
     <string name="messages">Messsages</string>
     <string name="profile">Profile</string>
     <string name="log_out">Log out</string>
+    <string name="enter_new_name">Enter New Name</string>
+    <string name="new_profile_picture">New Profile Picture</string>
+    <string name="browse_gallery">Browse gallery</string>
+    <string name="apply_changes">Apply Changes</string>
+    <string name="label_settings">Settings</string>
 </resources>
