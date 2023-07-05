@@ -4,27 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    android:translationZ="@dimen/cardview_compat_inset_shadow">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:background="@drawable/item_backgroung"
+        android:layout_margin="16dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:translationZ="@dimen/cardview_compat_inset_shadow">
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_image"
-            android:layout_width="64dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
             android:src="@mipmap/ic_launcher"
-            android:translationZ="@dimen/cardview_compat_inset_shadow"
-            app:civ_border_color="@color/colorItemRight"
-            app:civ_border_width="1dp" />
+            android:translationZ="@dimen/cardview_compat_inset_shadow" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,6 +50,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_height="0.5dp"
+        android:background="@color/colorTextBackground"/>
 
 </LinearLayout>
