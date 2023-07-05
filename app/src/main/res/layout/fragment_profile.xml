@@ -12,11 +12,14 @@
         android:layout_height="64dp"
         android:elevation="@dimen/cardview_default_elevation"
         android:fontFamily="@font/archivo_regular"
-        android:gravity="center"
         android:text="@string/profile"
         android:textColor="@color/colorWhite"
-        android:textSize="32dp"
+        android:textSize="27dp"
         android:translationZ="@dimen/cardview_compat_inset_shadow"
+        android:background="@color/colorGreen"
+        android:paddingStart="32dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/cv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -55,8 +58,7 @@
                 android:layout_height="120dp"
                 android:layout_marginTop="10dp"
                 android:src="@mipmap/ic_launcher"
-                app:civ_border_color="@color/colorItemRight"
-                app:civ_border_width="1dp" />
+                android:translationZ="@dimen/cardview_compat_inset_shadow" />
 
             <TextView
                 android:id="@+id/userName"
@@ -78,9 +80,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"
-        android:background="@drawable/custom_button_3"
         android:text="@string/log_out"
-        android:textColor="@color/colorGreenDark"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -95,6 +97,7 @@
         android:contentDescription="@string/label_settings"
         android:focusable="true"
         android:src="@drawable/ic_settings"
+        android:background="@color/colorGreenLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
