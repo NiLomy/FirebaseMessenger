@@ -6,12 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".fragments.MessagesFragment">
 
+
+    <TextView
+        android:id="@+id/tv_profile"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:fontFamily="@font/archivo_regular"
+        android:gravity="center"
+        android:text="@string/messages"
+        android:textColor="@color/colorWhite"
+        android:textSize="32dp"
+        android:translationZ="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toTopOf="@id/rv_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile"
         tools:itemCount="8"
         tools:listitem="@layout/item_user" />
 
