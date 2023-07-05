@@ -29,9 +29,7 @@
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_user_img"
-        android:background="@drawable/sent_msg_bg"
-        android:layout_marginEnd="8dp">
+        app:layout_constraintEnd_toStartOf="@id/iv_user_img">
       
         <TextView
             android:id="@+id/tv_msg"
