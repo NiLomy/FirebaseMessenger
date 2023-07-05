@@ -16,9 +16,6 @@
         <action
             android:id="@+id/nav_from_signup_to_container"
             app:destination="@id/containerFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -31,9 +28,6 @@
         <action
             android:id="@+id/nav_from_login_to_container"
             app:destination="@id/containerFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/containerFragment"
@@ -44,7 +38,7 @@
             android:id="@+id/nav_from_container_to_login"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_containerFragment_to_settingsFragment"
+            android:id="@+id/nav_from_container_to_settings"
             app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
@@ -52,23 +46,8 @@
         android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SettingsFragment"
         android:label="SettingsFragment" >
         <action
-            android:id="@+id/action_settingsFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.ProfileFragment"
-        android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/nav_from_settings_to_container"
+            app:destination="@id/containerFragment" />
     </fragment>
 
 </navigation>
