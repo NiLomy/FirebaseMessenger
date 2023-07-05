@@ -20,7 +20,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private val binding get() = _binding!!
     private var _auth: FirebaseAuth? = null
     private val auth get() = _auth!!
-    private var context : Context? = null
+    private var context: Context? = null
     private var firebaseUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +47,12 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         val btnLogin = binding.btnLogin
 
         btnSignUp.setOnClickListener {
-            onSignUpClicked(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etConfirmPassword.text.toString())
+            onSignUpClicked(
+                etName.text.toString(),
+                etEmail.text.toString(),
+                etPassword.text.toString(),
+                etConfirmPassword.text.toString()
+            )
         }
 
         btnLogin.setOnClickListener {
@@ -55,7 +60,12 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
-    private fun onSignUpClicked(userName: String, email: String, password: String, confirmPassword: String) {
+    private fun onSignUpClicked(
+        userName: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ) {
         if (userName.isEmpty()) {
             showSnackbar(getString(R.string.user_name_must_be_non_empty))
             return
@@ -92,7 +102,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         val user: FirebaseUser? = auth.currentUser
                         val userId: String = user!!.uid
 
-                        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                        val databaseReference =
+                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
 
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = userId
@@ -111,7 +122,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
-    private fun saveUserDataToDatabase(databaseReference: DatabaseReference, hashMap: HashMap<String, String>) {
+    private fun saveUserDataToDatabase(
+        databaseReference: DatabaseReference,
+        hashMap: HashMap<String, String>
+    ) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {

@@ -21,13 +21,13 @@ import ru.kpfu.itis.android.team22.firebasemessenger.adapters.UserAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentMessagesBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
-class MessagesFragment: Fragment(R.layout.fragment_messages) {
+class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var _binding: FragmentMessagesBinding? = null
 
     // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
     private val binding get() = _binding!!
     private var adapter: UserAdapter? = null
-    private var context : Context? = null
+    private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,7 +48,7 @@ class MessagesFragment: Fragment(R.layout.fragment_messages) {
             list = userList,
             glide = Glide.with(this),
             onItemClick = { user ->
-                val bundle : Bundle = bundleOf("id" to user.userId)
+                val bundle: Bundle = bundleOf("id" to user.userId)
                 findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
             }
         )
@@ -57,9 +57,10 @@ class MessagesFragment: Fragment(R.layout.fragment_messages) {
 
     private fun getUsersList() {
         val firebase: FirebaseUser? = Firebase.auth.currentUser
-        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Users")
 
-        databaseReference.addValueEventListener(object: ValueEventListener{
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
 
