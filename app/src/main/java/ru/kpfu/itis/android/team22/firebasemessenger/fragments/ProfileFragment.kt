@@ -36,9 +36,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         _auth = Firebase.auth
         firebaseUser = auth.currentUser
         databaseReference =
-            firebaseUser?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
+            firebaseUser?.uid?.let {
+                FirebaseDatabase.getInstance().getReference("Users").child(it)
+            }
 
-        databaseReference?.addValueEventListener(object: ValueEventListener {
+        databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
                 binding.run {
@@ -64,7 +66,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         val btnLogOut = binding.btnLogOut
-        btnLogOut.setOnClickListener{
+        btnLogOut.setOnClickListener {
             auth.signOut()
             findNavController().navigate(R.id.nav_from_container_to_login)
         }

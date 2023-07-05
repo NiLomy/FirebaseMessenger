@@ -32,7 +32,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val changesButton = _binding?.applyChangesButton
         val etNewName = _binding?.etNewName
         val fabToProfile = _binding?.fabToContainer
-        var newImageUri : Uri? = null
+        var newImageUri: Uri? = null
         val user = FirebaseAuth.getInstance().currentUser
         databaseReference =
             user?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
@@ -51,11 +51,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun getProfilePicture() : Uri?{
+    private fun getProfilePicture(): Uri? {
         //TODO: заставить эту штуку работать
         val intent = Intent(Intent.ACTION_PICK)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        var imageUri : Uri? = null
+        var imageUri: Uri? = null
         val profilePicture = _binding?.ivProfilePicture
         val changeImage =
             registerForActivityResult(
@@ -65,18 +65,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val data = it.data
                     imageUri = data?.data
                     profilePicture?.setImageURI(imageUri)
-                }                }
+                }
+            }
         changeImage.launch(intent)
         return imageUri
     }
 
-    private fun updateName(newName : String?, databaseReference: DatabaseReference?,
-                           user : FirebaseUser?) {
-        val hashMap : HashMap<String, String> = HashMap()
-        newName?.let {hashMap.put("userName", it)}
+    private fun updateName(
+        newName: String?, databaseReference: DatabaseReference?,
+        user: FirebaseUser?
+    ) {
+        val hashMap: HashMap<String, String> = HashMap()
+        newName?.let { hashMap.put("userName", it) }
         user?.let {
             hashMap.put("userId", it.uid)
-            newName?.let {name -> hashMap.put("userName", name)}
+            newName?.let { name -> hashMap.put("userName", name) }
             //хз сработает ли
             hashMap.put("profileImage", it.photoUrl.toString())
         }

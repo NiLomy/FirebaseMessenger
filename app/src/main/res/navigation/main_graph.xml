@@ -9,7 +9,7 @@
         android:id="@+id/signUpFragment"
         android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SignUpFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/nav_from_signup_to_login"
             app:destination="@id/loginFragment" />
