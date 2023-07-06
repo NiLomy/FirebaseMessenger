@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorGreenLight">#7AD87B</color>
-    <color name="colorPrimary">#106f11</color>
-    <color name="colorGreen">#106f11</color>
-    <color name="colorOrange">#f0893a</color>
-    <color name="colorGreenDark">#203b09</color>
+    <color name="colorGreenLight">#6F7FD6</color>
+    <color name="colorGreen">#3F51B5</color>
+    <color name="colorPrimary">#3f51b5</color>
+    <color name="colorOrange">#F09E3A</color>
+    <color name="colorGreenDark">#16267A</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorText">#464646</color>
     <color name="colorDarkGray">#464646</color>

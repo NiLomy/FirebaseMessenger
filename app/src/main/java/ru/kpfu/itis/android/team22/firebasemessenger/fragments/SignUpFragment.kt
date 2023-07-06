@@ -18,18 +18,17 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpB
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-    private var _auth: FirebaseAuth? = null
-    private val auth get() = _auth!!
-    private var context : Context? = null
+    private var auth: FirebaseAuth? = null
+    private var context: Context? = null
     private var firebaseUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSignUpBinding.bind(view)
-        _auth = Firebase.auth
+        auth = Firebase.auth
         context = requireContext().applicationContext
 
-        firebaseUser = auth.currentUser
+        firebaseUser = auth?.currentUser
 
         if (firebaseUser != null) {
             findNavController().navigate(R.id.nav_from_signup_to_container)
@@ -39,23 +38,28 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun setUp() {
-        val btnSignUp = binding.btnSignUp
-        val etName = binding.etName
-        val etEmail = binding.etEmail
-        val etPassword = binding.etPassword
-        val etConfirmPassword = binding.etConfirmPassword
-        val btnLogin = binding.btnLogin
+        with(binding) {
+            btnSignUp.setOnClickListener {
+                onSignUpClicked(
+                    etName.text.toString(),
+                    etEmail.text.toString(),
+                    etPassword.text.toString(),
+                    etConfirmPassword.text.toString()
+                )
+            }
 
-        btnSignUp.setOnClickListener {
-            onSignUpClicked(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etConfirmPassword.text.toString())
-        }
-
-        btnLogin.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_signup_to_login)
+            btnLogin.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_signup_to_login)
+            }
         }
     }
 
-    private fun onSignUpClicked(userName: String, email: String, password: String, confirmPassword: String) {
+    private fun onSignUpClicked(
+        userName: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ) {
         if (userName.isEmpty()) {
             showSnackbar(getString(R.string.user_name_must_be_non_empty))
             return
@@ -85,22 +89,20 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun signUpUser(email: String, password: String, userName: String) {
-        // TODO: если пароль слабый, то без объявления ошибки не регает пользователя - починить
-        // TODO: как-то уведомлять, если пользователь с такой почтой уже есть
-        // Initial task failed for action RecaptchaAction(action=signUpPassword)with exception - The given password is invalid
         activity?.let { fragmentActivity ->
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(fragmentActivity) { task ->
+            auth?.createUserWithEmailAndPassword(email, password)
+                ?.addOnCompleteListener(fragmentActivity) { task ->
                     if (task.isSuccessful) {
-                        val user: FirebaseUser? = auth.currentUser
-                        val userId: String = user!!.uid
+                        val user: FirebaseUser? = auth?.currentUser
+                        val userId: String = user?.uid ?: ""
 
-                        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                        val databaseReference =
+                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
 
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = userId
                         hashMap["userName"] = userName
-                        hashMap["profileImage"] = ""
+                        hashMap["profileImage"] = "default.png"
 
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
@@ -114,7 +116,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
-    private fun saveUserDataToDatabase(databaseReference: DatabaseReference, hashMap: HashMap<String, String>) {
+    private fun saveUserDataToDatabase(
+        databaseReference: DatabaseReference,
+        hashMap: HashMap<String, String>
+    ) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {

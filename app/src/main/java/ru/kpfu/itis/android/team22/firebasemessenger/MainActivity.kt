@@ -13,6 +13,6 @@ class MainActivity : AppCompatActivity() {
     // TODO: возможно, есть способ получше пофиксить этот баг
     // Blocking transition to the previous fragment
     // Necessary to avoid exceptional situations
-    override fun onBackPressed() {
-    }
+//    override fun onBackPressed() {
+//    }
 }
