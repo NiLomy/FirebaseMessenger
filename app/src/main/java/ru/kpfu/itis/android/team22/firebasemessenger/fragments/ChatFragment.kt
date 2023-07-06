@@ -113,6 +113,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun initAdapter() {
+        if (!isAdded || isDetached || activity == null) {
+            // The fragment is not yet linked to the activity
+            return
+        }
+
         adapter = MessageAdapter(
             context = requireContext(),
             list = mMessageList
