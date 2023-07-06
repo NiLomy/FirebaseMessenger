@@ -23,11 +23,14 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
 
     private var userID : String? = null
 
+    private var destination : String? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentUserProfileBinding.bind(view)
 
         userID = arguments?.getString(getString(R.string.user_id_tag))
+        destination = arguments?.getString("from")
 
 
         databaseReference =
@@ -35,11 +38,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
 
         databaseReference?.let {loadUserInfo(it)}
 
-        binding.fabToChat.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("id", userID)
-            findNavController().navigate(R.id.nav_from_user_profile_to_chat, bundle)
-        }
+        setOnClickListeners()
     }
 
     private fun loadUserInfo(databaseReference: DatabaseReference) {
@@ -60,5 +59,30 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
 
             }
         })
+    }
+
+    private fun setOnClickListeners() {
+        binding.run {
+            val bundle = Bundle()
+            bundle.putString("id", userID)
+
+            fabBack.setOnClickListener {
+                when(destination) {
+                    "chat" -> {
+                        findNavController().navigate(R.id.nav_from_user_profile_to_chat, bundle)
+                    }
+                    "friends" -> findNavController().navigate(R.id.nav_from_user_profile_to_friends_list)
+                }
+            }
+
+            ibMessage.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_user_profile_to_chat, bundle)
+            }
+
+            ibFriend.setOnClickListener {
+                //добавление друзей
+            }
+
+        }
     }
 }

@@ -39,7 +39,7 @@ class ChattableUserItem(
             }
 
             root.setOnClickListener {
-                val bundle : Bundle = bundleOf(userId to user.userId)
+                val bundle : Bundle = bundleOf(userId to user.userId, "from" to "friends")
                 controller.navigate(R.id.nav_from_friends_list_to_user_profile, bundle)
             }
         }

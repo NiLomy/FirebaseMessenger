@@ -84,7 +84,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
 
         binding.ivProfileImage.setOnClickListener {
-            val bundle : Bundle = bundleOf(getString(R.string.user_id_tag) to userID)
+            val bundle : Bundle = bundleOf(getString(R.string.user_id_tag) to userID, "from" to "chat")
             findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
         }
     }

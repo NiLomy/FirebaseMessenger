@@ -85,7 +85,7 @@
         android:backgroundTint="@color/colorLightGray"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_to_chat"
+        android:id="@+id/fab_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
