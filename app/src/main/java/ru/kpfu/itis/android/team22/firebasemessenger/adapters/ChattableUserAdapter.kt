@@ -2,6 +2,7 @@ package ru.kpfu.itis.android.team22.firebasemessenger.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemFriendToChatBinding
@@ -12,6 +13,8 @@ class ChattableUserAdapter(
     private var list: ArrayList<User>,
     private val glide: RequestManager,
     private val onItemClick: (User) -> Unit,
+    private val controller: NavController,
+    private val userId: String,
 ) : RecyclerView.Adapter<ChattableUserItem>() {
 
     override fun onCreateViewHolder(
@@ -25,6 +28,8 @@ class ChattableUserAdapter(
         ),
         glide = glide,
         onItemClick = onItemClick,
+        controller = controller,
+        userId = userId,
     )
 
     override fun onBindViewHolder(holder: ChattableUserItem, position: Int) {

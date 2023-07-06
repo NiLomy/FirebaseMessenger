@@ -88,7 +88,9 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
                 //TODO сделать так, чтобы переходил на профиль пользователя
 //                val bundle: Bundle = bundleOf("id" to user.userId)
 //                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
-            }
+            },
+            controller = findNavController(),
+            userId = getString(R.string.user_id_tag)
         )
         binding.rvUser.adapter = adapter
     }

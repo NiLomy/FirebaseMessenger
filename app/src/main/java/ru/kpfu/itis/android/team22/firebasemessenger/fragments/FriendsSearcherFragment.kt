@@ -3,7 +3,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -86,6 +85,8 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     //                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
                 },
                 context = it,
+                controller = findNavController(),
+                userId = getString(R.string.user_id_tag)
             )
         }
         binding.rvUser.adapter = adapter

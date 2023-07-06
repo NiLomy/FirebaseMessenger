@@ -3,6 +3,7 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -83,9 +84,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
 
         binding.ivProfileImage.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString(getString(R.string.user_id_tag), userID)
-            findNavController().navigate(R.id.nav_from_chat_to_u_profile, bundle)
+            val bundle : Bundle = bundleOf(getString(R.string.user_id_tag) to userID)
+            findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
         }
     }
 

@@ -1,5 +1,8 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.items
 
+import android.os.Bundle
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -12,6 +15,8 @@ class ChattableUserItem(
     private val binding: ItemFriendToChatBinding,
     private val glide: RequestManager,
     private val onItemClick: (User) -> Unit,
+    private val controller: NavController,
+    private val userId: String,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val options: RequestOptions = RequestOptions
@@ -28,8 +33,14 @@ class ChattableUserItem(
                 .apply(options)
                 .into(ivImage)
 
+            ib.setOnClickListener {
+                val bundle: Bundle = bundleOf("id" to user.userId)
+                controller.navigate(R.id.nav_from_friends_list_to_chat, bundle)
+            }
+
             root.setOnClickListener {
-                onItemClick(user)
+                val bundle : Bundle = bundleOf(userId to user.userId)
+                controller.navigate(R.id.nav_from_friends_list_to_user_profile, bundle)
             }
         }
     }

@@ -38,7 +38,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
         binding.fabToChat.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("id", userID)
-            findNavController().navigate(R.id.nav_from_u_profile_to_chat, bundle)
+            findNavController().navigate(R.id.nav_from_user_profile_to_chat, bundle)
         }
     }
 
