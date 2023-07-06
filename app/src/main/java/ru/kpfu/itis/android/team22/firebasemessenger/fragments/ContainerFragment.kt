@@ -3,6 +3,8 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentContainerBinding
 
@@ -36,6 +38,11 @@ class ContainerFragment : Fragment(R.layout.fragment_container) {
             }
             false
         }
+
+        pushNotificationTest()
+    }
+
+    private fun pushNotificationTest() {
 
     }
 
