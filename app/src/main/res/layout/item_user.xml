@@ -45,7 +45,6 @@
                 android:textSize="14sp"
                 tools:text="Temp" />
         </LinearLayout>
-
     </LinearLayout>
 
     <View
