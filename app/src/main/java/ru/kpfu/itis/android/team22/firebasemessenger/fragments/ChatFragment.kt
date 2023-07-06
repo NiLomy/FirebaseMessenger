@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -34,12 +35,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         _binding = FragmentChatBinding.bind(view)
 
-        setUserName()
+        setUserInfo()
         setOnClickListeners()
         updateChat(firebaseUser!!.uid, userID!!)
     }
 
-    private fun setUserName() {
+    private fun setUserInfo() {
         userID = arguments?.getString("id")
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -53,6 +54,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 binding.tvUserName.text = user!!.userName
+                val context = requireContext().applicationContext
+                Glide.with(context)
+                    .load(user.profileImage)
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(binding.ivProfileImage)
+
             }
         })
     }
@@ -72,6 +80,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         binding.backButton.setOnClickListener {
             findNavController().navigate(R.id.nav_from_chat_to_container)
+        }
+
+        binding.ivProfileImage.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString(getString(R.string.user_id_tag), userID)
+            findNavController().navigate(R.id.nav_from_chat_to_u_profile, bundle)
         }
     }
 

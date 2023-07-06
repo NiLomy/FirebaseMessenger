@@ -55,6 +55,9 @@
         <action
             android:id="@+id/nav_from_chat_to_container"
             app:destination="@id/containerFragment" />
+        <action
+            android:id="@+id/nav_from_chat_to_u_profile"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -85,6 +88,15 @@
         <action
             android:id="@+id/nav_from_friends_searcher_to_friends_list"
             app:destination="@id/friendsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.UserProfileFragment"
+        android:label="UserProfileFragment"
+        tools:layout="@layout/fragment_user_profile">
+        <action
+            android:id="@+id/nav_from_u_profile_to_chat"
+            app:destination="@id/chatFragment" />
     </fragment>
 
 </navigation>
