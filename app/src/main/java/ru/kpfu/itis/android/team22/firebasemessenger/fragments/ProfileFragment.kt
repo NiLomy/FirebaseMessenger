@@ -1,5 +1,7 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
+import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -26,11 +28,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var auth: FirebaseAuth? = null
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
+    private var context: Context? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentProfileBinding.bind(view)
+        context = requireContext()
         setUpButtons()
 
         auth = Firebase.auth
@@ -76,6 +80,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.btnLogOut.setOnClickListener {
             auth?.signOut()
             findNavController().navigate(R.id.nav_from_container_to_login)
+        }
+
+        binding.ibNotifications.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Notifications")
+                .setMessage("Message")
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 

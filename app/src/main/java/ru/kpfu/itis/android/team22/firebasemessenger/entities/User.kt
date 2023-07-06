@@ -4,4 +4,5 @@ data class User(
     val userId: String = "",
     val userName: String = "",
     val profileImage: String = "",
+    val friendsList: List<String> = ArrayList(),
 )
