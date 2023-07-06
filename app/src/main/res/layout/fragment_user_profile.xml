@@ -50,7 +50,7 @@
                 android:translationZ="@dimen/cardview_compat_inset_shadow" />
 
             <TextView
-                android:id="@+id/userName"
+                android:id="@+id/tv_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -85,7 +85,7 @@
         android:backgroundTint="@color/colorLightGray"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_to_container"
+        android:id="@+id/fab_to_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
