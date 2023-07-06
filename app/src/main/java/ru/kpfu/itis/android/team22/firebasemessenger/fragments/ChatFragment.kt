@@ -124,6 +124,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         )
 
         binding.rvMessages.adapter = adapter
+        binding.rvMessages.scrollToPosition(adapter!!.itemCount - 1)
     }
 
     override fun onDestroy() {
