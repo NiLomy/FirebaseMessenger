@@ -6,13 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import ru.kpfu.itis.android.team22.firebasemessenger.R
@@ -20,33 +18,31 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSetting
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var _binding: FragmentSettingsBinding? = null
-    private var databaseReference: DatabaseReference? = null
+    private val binding get() = _binding!!
 
-    val etNewName = _binding?.etNewName
-    //private val binding get() = _binding!!
+    private var databaseReference: DatabaseReference? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
-        val galleryButton = _binding?.galleryButton
-        val changesButton = _binding?.applyChangesButton
-        val etNewName = _binding?.etNewName
-        val fabToProfile = _binding?.fabToContainer
-        var newImageUri: Uri? = null
-        val user = FirebaseAuth.getInstance().currentUser
-        databaseReference =
-            user?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
 
-        galleryButton?.setOnClickListener {
-            newImageUri = getProfilePicture()
-        }
-        fabToProfile?.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_settings_to_container)
-        }
-        changesButton?.setOnClickListener {
+        with(binding) {
+            var newImageUri: Uri? = null
             val user = FirebaseAuth.getInstance().currentUser
-            user?.run {
-                updateName(etNewName?.text.toString(), databaseReference, user)
+            databaseReference =
+                user?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
+
+            galleryButton.setOnClickListener {
+                newImageUri = getProfilePicture()
+            }
+            fabToContainer.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_settings_to_container)
+            }
+            applyChangesButton.setOnClickListener {
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                currentUser?.run {
+                    updateName(etNewName.text.toString(), databaseReference, currentUser)
+                }
             }
         }
     }
@@ -72,20 +68,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun updateName(
-        newName: String?, databaseReference: DatabaseReference?,
-        user: FirebaseUser?
+        newName: String, databaseReference: DatabaseReference?,
+        user: FirebaseUser
     ) {
         val hashMap: HashMap<String, String> = HashMap()
-        newName?.let { hashMap.put("userName", it) }
-        user?.let {
-            hashMap.put("userId", it.uid)
-            newName?.let { name -> hashMap.put("userName", name) }
-            //хз сработает ли
-            hashMap.put("profileImage", it.photoUrl.toString())
-        }
+        hashMap["userName"] = newName
+        hashMap["userId"] = user.uid
+        hashMap["profileImage"] = user.photoUrl.toString()
 
         databaseReference?.setValue(hashMap)
-
     }
-
 }

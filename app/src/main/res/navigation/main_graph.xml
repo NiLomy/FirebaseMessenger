@@ -43,6 +43,9 @@
         <action
             android:id="@+id/nav_from_container_to_settings"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/nav_from_container_to_friends_list"
+            app:destination="@id/friendsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -62,4 +65,26 @@
             android:id="@+id/nav_from_settings_to_container"
             app:destination="@id/containerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/friendsListFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.FriendsListFragment"
+        android:label="FriendsListFragment"
+        tools:layout="@layout/fragment_friends_list">
+        <action
+            android:id="@+id/nav_from_friends_list_to_container"
+            app:destination="@id/containerFragment" />
+        <action
+            android:id="@+id/nav_from_friends_list_to_friends_searcher"
+            app:destination="@id/friendsSearcherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsSearcherFragment"
+        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.FriendsSearcherFragment"
+        android:label="FriendsSearcherFragment"
+        tools:layout="@layout/fragment_friends_searcher">
+        <action
+            android:id="@+id/nav_from_friends_searcher_to_friends_list"
+            app:destination="@id/friendsListFragment" />
+    </fragment>
+
 </navigation>

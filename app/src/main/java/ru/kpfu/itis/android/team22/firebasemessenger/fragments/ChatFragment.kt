@@ -2,9 +2,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,15 +20,11 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 import java.time.LocalDateTime
 
-
 class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
-
     private var firebaseUser: FirebaseUser? = null
-
     private var reference: DatabaseReference? = null
-
     private var userID: String? = null
     private var mMessageList = ArrayList<Message>()
     private var adapter: MessageAdapter? = null
