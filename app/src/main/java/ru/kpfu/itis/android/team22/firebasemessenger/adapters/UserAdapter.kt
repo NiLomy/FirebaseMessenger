@@ -9,7 +9,7 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 import ru.kpfu.itis.android.team22.firebasemessenger.items.UserItem
 
 class UserAdapter(
-    private var list: List<User>,
+    private var list: ArrayList<User>,
     private val glide: RequestManager,
     private val onItemClick: (User) -> Unit,
 ) : RecyclerView.Adapter<UserItem>() {
@@ -33,5 +33,10 @@ class UserAdapter(
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun filter(newList : ArrayList<User>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }

@@ -3,6 +3,7 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -35,7 +36,37 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         _binding = FragmentMessagesBinding.bind(view)
         context = requireContext().applicationContext
 
+        setUpSearchBar()
         getUsersList()
+    }
+
+    private fun setUpSearchBar() {
+        binding.sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { filter(it) }
+                return false
+            }
+        })
+    }
+
+    private fun filter(input : String) {
+        val filteredList : ArrayList<User> = ArrayList()
+
+        for (item in userList) {
+            if (item.userName.lowercase().trim().contains(input.lowercase().trim())) {
+                filteredList.add(item)
+            }
+        }
+        if (filteredList.isEmpty()) {
+            binding.tvNoResults.visibility = View.VISIBLE
+        } else {
+            binding.tvNoResults.visibility = View.GONE
+        }
+        adapter?.filter(filteredList)
     }
 
     private fun initAdapter() {
