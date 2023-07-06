@@ -41,4 +41,5 @@
     <string name="db_user_profile_image">userProfileImage</string>
     <string name="friends_list">Friends list</string>
     <string name="profile_picture">Profile picture</string>
+    <string name="user_id_tag">USER_ID</string>
 </resources>
