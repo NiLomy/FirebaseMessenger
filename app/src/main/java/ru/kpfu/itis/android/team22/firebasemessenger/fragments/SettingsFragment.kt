@@ -32,22 +32,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
+        val user = FirebaseAuth.getInstance().currentUser
 
         with(binding) {
-            val user = FirebaseAuth.getInstance().currentUser
-
+            var newImageUri: Uri? = null
             databaseReference =
                 user?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
 
             galleryButton.setOnClickListener {
-//                newImageUri = getProfilePicture()
+                newImageUri = getProfilePicture()
             }
             fabToContainer.setOnClickListener {
                 findNavController().navigate(R.id.nav_from_settings_to_container)
             }
             applyChangesButton.setOnClickListener {
-                val currentUser = FirebaseAuth.getInstance().currentUser
-                currentUser?.run {
+                user?.run {
                     //null пока как плейсхолдер
                     updateProfile(etNewName.text.toString(), null, databaseReference)
                 }
