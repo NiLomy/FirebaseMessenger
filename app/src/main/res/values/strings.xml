@@ -38,5 +38,5 @@
 
     <string name="db_user_id">userId</string>
     <string name="db_user_name">userName</string>
-    <string name="db_user_profile_image">userProfileImage></string>
+    <string name="db_user_profile_image">userProfileImage</string>
 </resources>
