@@ -39,6 +39,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
+            android:maxWidth="200dp"
             android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"

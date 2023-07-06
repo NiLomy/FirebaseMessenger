@@ -101,18 +101,14 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
     }
 
     private fun loadImage(holder: ViewHolder, profileImage: String?) {
-        val storageRef = profileImage?.let { FirebaseStorage.getInstance().reference.child(it) }
-        storageRef?.downloadUrl?.addOnSuccessListener { uri ->
-            Glide
-                .with(context)
-                .load(uri)
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error)
-                .apply(options)
-                .into(holder.ivUserImage)
-        }?.addOnFailureListener {
-            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-        }
+        Glide
+            .with(context)
+            .load(profileImage)
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.error)
+            .apply(options)
+            .into(holder.ivUserImage)
+
     }
 
     override fun getItemViewType(position: Int): Int {

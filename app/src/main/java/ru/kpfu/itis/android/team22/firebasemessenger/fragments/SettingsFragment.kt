@@ -27,18 +27,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var databaseReference: DatabaseReference? = null
 
+    // TODO ("Добавить смену параля через FirebaseUser.updatePassword()?)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
 
         with(binding) {
-            var newImageUri: Uri? = null
             val user = FirebaseAuth.getInstance().currentUser
+
             databaseReference =
                 user?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
 
             galleryButton.setOnClickListener {
-                newImageUri = getProfilePicture()
+//                newImageUri = getProfilePicture()
             }
             fabToContainer.setOnClickListener {
                 findNavController().navigate(R.id.nav_from_settings_to_container)
