@@ -17,14 +17,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import ru.kpfu.itis.android.team22.firebasemessenger.R
-import ru.kpfu.itis.android.team22.firebasemessenger.adapters.UserAdapter
+import ru.kpfu.itis.android.team22.firebasemessenger.adapters.ChattableUserAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentFriendsListBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     private var _binding: FragmentFriendsListBinding? = null
     private val binding get() = _binding!!
-    private var adapter: UserAdapter? = null
+    private var adapter: ChattableUserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
 
@@ -81,7 +81,7 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
             return
         }
 
-        adapter = UserAdapter(
+        adapter = ChattableUserAdapter(
             list = userList,
             glide = Glide.with(this),
             onItemClick = { user ->

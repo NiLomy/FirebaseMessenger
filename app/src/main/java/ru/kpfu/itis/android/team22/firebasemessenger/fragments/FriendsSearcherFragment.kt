@@ -17,14 +17,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import ru.kpfu.itis.android.team22.firebasemessenger.R
-import ru.kpfu.itis.android.team22.firebasemessenger.adapters.UserAdapter
+import ru.kpfu.itis.android.team22.firebasemessenger.adapters.AddableUserAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentFriendsSearcherBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     private var _binding: FragmentFriendsSearcherBinding? = null
     private val binding get() = _binding!!
-    private var adapter: UserAdapter? = null
+    private var adapter: AddableUserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
 
@@ -76,16 +76,18 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             // The fragment is not yet linked to the activity
             return
         }
-
-        adapter = UserAdapter(
-            list = userList,
-            glide = Glide.with(this),
-            onItemClick = { user ->
-                //TODO сделать так, чтобы переходил на профиль пользователя
-//                val bundle: Bundle = bundleOf("id" to user.userId)
-//                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
-            }
-        )
+        adapter = context?.let {
+            AddableUserAdapter(
+                list = userList,
+                glide = Glide.with(this),
+                onItemClick = { user ->
+                    //TODO сделать так, чтобы переходил на профиль пользователя
+    //                val bundle: Bundle = bundleOf("id" to user.userId)
+    //                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
+                },
+                context = it,
+            )
+        }
         binding.rvUser.adapter = adapter
     }
 
