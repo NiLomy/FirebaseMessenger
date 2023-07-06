@@ -71,7 +71,6 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
 
     private fun initAdapter() {
         if (!isAdded || isDetached || activity == null) {
-            // The fragment is not yet linked to the activity
             return
         }
 

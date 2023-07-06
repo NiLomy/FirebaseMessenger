@@ -36,7 +36,4 @@
     <string name="friends">Friends</string>
     <string name="find_friends">Find Friends</string>
     <string name="no_results">No Results</string>
-    <string name="db_user_id">userId</string>
-    <string name="db_user_name">userName</string>
-    <string name="db_user_profile_image">userProfileImage</string>
 </resources>

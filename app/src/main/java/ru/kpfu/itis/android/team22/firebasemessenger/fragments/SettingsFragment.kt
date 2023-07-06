@@ -7,16 +7,17 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSettingsBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
@@ -26,75 +27,121 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding get() = _binding!!
 
     private var databaseReference: DatabaseReference? = null
+    private var currUser: FirebaseUser? = null
+    private var profilePictureUri: Uri? = null
+    private val PICK_IMAGE_REQUEST = 1
 
     // TODO ("Добавить смену параля через FirebaseUser.updatePassword()?)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
-        val user = FirebaseAuth.getInstance().currentUser
+        currUser = FirebaseAuth.getInstance().currentUser
 
-        with(binding) {
-            var newImageUri: Uri? = null
-            databaseReference =
-                user?.uid?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
+        databaseReference = currUser?.uid?.let {
+            FirebaseDatabase.getInstance().getReference("Users").child(it)
+        }
 
-            galleryButton.setOnClickListener {
-                newImageUri = getProfilePicture()
-            }
-            fabToContainer.setOnClickListener {
-                findNavController().navigate(R.id.nav_from_settings_to_container)
-            }
-            applyChangesButton.setOnClickListener {
-                user?.run {
-                    //null пока как плейсхолдер
-                    updateProfile(etNewName.text.toString(), null, databaseReference)
+        setClickListeners()
+    }
+
+    private fun setClickListeners() {
+        binding.galleryButton.setOnClickListener {
+            openGallery()
+        }
+
+        binding.fabToContainer.setOnClickListener {
+            findNavController().navigate(R.id.nav_from_settings_to_container)
+        }
+
+        binding.applyChangesButton.setOnClickListener {
+            currUser?.run {
+                if (profilePictureUri != null) {
+                    updateNameAndImage(
+                        binding.etNewName.text.toString(),
+                        profilePictureUri!!,
+                        databaseReference
+                    )
+                } else {
+                    updateName(binding.etNewName.text.toString(), databaseReference)
                 }
             }
+
+            Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
+
+            findNavController().navigate(R.id.nav_from_settings_to_container)
         }
     }
 
-    private fun getProfilePicture(): Uri? {
-        //TODO: заставить эту штуку работать
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        var imageUri: Uri? = null
-        val profilePicture = _binding?.galleryButton
-        val changeImage =
-            registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) {
-                if (it.resultCode == Activity.RESULT_OK) {
-                    val data = it.data
-                    imageUri = data?.data
-                    profilePicture?.setImageURI(imageUri)
-                }
+    private fun updateNameAndImage(
+        newName: String,
+        profilePictureUri: Uri,
+        databaseReference: DatabaseReference?
+    ) {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val userUid = currUser?.uid
+        val avatarRef = storageRef.child("avatars/$userUid.jpg")
+
+        avatarRef.putFile(profilePictureUri)
+            .addOnSuccessListener {
+                avatarRef.downloadUrl
+                    .addOnSuccessListener { downloadUri ->
+                        val url = downloadUri.toString()
+
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setPhotoUri(Uri.parse(url))
+                            .build()
+
+                        currUser?.updateProfile(profileUpdates)
+
+                        val hashMap = readUserInfo(databaseReference)
+                        newName.let {
+                            if (it.isNotEmpty()) hashMap["userName"] = it
+                        }
+                        hashMap["profileImage"] = url
+
+                        this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
+                    }
             }
-        changeImage.launch(intent)
-        return imageUri
     }
 
-    private fun updateProfile(
-        newName: String?, newProfilePicture: String?, databaseReference: DatabaseReference?
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            profilePictureUri = data.data
+        }
+    }
+
+    private fun updateName(
+        newName: String, databaseReference: DatabaseReference?
     ) {
         val hashMap = readUserInfo(databaseReference)
-        newName?.let {
-            if (it.isNotEmpty()) hashMap[getString(R.string.db_user_name)] = it
-        }
-        newProfilePicture?.let { hashMap[getString(R.string.db_user_profile_image)] = it }
 
-        databaseReference?.updateChildren(hashMap as Map<String, Any>)
+        if (newName.isEmpty() || newName.length > 20) {
+            Toast.makeText(context, "Username is invalid! Please try another.", Toast.LENGTH_SHORT)
+                .show()
+
+        } else {
+            hashMap["userName"] = newName
+            databaseReference?.updateChildren(hashMap as Map<String, Any>)
+        }
     }
 
-    private fun readUserInfo(databaseReference: DatabaseReference?) : HashMap<String, String> {
+    private fun readUserInfo(databaseReference: DatabaseReference?): HashMap<String, String> {
         val hashMap: HashMap<String, String> = HashMap()
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
                 user?.run {
-                    hashMap.put(getString(R.string.db_user_profile_image), this.profileImage)
-                    hashMap.put(getString(R.string.db_user_id), this.userId)
-                    hashMap.put(getString(R.string.db_user_name),  this.userName)
+                    hashMap["profileImage"] = this.profileImage
+                    hashMap["userId"] = this.userId
+                    hashMap["userName"] = this.userName
                 }
             }
 
@@ -103,5 +150,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         })
         return hashMap
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
