@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".fragments.FriendsListFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/friends_list_action_bar"
@@ -45,6 +46,9 @@
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Enter friend's name"
         app:layout_constraintEnd_toStartOf="@+id/button_find_friends"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/friends_list_action_bar" />
@@ -57,15 +61,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_no_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_results"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp"
+        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sv"
-        tools:itemCount="8"
+        tools:itemCount="18"
         tools:listitem="@layout/item_friend_to_chat" />
 </androidx.constraintlayout.widget.ConstraintLayout>
