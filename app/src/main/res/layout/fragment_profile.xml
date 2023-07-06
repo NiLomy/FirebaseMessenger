@@ -14,7 +14,7 @@
         android:fontFamily="@font/archivo_regular"
         android:text="@string/profile"
         android:textColor="@color/colorWhite"
-        android:textSize="27dp"
+        android:textSize="27sp"
         android:translationZ="@dimen/cardview_compat_inset_shadow"
         android:background="@color/colorGreen"
         android:paddingStart="32dp"
@@ -66,6 +66,17 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <Button
+        android:id="@+id/friends_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/friends"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv"
+        />
+
     <ImageButton
         android:id="@+id/btn_log_out"
         android:layout_width="wrap_content"
@@ -91,5 +102,4 @@
         android:background="@color/colorGreenLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

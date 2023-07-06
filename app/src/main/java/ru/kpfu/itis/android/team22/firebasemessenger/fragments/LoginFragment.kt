@@ -15,17 +15,16 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentLoginBi
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private var _auth: FirebaseAuth? = null
-    private val auth get() = _auth!!
+    private var auth: FirebaseAuth? = null
     private var firebaseUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentLoginBinding.bind(view)
-        _auth = Firebase.auth
+        auth = Firebase.auth
 
-        firebaseUser = auth.currentUser
+        firebaseUser = auth?.currentUser
 
         if (firebaseUser != null) {
             findNavController().navigate(R.id.nav_from_login_to_container)
@@ -61,8 +60,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun signInWithEmailAndPassword(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
+        auth?.signInWithEmailAndPassword(email, password)
+            ?.addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     showSnackbar(getString(R.string.login_success))
                     findNavController().navigate(R.id.nav_from_login_to_container)
