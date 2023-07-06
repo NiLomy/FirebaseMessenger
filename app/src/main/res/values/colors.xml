@@ -3,7 +3,7 @@
     <color name="colorGreenLight">#6F7FD6</color>
     <color name="colorGreen">#3F51B5</color>
     <color name="colorPrimary">#3f51b5</color>
-    <color name="colorOrange">#f0893a</color>
+    <color name="colorOrange">#F09E3A</color>
     <color name="colorGreenDark">#16267A</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorText">#464646</color>
@@ -11,5 +11,5 @@
     <color name="colorTextBackground">#c3c1b4</color>
     <color name="colorItemLeft">#E6E4E4</color>
     <color name="colorItemRight">#813fd7</color>
-    <color name="colorWhite">#fff</color>
+    <color name="colorWhite">#ffffff</color>
 </resources>
