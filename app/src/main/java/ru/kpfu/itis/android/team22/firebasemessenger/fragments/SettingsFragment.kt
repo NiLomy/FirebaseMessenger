@@ -52,7 +52,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val intent = Intent(Intent.ACTION_PICK)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         var imageUri: Uri? = null
-        val profilePicture = _binding?.ivProfilePicture
+        val profilePicture = _binding?.galleryButton
         val changeImage =
             registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
