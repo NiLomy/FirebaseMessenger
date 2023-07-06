@@ -45,12 +45,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 val user: User? = snapshot.getValue(User::class.java)
                 binding.run {
                     userName.text = user?.userName
-                    val context = requireContext().applicationContext
-                    Glide.with(context)
-                        .load(user?.profileImage)
-                        .placeholder(R.drawable.loading)
-                        .error(R.drawable.error)
-                        .into(ivImage)
+
+                    if (isAdded) {
+                        val context = requireContext().applicationContext
+                        Glide.with(context)
+                            .load(user?.profileImage)
+                            .placeholder(R.drawable.loading)
+                            .error(R.drawable.error)
+                            .into(ivImage)
+                    }
                 }
             }
 
