@@ -35,14 +35,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         _binding = FragmentProfileBinding.bind(view)
         context = requireContext()
-        setUpButtons()
-
         auth = Firebase.auth
         firebaseUser = auth?.currentUser
-        databaseReference =
-            firebaseUser?.uid?.let {
-                FirebaseDatabase.getInstance().getReference("Users").child(it)
-            }
+
+
+        setUpButtons()
+        initFields()
+    }
+
+    private fun initFields() {
+        databaseReference = firebaseUser?.uid?.let {
+            FirebaseDatabase.getInstance().getReference("Users").child(it)
+        }
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -89,9 +93,5 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             val dialog = builder.create()
             dialog.show()
         }
-    }
-
-    private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 }

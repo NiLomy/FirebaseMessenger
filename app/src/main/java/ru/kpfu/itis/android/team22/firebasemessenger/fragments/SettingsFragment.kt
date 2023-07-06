@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -42,10 +43,40 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         setClickListeners()
+        initFields()
+    }
+
+    private fun initFields() {
+        databaseReference = currUser?.uid?.let {
+            FirebaseDatabase.getInstance().getReference("Users").child(it)
+        }
+
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user: User? = snapshot.getValue(User::class.java)
+
+                binding.run {
+                    etNewName.setText(user?.userName)
+
+                    if (isAdded) {
+                        val context = requireContext().applicationContext
+                        Glide.with(context)
+                            .load(user?.profileImage)
+                            .placeholder(R.drawable.loading)
+                            .error(R.drawable.error)
+                            .into(ivProfilePicture)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setClickListeners() {
-        binding.galleryButton.setOnClickListener {
+        binding.ivProfilePicture.setOnClickListener {
             openGallery()
         }
 
@@ -65,8 +96,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     updateName(binding.etNewName.text.toString(), databaseReference)
                 }
             }
-
-            Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
 
             findNavController().navigate(R.id.nav_from_settings_to_container)
         }
@@ -101,6 +130,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         hashMap["profileImage"] = url
 
                         this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
+                        makeToast("Success!")
                     }
             }
     }
@@ -115,6 +145,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             profilePictureUri = data.data
+            val context = requireContext().applicationContext
+            Glide.with(context)
+                .load(profilePictureUri)
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .into(binding.ivProfilePicture)
         }
     }
 
@@ -123,13 +159,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     ) {
         val hashMap = readUserInfo(databaseReference)
 
-        if (newName.isEmpty() || newName.length > 20) {
-            Toast.makeText(context, "Username is invalid! Please try another.", Toast.LENGTH_SHORT)
-                .show()
-
+        if (newName.isEmpty()) {
+            makeToast("Username must be non-empty.")
+        } else if (newName.length > 20) {
+            makeToast("Username is too long. Try shorter.")
         } else {
             hashMap["userName"] = newName
             databaseReference?.updateChildren(hashMap as Map<String, Any>)
+            makeToast("Success!")
         }
     }
 
@@ -146,14 +183,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                makeToast(error.message)
             }
         })
         return hashMap
     }
 
+    private fun makeToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+
+        // TODO: Если раскомментировать, то ошибка из за метода в initFields()
+//        _binding = null
     }
 }
