@@ -62,8 +62,11 @@
             android:id="@+id/nav_from_chat_to_container"
             app:destination="@id/containerFragment" />
         <action
-            android:id="@+id/nav_from_chat_to_u_profile"
+            android:id="@+id/nav_from_chat_to_user_profile"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/nav_from_chat_to_friends_list"
+            app:destination="@id/friendsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -85,6 +88,12 @@
         <action
             android:id="@+id/nav_from_friends_list_to_friends_searcher"
             app:destination="@id/friendsSearcherFragment" />
+        <action
+            android:id="@+id/nav_from_friends_list_to_user_profile"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/nav_from_friends_list_to_chat"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/friendsSearcherFragment"
@@ -94,6 +103,9 @@
         <action
             android:id="@+id/nav_from_friends_searcher_to_friends_list"
             app:destination="@id/friendsListFragment" />
+        <action
+            android:id="@+id/nav_from_friends_searcher_to_user_profile"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
@@ -101,8 +113,14 @@
         android:label="UserProfileFragment"
         tools:layout="@layout/fragment_user_profile">
         <action
-            android:id="@+id/nav_from_u_profile_to_chat"
+            android:id="@+id/nav_from_user_profile_to_chat"
             app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/nav_from_user_profile_to_friends_searcher"
+            app:destination="@id/friendsSearcherFragment" />
+        <action
+            android:id="@+id/nav_from_user_profile_to_friends_list"
+            app:destination="@id/friendsListFragment" />
     </fragment>
 
 </navigation>
