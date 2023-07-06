@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="4dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_user_img"
@@ -25,12 +25,12 @@
         android:layout_marginVertical="10dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/sent_msg_bg"
-        android:padding="10dp"
+        android:padding="8dp"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_user_img">
-      
+
         <TextView
             android:id="@+id/tv_msg"
             android:layout_width="wrap_content"
@@ -39,24 +39,24 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="4dp"
             android:fontFamily="@font/gilroy_light"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorText"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_time"
+            app:layout_constraintEnd_toStartOf="@id/tv_time"
             tools:text="Sent msg" />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_margin="2dp"
             android:textSize="12sp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorText"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_msg"
             tools:text="00:00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

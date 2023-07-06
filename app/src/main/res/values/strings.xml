@@ -32,6 +32,7 @@
     <string name="apply_changes">Apply Changes</string>
     <string name="label_settings">Settings</string>
     <string name="back_button">Back button</string>
+    <string name="name">Name</string>
     <string name="friends">Friends</string>
     <string name="find_friends">Find Friends</string>
 </resources>
