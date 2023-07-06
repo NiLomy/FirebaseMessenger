@@ -23,9 +23,7 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-
-    private var _auth: FirebaseAuth? = null
-    private val auth get() = _auth!!
+    private var auth: FirebaseAuth? = null
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
 
@@ -33,8 +31,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentProfileBinding.bind(view)
-        _auth = Firebase.auth
-        firebaseUser = auth.currentUser
+        setUpButtons()
+
+        auth = Firebase.auth
+        firebaseUser = auth?.currentUser
         databaseReference =
             firebaseUser?.uid?.let {
                 FirebaseDatabase.getInstance().getReference("Users").child(it)
@@ -59,15 +59,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
 
         })
+    }
 
-        val settings = binding.fabSettings
-        settings.setOnClickListener {
+    private fun setUpButtons() {
+        binding.friendsButton.setOnClickListener {
+            findNavController().navigate(R.id.nav_from_container_to_friends_list)
+        }
+
+        binding.fabSettings.setOnClickListener {
             findNavController().navigate(R.id.nav_from_container_to_settings)
         }
 
-        val btnLogOut = binding.btnLogOut
-        btnLogOut.setOnClickListener {
-            auth.signOut()
+        binding.btnLogOut.setOnClickListener {
+            auth?.signOut()
             findNavController().navigate(R.id.nav_from_container_to_login)
         }
     }
