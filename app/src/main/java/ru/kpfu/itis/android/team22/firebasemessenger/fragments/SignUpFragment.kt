@@ -1,6 +1,7 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -15,12 +17,16 @@ import com.google.firebase.ktx.Firebase
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpBinding
 
+
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     private var auth: FirebaseAuth? = null
     private var context: Context? = null
     private var firebaseUser: FirebaseUser? = null
+
+    private val DEFAULT_IMG_URL =
+        "https://firebasestorage.googleapis.com/v0/b/fir-messenger-187aa.appspot.com/o/default.png?alt=media&token=cfe96231-9136-485e-932a-bcf2f1e7fdb9"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,6 +100,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 ?.addOnCompleteListener(fragmentActivity) { task ->
                     if (task.isSuccessful) {
                         val user: FirebaseUser? = auth?.currentUser
+
+                        saveUserToFirebaseUser(user, email, userName)
+
                         val userId: String = user?.uid ?: ""
 
                         val databaseReference =
@@ -102,7 +111,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = userId
                         hashMap["userName"] = userName
-                        hashMap["profileImage"] = "default.png"
+                        hashMap["profileImage"] = DEFAULT_IMG_URL
 
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
@@ -114,6 +123,16 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                     }
                 }
         }
+    }
+
+    private fun saveUserToFirebaseUser(user: FirebaseUser?, email: String, userName: String) {
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(userName)
+            .setPhotoUri(Uri.parse(DEFAULT_IMG_URL))
+            .build()
+
+        user!!.updateProfile(profileUpdates)
+        user.updateEmail(email)
     }
 
     private fun saveUserDataToDatabase(
@@ -130,11 +149,12 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+        val rootView = view ?: return // Проверка, что view не равно null
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 }

@@ -24,17 +24,12 @@ class UserItem(
         binding.run {
             userName.text = user.userName
 
-            val storageRef = FirebaseStorage.getInstance().reference.child(user.profileImage)
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                glide
-                    .load(uri)
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .apply(options)
-                    .into(ivImage)
-            }.addOnFailureListener {
-                Toast.makeText(root.context, it.message, Toast.LENGTH_SHORT).show()
-            }
+            glide
+                .load(user.profileImage)
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .apply(options)
+                .into(ivImage)
 
             root.setOnClickListener {
                 onItemClick(user)
