@@ -34,4 +34,9 @@ class UserAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
+
+    fun filter(newList : ArrayList<User>) {
+        list = newList
+        notifyDataSetChanged()
+    }
 }
