@@ -102,7 +102,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["userId"] = userId
                         hashMap["userName"] = userName
-                        hashMap["profileImage"] = ""
+                        hashMap["profileImage"] = "default.png"
 
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
