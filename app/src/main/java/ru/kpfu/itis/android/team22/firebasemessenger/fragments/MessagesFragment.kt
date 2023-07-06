@@ -41,7 +41,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     }
 
     private fun setUpSearchBar() {
-        binding.sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.sv.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }

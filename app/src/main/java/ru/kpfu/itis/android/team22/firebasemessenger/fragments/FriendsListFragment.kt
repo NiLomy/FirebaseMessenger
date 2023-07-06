@@ -94,7 +94,7 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     }
 
     private fun setUpSearchBar() {
-        binding.sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.sv.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }

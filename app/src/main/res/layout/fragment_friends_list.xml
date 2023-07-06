@@ -16,50 +16,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:background="@color/colorPrimary"
-            android:contentDescription="@string/back_button"
-            android:src="@drawable/arrow_back_32"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
-            android:id="@+id/tv_profile"
+            android:id="@+id/tv_friends"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:elevation="@dimen/cardview_default_elevation"
+            android:fontFamily="@font/archivo_regular"
+            android:text="@string/friends"
+            android:textColor="@color/colorWhite"
+            android:textSize="27dp"
+            android:translationZ="@dimen/cardview_compat_inset_shadow"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/button_find_friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:layout_marginStart="16dp"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/back_button"
+            android:text="@string/find_friends"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Profile" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="5dp"
         android:iconifiedByDefault="false"
         android:queryHint="Enter friend's name"
-        app:layout_constraintEnd_toStartOf="@+id/button_find_friends"
+        android:background="@drawable/custom_input"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/friends_list_action_bar" />
-
-    <Button
-        android:id="@+id/button_find_friends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/find_friends"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_no_results"
@@ -86,4 +82,20 @@
         app:layout_constraintTop_toBottomOf="@+id/sv"
         tools:itemCount="18"
         tools:listitem="@layout/item_friend_to_chat" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:layout_marginStart="236dp"
+        android:background="@color/colorPrimary"
+        android:contentDescription="@string/back_button"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:src="@drawable/arrow_back_32"
+        android:translationZ="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.781" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
