@@ -25,13 +25,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="5dp"
         android:iconifiedByDefault="false"
         android:queryHint="Enter friend's name"
+        android:background="@drawable/custom_input"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toTopOf="@+id/rv_user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
