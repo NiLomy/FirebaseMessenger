@@ -19,7 +19,7 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
 
     private val SEND_MSG = 0
     private val RECIEVED_MSG = 1
-    var firebaseUser: FirebaseUser? = null
+    private var firebaseUser: FirebaseUser? = null
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
