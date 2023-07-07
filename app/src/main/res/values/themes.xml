@@ -9,7 +9,10 @@
         <item name="fontProviderCerts">@font/archivo_regular</item>
         <item name="android:fontFamily">@font/gilroy_light</item>
         
-        <item name="android:statusBarColor" tools:targetIpi="l">?attr/colorPrimary</item>
+<!--        <item name="android:statusBarColor" tools:targetIpi="l">?attr/colorPrimary</item>-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.FirebaseMessenger" parent="Base.Theme.FirebaseMessenger" />
