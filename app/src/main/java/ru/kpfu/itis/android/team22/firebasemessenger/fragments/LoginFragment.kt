@@ -63,7 +63,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         auth?.signInWithEmailAndPassword(email, password)
             ?.addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    showSnackbar(getString(R.string.login_success))
+                    showSnackbarCustomPos(getString(R.string.login_success), binding.tvAnchor)
                     findNavController().navigate(R.id.nav_from_login_to_container)
                 } else {
                     showSnackbar(getString(R.string.invalid_credentials))
@@ -74,6 +74,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun showSnackbarCustomPos(message: String, view: View) {
+        val rootView = this.view ?: return // Проверка, что view не равно null
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
+            .setAnchorView(view)
+            .show()
     }
 
     override fun onDestroy() {
