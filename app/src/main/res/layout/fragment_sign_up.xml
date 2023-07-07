@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/iv_background"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="185dp"
         android:background="@drawable/background_color_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@mipmap/ic_launcher"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,78 +43,114 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-
-    <EditText
-        android:id="@+id/et_name"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/custom_name"
-        android:drawablePadding="12dp"
-        android:hint="@string/enter_name"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColor="@color/colorText"
+        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_sign_up" />
+        app:layout_constraintTop_toBottomOf="@id/tv_sign_up">
 
-    <EditText
-        android:id="@+id/et_email"
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/custom_name"
+            android:drawablePadding="12dp"
+            android:hint="@string/enter_name"
+            android:inputType="text"
+            android:padding="12dp"
+            android:textColor="@color/colorText"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/custom_mail"
-        android:drawablePadding="12dp"
-        android:hint="@string/enter_email"
-        android:inputType="textEmailAddress"
-        android:padding="12dp"
-        android:textColor="@color/colorText"
+        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_name" />
+        app:layout_constraintTop_toBottomOf="@id/til1">
 
-    <EditText
-        android:id="@+id/et_password"
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/custom_mail"
+            android:drawablePadding="12dp"
+            android:hint="@string/enter_email"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:textColor="@color/colorText" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/custom_lock"
-        android:drawablePadding="12dp"
-        android:hint="@string/enter_password"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:textColor="@color/colorText"
+        app:hintEnabled="false"
+        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_email" />
+        app:layout_constraintTop_toBottomOf="@id/til2">
 
-    <EditText
-        android:id="@+id/et_confirm_password"
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/custom_lock"
+            android:drawablePadding="12dp"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="@color/colorText" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/custom_lock"
-        android:drawablePadding="12dp"
-        android:hint="@string/enter_confirm_password"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:textColor="@color/colorText"
+        app:passwordToggleEnabled="true"
+        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_password" />
+        app:layout_constraintTop_toBottomOf="@id/til3">
+
+        <EditText
+            android:id="@+id/et_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/custom_lock"
+            android:drawablePadding="12dp"
+            android:hint="@string/enter_confirm_password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="@color/colorText" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_sign_up"
@@ -130,7 +167,7 @@
         android:translationZ="@dimen/cardview_compat_inset_shadow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_confirm_password" />
+        app:layout_constraintTop_toBottomOf="@id/til4" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_login"
