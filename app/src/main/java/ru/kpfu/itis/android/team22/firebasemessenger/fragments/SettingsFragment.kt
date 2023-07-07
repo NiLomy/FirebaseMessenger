@@ -24,8 +24,9 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSetting
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentSettingsBinding? = null
+    // Так нужно, иначе будут баги с вылетом
+//    private val binding get() = _binding!!
 
     private var databaseReference: DatabaseReference? = null
     private var currUser: FirebaseUser? = null
@@ -33,9 +34,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val PICK_IMAGE_REQUEST = 1
 
     // TODO ("Добавить смену параля через FirebaseUser.updatePassword()?)
+    // TODO ("Обновлять userName у FirebaseUser")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSettingsBinding.bind(view)
+        binding = FragmentSettingsBinding.bind(view)
         currUser = FirebaseAuth.getInstance().currentUser
 
         databaseReference = currUser?.uid?.let {
@@ -55,7 +57,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
 
-                binding.run {
+                binding?.run {
                     etNewName.setText(user?.userName)
 
                     if (isAdded) {
@@ -76,28 +78,30 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun setClickListeners() {
-        binding.ivProfilePicture.setOnClickListener {
+        binding?.ivProfilePicture?.setOnClickListener {
+            binding?.ivProfilePicture!!.isEnabled = false
             openGallery()
+            binding?.ivProfilePicture!!.isEnabled = true
         }
 
-        binding.fabToContainer.setOnClickListener {
+        binding?.fabToContainer?.setOnClickListener {
             findNavController().navigate(R.id.nav_from_settings_to_container)
         }
 
-        binding.applyChangesButton.setOnClickListener {
+        binding?.applyChangesButton?.setOnClickListener {
+            binding?.applyChangesButton!!.isEnabled = false
             currUser?.run {
                 if (profilePictureUri != null) {
                     updateNameAndImage(
-                        binding.etNewName.text.toString(),
+                        binding?.etNewName?.text.toString(),
                         profilePictureUri!!,
                         databaseReference
                     )
                 } else {
-                    updateName(binding.etNewName.text.toString(), databaseReference)
+                    updateName(binding?.etNewName?.text.toString(), databaseReference)
                 }
             }
-
-            findNavController().navigate(R.id.nav_from_settings_to_container)
+            binding?.applyChangesButton!!.isEnabled = true
         }
     }
 
@@ -131,7 +135,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                         this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
                         makeToast("Success!")
+                        findNavController().navigate(R.id.nav_from_settings_to_container)
                     }
+            }.addOnFailureListener{
+                makeToast("Something went wrong...")
+                findNavController().navigate(R.id.nav_from_settings_to_container)
+            }.addOnFailureListener{
+                makeToast("Failed to update...")
+                findNavController().navigate(R.id.nav_from_settings_to_container)
             }
     }
 
@@ -150,7 +161,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 .load(profilePictureUri)
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.error)
-                .into(binding.ivProfilePicture)
+                .into(binding!!.ivProfilePicture)
         }
     }
 
@@ -167,6 +178,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             hashMap["userName"] = newName
             databaseReference?.updateChildren(hashMap as Map<String, Any>)
             makeToast("Success!")
+            findNavController().navigate(R.id.nav_from_settings_to_container)
         }
     }
 
@@ -196,7 +208,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        // TODO: Если раскомментировать, то ошибка из за метода в initFields()
-//        _binding = null
+        binding = null
     }
 }

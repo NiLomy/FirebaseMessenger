@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/nav_from_signup_to_login"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/signUpFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/nav_from_signup_to_container"
             app:destination="@id/containerFragment"
@@ -26,7 +28,9 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/nav_from_login_to_signup"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/nav_from_login_to_container"
             app:destination="@id/containerFragment"

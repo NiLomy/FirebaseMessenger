@@ -9,9 +9,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentContainerBinding
 
 class ContainerFragment : Fragment(R.layout.fragment_container) {
-    // TODO: сделать так, чтоб нельзя было возвращаться назад, если пользователь уже зареган
-    // TODO: последний профиль в списке не видно до конца (RV налезает на BNV)
-
     private var _binding: FragmentContainerBinding? = null
     private val binding get() = _binding!!
 

@@ -8,11 +8,4 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
-
-
-    // TODO: возможно, есть способ получше пофиксить этот баг
-    // Blocking transition to the previous fragment
-    // Necessary to avoid exceptional situations
-//    override fun onBackPressed() {
-//    }
 }
