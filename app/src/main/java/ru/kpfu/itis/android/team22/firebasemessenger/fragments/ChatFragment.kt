@@ -84,12 +84,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
 
         binding.ivProfileImage.setOnClickListener {
-            val bundle : Bundle = bundleOf(getString(R.string.user_id_tag) to userID, "from" to "chat")
+            val bundle: Bundle =
+                bundleOf(getString(R.string.user_id_tag) to userID, "from" to "chat")
             findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
         }
     }
 
-    private fun sendMessage(senderId: String, receiverId: String, message: String, time : String) {
+    private fun sendMessage(senderId: String, receiverId: String, message: String, time: String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
 
         val hashMap: HashMap<String, String> = HashMap()

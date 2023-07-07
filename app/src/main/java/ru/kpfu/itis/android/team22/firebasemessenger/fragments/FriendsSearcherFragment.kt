@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -26,11 +27,13 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     private var adapter: AddableUserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
+    private var auth: FirebaseAuth? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFriendsSearcherBinding.bind(view)
         context = requireContext().applicationContext
+        auth = Firebase.auth
 
         setUpButtons()
         setUpSearchBar()
@@ -75,25 +78,28 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             // The fragment is not yet linked to the activity
             return
         }
+        val user: FirebaseUser? = auth?.currentUser
         adapter = context?.let {
             AddableUserAdapter(
                 list = userList,
                 glide = Glide.with(this),
                 onItemClick = { user ->
                     //TODO сделать так, чтобы переходил на профиль пользователя
-    //                val bundle: Bundle = bundleOf("id" to user.userId)
-    //                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
+                    //                val bundle: Bundle = bundleOf("id" to user.userId)
+                    //                findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
                 },
                 context = it,
                 controller = findNavController(),
-                userId = getString(R.string.user_id_tag)
+                userId = getString(R.string.user_id_tag),
+                currentUser = user
             )
         }
         binding.rvUser.adapter = adapter
     }
 
     private fun setUpSearchBar() {
-        binding.sv.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.sv.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -105,8 +111,8 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
         })
     }
 
-    private fun filter(input : String) {
-        val filteredList : ArrayList<User> = ArrayList()
+    private fun filter(input: String) {
+        val filteredList: ArrayList<User> = ArrayList()
 
         for (item in userList) {
             if (item.userName.lowercase().trim().contains(input.lowercase().trim())) {

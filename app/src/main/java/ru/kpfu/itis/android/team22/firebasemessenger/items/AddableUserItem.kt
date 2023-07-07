@@ -8,9 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.database.ktx.snapshots
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemUserToAddBinding
+import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import java.lang.StringBuilder
 
 class AddableUserItem(
     private val binding: ItemUserToAddBinding,
@@ -18,8 +27,8 @@ class AddableUserItem(
     private val onItemClick: (User) -> Unit,
     private val controller: NavController,
     private val userId: String,
+    private val currentUser: FirebaseUser?,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     private val options: RequestOptions = RequestOptions
         .diskCacheStrategyOf(DiskCacheStrategy.ALL)
 
@@ -34,12 +43,47 @@ class AddableUserItem(
                 .apply(options)
                 .into(ivImage)
 
-            ib.setOnClickListener {
+            val databaseReference =
+                currentUser?.uid?.let { currentUserid ->
+                    FirebaseDatabase.getInstance().getReference("Users").child(
+                        currentUserid
+                    )
+                }
+            val list: ArrayList<String> = ArrayList()
+            databaseReference?.child("friendsList")
+                ?.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        list.clear()
+                        for (dataSnapShot: DataSnapshot in snapshot.children) {
+                            val id = dataSnapShot.getValue(String::class.java)
+                            if (!list.contains(id)) {
+                                id?.let { it1 -> list.add(it1) }
+                            }
+                        }
+                        if (list.contains(user.userId)) {
+                            ib.setImageResource(R.drawable.ic_remove_user)
+                        } else {
+                            ib.setImageResource(R.drawable.ic_add_friend)
+                        }
+                    }
 
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+
+            ib.setOnClickListener {
+                if (!list.contains(user.userId)) {
+                    list.add(user.userId)
+                } else {
+                    list.remove(user.userId)
+                }
+                databaseReference?.child("friendsList")?.setValue(list)
             }
 
             root.setOnClickListener {
-                val bundle : Bundle = bundleOf(userId to user.userId, "from" to "friends")
+                val bundle: Bundle = bundleOf(userId to user.userId, "from" to "friends")
                 controller.navigate(R.id.nav_from_friends_searcher_to_user_profile, bundle)
             }
         }

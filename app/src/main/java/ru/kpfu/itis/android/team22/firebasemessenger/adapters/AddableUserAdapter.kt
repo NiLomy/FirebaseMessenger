@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
+import com.google.firebase.auth.FirebaseUser
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemUserToAddBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 import ru.kpfu.itis.android.team22.firebasemessenger.items.AddableUserItem
@@ -18,6 +19,7 @@ class AddableUserAdapter(
     private val context: Context,
     private val controller: NavController,
     private val userId: String,
+    private val currentUser: FirebaseUser?,
 ) : RecyclerView.Adapter<AddableUserItem>() {
 
     override fun onCreateViewHolder(
@@ -33,20 +35,18 @@ class AddableUserAdapter(
         onItemClick = onItemClick,
         controller = controller,
         userId = userId,
+        currentUser = currentUser,
     )
 
     override fun onBindViewHolder(holder: AddableUserItem, position: Int) {
         holder.onBind(list[position])
-//        holder.itemView.setOnClickListener {
-//            Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    fun filter(newList : ArrayList<User>) {
+    fun filter(newList: ArrayList<User>) {
         list = newList
         notifyDataSetChanged()
     }

@@ -108,11 +108,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         val databaseReference =
                             FirebaseDatabase.getInstance().getReference("Users").child(userId)
 
-                        val hashMap: HashMap<String, String> = HashMap()
+                        val hashMap: HashMap<String, Any> = HashMap()
                         hashMap["userId"] = userId
                         hashMap["userName"] = userName
                         hashMap["profileImage"] = DEFAULT_IMG_URL
-
+                        hashMap["friendsList"] = ArrayList<String>()
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
                         val errorMessage: String? = task.exception?.message
@@ -137,7 +137,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private fun saveUserDataToDatabase(
         databaseReference: DatabaseReference,
-        hashMap: HashMap<String, String>
+        hashMap: HashMap<String, Any>
     ) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
