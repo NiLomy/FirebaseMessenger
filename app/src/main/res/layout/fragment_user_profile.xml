@@ -4,85 +4,83 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
-        android:id="@+id/tv_profile"
+        android:id="@+id/tv_user_name"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:elevation="@dimen/cardview_default_elevation"
-        android:fontFamily="@font/archivo_regular"
-        android:text="@string/profile"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:paddingStart="16dp"
+        android:text="@string/name"
+        android:textSize="28dp"
+        android:translationZ="5dp"
+        android:elevation="5dp"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="10"
+        android:shadowColor="@color/colorText"
+        android:fontFamily="@font/gilroy_bold"
         android:textColor="@color/colorWhite"
-        android:textSize="27sp"
-        android:translationZ="@dimen/cardview_compat_inset_shadow"
-        android:background="@color/colorGreen"
-        android:paddingStart="32dp"
-        android:paddingTop="32dp"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/cv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+        tools:text="User" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="32dp"
-        android:padding="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="5dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/ic_launcher"
-                android:translationZ="@dimen/cardview_compat_inset_shadow" />
-
-            <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gilroy_bold"
-                android:maxLines="1"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                app:layout_constraintHorizontal_bias="0.0"
-                tools:text="User" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/ib_message"
-        android:layout_width="64dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="@+id/cv"
-        app:layout_constraintTop_toBottomOf="@+id/cv"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        android:paddingStart="70dp"
+        android:paddingEnd="70dp"
+        android:background="@drawable/custom_button_3"
+        android:translationZ="2dp"
+        android:elevation="2dp"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:shadowColor="@color/colorText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_image"
+        app:layout_constraintStart_toEndOf="@id/ib_friend"
         app:srcCompat="@drawable/mail_black"
-        android:backgroundTint="@color/colorLightGray"
+        android:backgroundTint="@color/colorWhite"
         />
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/ib_friend"
-        android:layout_width="64dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="12dp"
+        android:paddingStart="70dp"
+        android:paddingEnd="70dp"
+        android:background="@drawable/custom_button_3"
+        android:translationZ="2dp"
+        android:elevation="2dp"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:shadowColor="@color/colorText"
         app:layout_constraintEnd_toStartOf="@+id/ib_message"
-        app:layout_constraintTop_toTopOf="@+id/ib_message"
-        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_image"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/add_friend"
-        android:backgroundTint="@color/colorLightGray"/>
+        android:backgroundTint="@color/colorWhite"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_back"
@@ -93,8 +91,7 @@
         android:src="@drawable/arrow_back"
         android:layout_margin="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/colorLightGray"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
