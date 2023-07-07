@@ -3,7 +3,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -52,6 +51,24 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
         val firebase: FirebaseUser? = Firebase.auth.currentUser
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
+        val currentUserDatabaseReference: DatabaseReference? =
+            firebase?.uid?.let {
+                FirebaseDatabase.getInstance().getReference("Users").child(it).child("friendsList")
+            }
+        val list: ArrayList<String> = ArrayList()
+        currentUserDatabaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                list.clear()
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val id = dataSnapShot.getValue(String::class.java)
+                    id?.let { list.add(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -59,7 +76,7 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
 
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user: User? = dataSnapshot.getValue(User::class.java)
-                    if (user?.userId != firebase?.uid) {
+                    if (list.contains(user?.userId)) {
                         if (user != null) {
                             userList.add(user)
                         }
@@ -96,7 +113,8 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     }
 
     private fun setUpSearchBar() {
-        binding.sv.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.sv.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -108,8 +126,8 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
         })
     }
 
-    private fun filter(input : String) {
-        val filteredList : ArrayList<User> = ArrayList()
+    private fun filter(input: String) {
+        val filteredList: ArrayList<User> = ArrayList()
 
         for (item in userList) {
             if (item.userName.lowercase().trim().contains(input.lowercase().trim())) {
