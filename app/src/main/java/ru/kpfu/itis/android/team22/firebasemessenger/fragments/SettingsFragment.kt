@@ -34,6 +34,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val PICK_IMAGE_REQUEST = 1
 
     // TODO ("Добавить смену параля через FirebaseUser.updatePassword()?)
+    // TODO ("Обновлять userName у FirebaseUser")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSettingsBinding.bind(view)
