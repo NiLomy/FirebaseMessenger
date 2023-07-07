@@ -142,7 +142,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    showSnackbar(getString(R.string.registration_success))
+                    showSnackbarCustomPos(getString(R.string.registration_success), binding.tvAnchor)
                     findNavController().navigate(R.id.nav_from_signup_to_container)
                 }
             }
@@ -151,6 +151,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private fun showSnackbar(message: String) {
         val rootView = view ?: return // Проверка, что view не равно null
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun showSnackbarCustomPos(message: String, view: View) {
+        val rootView = this.view ?: return // Проверка, что view не равно null
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
+            .setAnchorView(view)
+            .show()
     }
 
     override fun onDestroy() {

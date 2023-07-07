@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/tv_profile"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="80dp"
         android:elevation="@dimen/cardview_default_elevation"
         android:fontFamily="@font/archivo_regular"
         android:text="@string/profile"
@@ -16,7 +16,7 @@
         android:translationZ="@dimen/cardview_compat_inset_shadow"
         android:background="@color/colorGreen"
         android:paddingStart="32dp"
-        android:paddingTop="16dp"
+        android:paddingTop="32dp"
         android:paddingBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/cv"
         app:layout_constraintStart_toStartOf="parent"

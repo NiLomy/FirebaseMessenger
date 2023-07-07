@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.UserAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentMessagesBinding
@@ -23,7 +24,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var _binding: FragmentMessagesBinding? = null
-
     // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
 
     //TODO почему-то если испольщовать не null binding то ->
@@ -89,7 +89,10 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     }
 
     private fun getUsersList() {
-        val firebase: FirebaseUser? = Firebase.auth.currentUser
+        val currentUser: FirebaseUser? = Firebase.auth.currentUser
+
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
+
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
 
@@ -98,7 +101,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
                 userList.clear()
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user: User? = dataSnapshot.getValue(User::class.java)
-                    if (user?.userId != firebase?.uid) {
+                    if (user?.userId != currentUser?.uid) {
                         if (user != null) {
                             userList.add(user)
                         }
