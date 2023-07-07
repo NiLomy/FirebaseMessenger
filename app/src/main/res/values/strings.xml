@@ -42,4 +42,8 @@
     <string name="friends_list">Friends list</string>
     <string name="profile_picture">Profile picture</string>
     <string name="user_id_tag">USER_ID</string>
+    <string name="change_acc_data">Change account data</string>
+    <string name="enter_new_email">Enter New Email</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 </resources>

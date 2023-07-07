@@ -80,29 +80,37 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun setClickListeners() {
-        binding?.ibGallery?.setOnClickListener {
-            binding?.ivProfilePicture!!.isEnabled = false
-            openGallery()
-            binding?.ivProfilePicture!!.isEnabled = true
-        }
-
-        binding?.fabToContainer?.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_settings_to_container)
-        }
-
-        binding?.applyChangesButton?.setOnClickListener {
-            binding?.applyChangesButton!!.isEnabled = false
-            currUser?.run {
-                if (profilePictureUri != null) {
-                    updateNameAndImage(
-                        binding?.etNewName?.text.toString(),
-                        profilePictureUri!!,
-                        databaseReference
-                    )
-                } else {
-                    updateName(binding?.etNewName?.text.toString(), databaseReference)
-                }
+        binding?.run {
+            ivProfilePicture.setOnClickListener {
+                binding?.ivProfilePicture!!.isEnabled = false
+                openGallery()
+                binding?.ivProfilePicture!!.isEnabled = true
             }
+
+            fabToContainer.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_settings_to_container)
+            }
+
+            applyChangesButton.setOnClickListener {
+                binding?.applyChangesButton!!.isEnabled = false
+                currUser?.run {
+                    if (profilePictureUri != null) {
+                        updateNameAndImage(
+                            binding?.etNewName?.text.toString(),
+                            profilePictureUri!!,
+                            databaseReference
+                        )
+                    } else {
+                        updateName(binding?.etNewName?.text.toString(), databaseReference)
+                    }
+                }
+                applyChangesButton!!.isEnabled = true
+            }
+            changeEmailPassword.setOnClickListener {
+                val frag = SettingsDialogFragment()
+                frag.show(parentFragmentManager, "data_change")
+            }
+
         }
     }
 
