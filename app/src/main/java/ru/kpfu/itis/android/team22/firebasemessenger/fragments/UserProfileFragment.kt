@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -59,6 +60,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
                 val context = requireContext().applicationContext
                 Glide.with(context)
                     .load(user.profileImage)
+                    .transform(CenterCrop())
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(binding.ivImage)

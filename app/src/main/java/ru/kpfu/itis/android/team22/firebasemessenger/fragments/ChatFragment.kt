@@ -35,8 +35,9 @@ import ru.kpfu.itis.android.team22.firebasemessenger.notifications.RetrofitInsta
 import java.time.LocalDateTime
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
-    private var _binding: FragmentChatBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentChatBinding? = null
+    // Если раскомментировать, то иногда будет ошибка NullPointerException
+//    private val binding get() = _binding!!
     private var currentUser: FirebaseUser? = null
     private var reference: DatabaseReference? = null
     private var userID: String? = null
@@ -46,7 +47,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentChatBinding.bind(view)
+        binding = FragmentChatBinding.bind(view)
 
         initFirebaseToken()
         setUserInfo()
@@ -81,28 +82,28 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                binding.tvUserName.text = user!!.userName
+                binding?.tvUserName?.text = user!!.userName
                 val context = requireContext().applicationContext
                 Glide.with(context)
                     .load(user.profileImage)
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
-                    .into(binding.ivProfileImage)
+                    .into(binding?.ivProfileImage!!)
 
             }
         })
     }
 
     private fun setOnClickListeners() {
-        binding.btnSendMsg.setOnClickListener {
-            val message: String = binding.etSendMsg.text.toString()
+        binding!!.btnSendMsg.setOnClickListener {
+            val message: String = binding!!.etSendMsg.text.toString()
 
             if (message.isEmpty()) {
-                Snackbar.make(binding.root, "Message is empty!", Snackbar.LENGTH_SHORT).show()
-                binding.etSendMsg.setText("")
+                Snackbar.make(binding!!.root, "Message is empty!", Snackbar.LENGTH_SHORT).show()
+                binding!!.etSendMsg.setText("")
             } else {
                 sendMessage(currentUser!!.uid, userID!!, message, LocalDateTime.now().toString())
-                binding.etSendMsg.setText("")
+                binding!!.etSendMsg.setText("")
                 PushNotification(
                     NotificationData(getString(R.string.messages), currentUser!!.displayName!! + ": " + message),
                     "/topics/msg_$userID"
@@ -113,11 +114,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             }
         }
 
-        binding.backButton.setOnClickListener {
+        binding!!.backButton.setOnClickListener {
             findNavController().navigate(R.id.nav_from_chat_to_container)
         }
 
-        binding.ivProfileImage.setOnClickListener {
+        binding!!.ivProfileImage.setOnClickListener {
             val bundle: Bundle = bundleOf(getString(R.string.user_id_tag) to userID)
             findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
         }
@@ -171,13 +172,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             list = mMessageList
         )
 
-        binding.rvMessages.adapter = adapter
-        binding.rvMessages.scrollToPosition(adapter!!.itemCount - 1)
+        binding!!.rvMessages.adapter = adapter
+        binding!!.rvMessages.scrollToPosition(adapter!!.itemCount - 1)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        binding = null
         adapter = null
     }
 

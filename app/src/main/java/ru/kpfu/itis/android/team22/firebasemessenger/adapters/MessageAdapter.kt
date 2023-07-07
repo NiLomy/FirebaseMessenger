@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -104,6 +105,7 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
         Glide
             .with(context)
             .load(profileImage)
+            .transform(CenterCrop())
             .placeholder(R.drawable.loading)
             .error(R.drawable.error)
             .apply(options)
