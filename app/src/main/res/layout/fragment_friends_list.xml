@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/tv_friends"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="80dp"
             android:elevation="@dimen/cardview_default_elevation"
             android:fontFamily="@font/archivo_regular"
             android:text="@string/friends"
@@ -27,7 +27,7 @@
             android:textSize="27dp"
             android:translationZ="@dimen/cardview_compat_inset_shadow"
             android:paddingStart="32dp"
-            android:paddingTop="16dp"
+            android:paddingTop="32dp"
             android:paddingBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/find_friends"
+            android:layout_marginTop="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
