@@ -71,6 +71,58 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         adapter?.filter(filteredList)
     }
 
+    private fun getUsersList() {
+        val currentUser: FirebaseUser? = Firebase.auth.currentUser
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
+
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Users")
+        val currentUserDatabaseReference: DatabaseReference? =
+            currentUser?.uid?.let {
+                databaseReference.child(it).child("chatsList")
+            }
+        val chatsList: ArrayList<String> = getUsersToChatList(currentUserDatabaseReference)
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userList.clear()
+                for (dataSnapshot: DataSnapshot in snapshot.children) {
+                    val user: User? = dataSnapshot.getValue(User::class.java)
+                    if (chatsList.contains(user?.userId)) {
+                        if (user != null) {
+                            userList.add(user)
+                        }
+                    }
+                }
+                initAdapter()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun getUsersToChatList(databaseReference: DatabaseReference?): ArrayList<String> {
+        val chatsList: ArrayList<String> = ArrayList()
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                chatsList.clear()
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val id = dataSnapShot.getValue(String::class.java)
+                    if (id != null) {
+                        chatsList.add(id)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+        return chatsList
+    }
+
     private fun initAdapter() {
         if (!isAdded || isDetached || activity == null) {
             return
@@ -85,34 +137,6 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
             }
         )
         binding?.rvUser?.adapter = adapter
-    }
-
-    private fun getUsersList() {
-        val currentUser: FirebaseUser? = Firebase.auth.currentUser
-
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
-
-        val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Users")
-
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-                for (dataSnapshot: DataSnapshot in snapshot.children) {
-                    val user: User? = dataSnapshot.getValue(User::class.java)
-                    if (user?.userId != currentUser?.uid) {
-                        if (user != null) {
-                            userList.add(user)
-                        }
-                    }
-                }
-                initAdapter()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     override fun onDestroyView() {

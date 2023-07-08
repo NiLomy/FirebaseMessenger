@@ -48,10 +48,8 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     }
 
     private fun getUsersList() {
-        val firebase: FirebaseUser? = Firebase.auth.currentUser
-
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/friend_${firebase?.uid}")
-
+        val currentUser: FirebaseUser? = Firebase.auth.currentUser
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/friend_${currentUser?.uid}")
 
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
@@ -62,7 +60,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
 
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user: User? = dataSnapshot.getValue(User::class.java)
-                    if (user?.userId != firebase?.uid) {
+                    if (user?.userId != currentUser?.uid) {
                         if (user != null) {
                             userList.add(user)
                         }

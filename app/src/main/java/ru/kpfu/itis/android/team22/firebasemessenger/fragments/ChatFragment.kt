@@ -152,6 +152,45 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         hashMap["time"] = time
 
         reference.child("Messages").push().setValue(hashMap)
+        updateChatsLists(senderId, receiverId)
+    }
+
+    private fun updateChatsLists(senderId: String, receiverId: String) {
+        val currentUserReference: DatabaseReference = getDatabaseReference(senderId)
+        val anotherUserReference: DatabaseReference = getDatabaseReference(receiverId)
+        setUpChatsList(currentUserReference, receiverId)
+        setUpChatsList(anotherUserReference, senderId)
+    }
+
+    private fun getDatabaseReference(userIdentifier: String): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference("Users").child(
+            userIdentifier
+        )
+    }
+
+    private fun setUpChatsList(databaseReference: DatabaseReference, addId: String) {
+        val chatsList: ArrayList<String> = ArrayList()
+        databaseReference.child("chatsList")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    chatsList.clear()
+                    for (dataSnapShot: DataSnapshot in snapshot.children) {
+                        val id = dataSnapShot.getValue(String::class.java)
+                        if (id != null) {
+                            chatsList.add(id)
+                        }
+                    }
+                    if (!chatsList.contains(addId)) {
+                        chatsList.add(addId)
+                        databaseReference.child("chatsList").setValue(chatsList)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                }
+
+            })
     }
 
     private fun updateChat(senderId: String, receiverId: String) {
@@ -164,8 +203,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val message = dataSnapShot.getValue(Message::class.java)
 
-                    if (message!!.senderID == senderId && message.receiverID == receiverId ||
-                        message.senderID == receiverId && message.receiverID == senderId
+                    if (message?.senderID == senderId && message.receiverID == receiverId ||
+                        message?.senderID == receiverId && message.receiverID == senderId
                     ) {
                         mMessageList.add(message)
                     }
@@ -190,8 +229,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             list = mMessageList
         )
 
-        binding!!.rvMessages.adapter = adapter
-        binding!!.rvMessages.scrollToPosition(adapter!!.itemCount - 1)
+        binding?.rvMessages?.adapter = adapter
+        adapter?.itemCount?.minus(1)?.let { binding?.rvMessages?.scrollToPosition(it) }
     }
 
     override fun onDestroy() {
@@ -207,7 +246,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 if (response.isSuccessful) {
                     Log.d("PUSH", "Response: ${Gson().toJson(response)}")
                 } else {
-                    Log.e("PUSH", response.errorBody()!!.string())
+                    response.errorBody()?.string()?.let { Log.e("PUSH", it) }
                 }
             } catch (e: Exception) {
                 Log.e("PUSH", e.toString())

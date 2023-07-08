@@ -30,7 +30,7 @@ import ru.kpfu.itis.android.team22.firebasemessenger.notifications.RetrofitInsta
 
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
     private var _binding: FragmentUserProfileBinding? = null
-    private val binding get() = _binding!!
+//    private val binding get() = _binding!!
     private var auth: FirebaseAuth? = null
     private var databaseReference: DatabaseReference? = null
     private var userID: String? = null
@@ -54,7 +54,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                binding.tvUserName.text = user?.userName
+                _binding?.tvUserName?.text = user?.userName
                 loadImage(user)
             }
 
@@ -66,16 +66,18 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
 
     private fun loadImage(user: User?) {
         val context = requireContext().applicationContext
-        Glide.with(context)
-            .load(user?.profileImage)
-            .transform(CenterCrop())
-            .placeholder(R.drawable.loading)
-            .error(R.drawable.error)
-            .into(binding.ivImage)
+        _binding?.ivImage?.let {
+            Glide.with(context)
+                .load(user?.profileImage)
+                .transform(CenterCrop())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.error)
+                .into(it)
+        }
     }
 
     private fun setOnClickListeners() {
-        binding.run {
+        _binding?.run {
             val bundle = Bundle()
             bundle.putString("id", userID)
 
@@ -160,9 +162,9 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
                     fillListWithData(friendsList, snapshot)
 
                     if (friendsList.contains(userID)) {
-                        binding.ibFriend.setImageResource(R.drawable.ic_remove_user)
+                        _binding?.ibFriend?.setImageResource(R.drawable.ic_remove_user)
                     } else {
-                        binding.ibFriend.setImageResource(R.drawable.ic_add_friend)
+                        _binding?.ibFriend?.setImageResource(R.drawable.ic_add_friend)
                     }
                 }
 

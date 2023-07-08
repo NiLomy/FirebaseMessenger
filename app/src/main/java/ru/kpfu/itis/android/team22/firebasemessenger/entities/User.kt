@@ -6,4 +6,5 @@ data class User(
     val profileImage: String = "",
     val friendsList: ArrayList<String> = ArrayList(),
     val notificationsList: ArrayList<String> = ArrayList(),
+    val chatsList: ArrayList<String> = ArrayList(),
 )

@@ -47,66 +47,6 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
         }
     }
 
-    private fun getFriendsList() {
-        val firebase: FirebaseUser? = Firebase.auth.currentUser
-        val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Users")
-        val currentUserDatabaseReference: DatabaseReference? =
-            firebase?.uid?.let {
-                FirebaseDatabase.getInstance().getReference("Users").child(it).child("friendsList")
-            }
-        val list: ArrayList<String> = ArrayList()
-        currentUserDatabaseReference?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                list.clear()
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val id = dataSnapShot.getValue(String::class.java)
-                    id?.let { list.add(it) }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-
-                for (dataSnapshot: DataSnapshot in snapshot.children) {
-                    val user: User? = dataSnapshot.getValue(User::class.java)
-                    if (list.contains(user?.userId)) {
-                        if (user != null) {
-                            userList.add(user)
-                        }
-                    }
-                }
-                initAdapter()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            }
-
-        })
-    }
-
-    private fun initAdapter() {
-        if (!isAdded || isDetached || activity == null) {
-            // The fragment is not yet linked to the activity
-            return
-        }
-
-        adapter = ChattableUserAdapter(
-            list = userList,
-            glide = Glide.with(this),
-            controller = findNavController(),
-            userId = getString(R.string.user_id_tag)
-        )
-        binding.rvUser.adapter = adapter
-    }
-
     private fun setUpSearchBar() {
         binding.sv.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -135,6 +75,72 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
             binding.tvNoResults.visibility = View.GONE
         }
         adapter?.filter(filteredList)
+    }
+
+    private fun getFriendsList() {
+        val currentUser: FirebaseUser? = Firebase.auth.currentUser
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Users")
+        val currentUserDatabaseReference: DatabaseReference? =
+            currentUser?.uid?.let {
+                databaseReference.child(it).child("friendsList")
+            }
+        val friendsList: ArrayList<String> = getFriendsList(currentUserDatabaseReference)
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userList.clear()
+                for (dataSnapshot: DataSnapshot in snapshot.children) {
+                    val user: User? = dataSnapshot.getValue(User::class.java)
+                    if (friendsList.contains(user?.userId)) {
+                        if (user != null) {
+                            userList.add(user)
+                        }
+                    }
+                }
+                initAdapter()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun getFriendsList(databaseReference: DatabaseReference?): ArrayList<String> {
+        val friendsList: ArrayList<String> = ArrayList()
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                friendsList.clear()
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val id = dataSnapShot.getValue(String::class.java)
+                    if (id != null) {
+                        friendsList.add(id)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
+        return friendsList
+    }
+
+    private fun initAdapter() {
+        if (!isAdded || isDetached || activity == null) {
+            // The fragment is not yet linked to the activity
+            return
+        }
+
+        adapter = ChattableUserAdapter(
+            list = userList,
+            glide = Glide.with(this),
+            controller = findNavController(),
+            userId = getString(R.string.user_id_tag)
+        )
+        binding.rvUser.adapter = adapter
     }
 
     override fun onDestroyView() {

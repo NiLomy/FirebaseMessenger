@@ -104,6 +104,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         hashMap["profileImage"] = DEFAULT_IMG_URL
                         hashMap["friendsList"] = ArrayList<String>()
                         hashMap["notificationsList"] = ArrayList<String>()
+                        hashMap["chatsList"] = ArrayList<String>()
 
                         saveUserToFirebaseUser(user, email, userName)
                         saveUserDataToDatabase(databaseReference, hashMap)
