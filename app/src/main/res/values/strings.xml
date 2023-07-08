@@ -46,5 +46,5 @@
     <string name="enter_new_email">Enter New Email</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
-    <string name="added_you_to_friends"> added you to friends.</string>
+    <string name="added_you_to_friends">" added you to friends."</string>
 </resources>

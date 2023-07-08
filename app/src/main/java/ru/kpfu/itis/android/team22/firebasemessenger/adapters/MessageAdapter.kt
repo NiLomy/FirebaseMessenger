@@ -26,11 +26,8 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 class MessageAdapter(private val context: Context, private val list: ArrayList<Message>) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
-    private val SEND_MSG = 0
-    private val RECIEVED_MSG = 1
 
     private val options: RequestOptions = RequestOptions
         .diskCacheStrategyOf(DiskCacheStrategy.ALL)
@@ -114,5 +111,10 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
         } else {
             SEND_MSG
         }
+    }
+
+    companion object {
+        const val SEND_MSG = 0
+        const val RECIEVED_MSG = 1
     }
 }
