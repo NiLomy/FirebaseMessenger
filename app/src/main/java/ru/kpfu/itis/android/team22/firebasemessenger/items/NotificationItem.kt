@@ -2,6 +2,7 @@ package ru.kpfu.itis.android.team22.firebasemessenger.items
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -14,9 +15,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemProfileNotificationBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import ru.kpfu.itis.android.team22.firebasemessenger.notifications.NotificationData
+import ru.kpfu.itis.android.team22.firebasemessenger.notifications.PushNotification
+import ru.kpfu.itis.android.team22.firebasemessenger.notifications.RetrofitInstance
 
 class NotificationItem(
     private val binding: ItemProfileNotificationBinding,
@@ -72,6 +80,13 @@ class NotificationItem(
 
             ibAddFriend.setOnClickListener {
                 if (!friendsList.contains(user.userId)) {
+                    PushNotification(
+                        NotificationData("You have a new friend!", currentUser!!.displayName!! + " just added you to his friends."),
+                        "/topics/friend_${user.userId}"
+                    )
+                        .also {
+                            sendNotification(it)
+                        }
                     friendsList.add(user.userId)
                     databaseReference?.child("friendsList")?.setValue(friendsList)
                     ibAddFriend.visibility = View.GONE
@@ -109,4 +124,18 @@ class NotificationItem(
             }
         }
     }
+
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.api.postNotification(notification)
+                if (response.isSuccessful) {
+                    Log.d("PUSH", "Response: ${Gson().toJson(response)}")
+                } else {
+                    Log.e("PUSH", response.errorBody()!!.string())
+                }
+            } catch (e: Exception) {
+                Log.e("PUSH", e.toString())
+            }
+        }
 }

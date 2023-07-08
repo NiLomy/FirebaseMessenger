@@ -101,22 +101,27 @@ class AddableUserItem(
                 })
 
             ib.setOnClickListener {
-                val notificationTitle = if (friendsList.contains(user.userId)) "Friend removed" else "New friend"
 
                 if (!friendsList.contains(user.userId)) {
                     friendsList.add(user.userId)
                     currentUser?.uid?.let { it1 -> notificationsList.add(it1) }
+                    PushNotification(
+                        NotificationData("You have a new friend!", currentUser!!.displayName!! + " just added you to his friends."),
+                        "/topics/friend_${user.userId}"
+                    )
+                        .also {
+                            sendNotification(it)
+                        }
                 } else {
                     friendsList.remove(user.userId)
+                    PushNotification(
+                        NotificationData("Bad news...", currentUser!!.displayName!! + " just removed you from his friends."),
+                        "/topics/friend_${user.userId}"
+                    )
+                        .also {
+                            sendNotification(it)
+                        }
                 }
-
-                PushNotification(
-                    NotificationData(notificationTitle, currentUser!!.displayName!!),
-                    "/topics/friend_${user.userId}"
-                )
-                    .also {
-                        sendNotification(it)
-                    }
 
                 databaseReference?.child("friendsList")?.setValue(friendsList)
                 anotherUserDatabaseReference.child("notificationsList").setValue(notificationsList)
