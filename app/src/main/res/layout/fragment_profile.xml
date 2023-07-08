@@ -103,7 +103,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_3"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
@@ -119,16 +119,15 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="5dp">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <ImageButton
                 android:id="@+id/ib_notifications"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
-                android:text="Notifications"
                 android:gravity="center"
-                android:drawableStart="@drawable/ic_notifications"/>
+                android:src="@drawable/ic_notifications" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
