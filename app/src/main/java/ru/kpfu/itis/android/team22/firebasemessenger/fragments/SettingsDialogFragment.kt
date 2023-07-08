@@ -42,7 +42,7 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
                                     else {
                                         val credential =
                                             EmailAuthProvider.getCredential(currentUser?.email.toString(), etNewPassword.text.toString())
-                                        user?.reauthenticate(credential)?.addOnCompleteListener {
+                                        currentUser?.reauthenticate(credential)?.addOnCompleteListener {
                                             if (it.isSuccessful) {
                                                 when (checkAndChangeEmail(etNewEmail)) {
                                                     FAIL_EMAIL_CODE -> successful = false
@@ -104,7 +104,7 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
     private fun checkAndChangeEmail(et : EditText) : Int{
         if (et.text.isEmpty()) return NO_EMAIL_CODE
         var fail = false
-        user?.let {
+        currentUser?.let {
             if (et.text.isNotEmpty()) {
                 try {
                     it.updateEmail(et.text.toString())
