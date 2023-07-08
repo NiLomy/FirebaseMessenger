@@ -26,7 +26,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private var firebaseUser: FirebaseUser? = null
 
     private val DEFAULT_IMG_URL =
-        "https://firebasestorage.googleapis.com/v0/b/fir-messenger-187aa.appspot.com/o/default.png?alt=media&token=cfe96231-9136-485e-932a-bcf2f1e7fdb9"
+        "https://firebasestorage.googleapis.com/v0/b/fir-messenger-187aa.appspot.com/o/default.png?alt=media&token=47bdc05f-ce9f-4d8b-bd3f-f2be197bafae"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

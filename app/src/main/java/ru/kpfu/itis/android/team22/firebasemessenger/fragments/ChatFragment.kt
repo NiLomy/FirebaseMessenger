@@ -1,11 +1,15 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -49,10 +53,20 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         binding = FragmentChatBinding.bind(view)
 
+
+        setStatusBarColor()
         initFirebaseToken()
         setUserInfo()
         setOnClickListeners()
         updateChat(currentUser!!.uid, userID!!)
+    }
+
+    private fun setStatusBarColor() {
+        val window = activity?.window
+        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        window?.statusBarColor = resources.getColor(R.color.colorPrimary)
     }
 
     private fun initFirebaseToken() {
