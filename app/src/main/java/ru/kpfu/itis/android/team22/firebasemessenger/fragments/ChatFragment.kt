@@ -1,19 +1,18 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.WindowInsetsController
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -40,8 +39,6 @@ import java.time.LocalDateTime
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var binding: FragmentChatBinding? = null
-    // Если раскомментировать, то иногда будет ошибка NullPointerException
-//    private val binding get() = _binding!!
     private var currentUser: FirebaseUser? = null
     private var reference: DatabaseReference? = null
     private var userID: String? = null
@@ -50,15 +47,16 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentChatBinding.bind(view)
-
+        currentUser = FirebaseAuth.getInstance().currentUser
 
         setStatusBarColor()
         initFirebaseToken()
         setUserInfo()
         setOnClickListeners()
-        updateChat(currentUser!!.uid, userID!!)
+        currentUser?.uid?.let {
+                currentUserId -> userID?.let { userId -> updateChat(currentUserId, userId) }
+        }
     }
 
     private fun setStatusBarColor() {
@@ -85,44 +83,50 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun setUserInfo() {
         userID = arguments?.getString("id")
+        reference = userID?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
 
-        currentUser = FirebaseAuth.getInstance().currentUser
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(userID!!)
-
-        reference!!.addValueEventListener(object : ValueEventListener {
+        reference?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                binding?.tvUserName?.text = user!!.userName
-                val context = requireContext().applicationContext
-                Glide.with(context)
-                    .load(user.profileImage)
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(binding?.ivProfileImage!!)
-
+                binding?.tvUserName?.text = user?.userName
+                binding?.ivProfileImage?.let { loadImage(user, it) }
             }
         })
     }
 
+    private fun loadImage(user: User?, ivProfilePicture: ImageView) {
+        val context = requireContext().applicationContext
+        Glide.with(context)
+            .load(user?.profileImage)
+            .transform(CenterCrop())
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.error)
+            .into(ivProfilePicture)
+    }
+
+
     private fun setOnClickListeners() {
-        binding!!.btnSendMsg.setOnClickListener {
+        binding?.btnSendMsg?.setOnClickListener {
             val message: String = binding!!.etSendMsg.text.toString()
 
             if (message.isEmpty()) {
-                Snackbar.make(binding!!.root, "Message is empty!", Snackbar.LENGTH_SHORT).show()
-                binding!!.etSendMsg.setText("")
+                binding?.root?.let { root -> Snackbar.make(root, "Message is empty!", Snackbar.LENGTH_SHORT).show() }
+                binding?.etSendMsg?.setText("")
             } else {
-                sendMessage(currentUser!!.uid, userID!!, message, LocalDateTime.now().toString())
-                binding!!.etSendMsg.setText("")
+                currentUser?.uid?.let {
+                        currentUserId -> userID?.let {
+                        userId -> sendMessage(currentUserId, userId, message, LocalDateTime.now().toString())
+                        }
+                }
+                binding?.etSendMsg?.setText("")
                 PushNotification(
                     NotificationData(getString(R.string.messages), currentUser!!.displayName!! + ": " + message),
                     "/topics/msg_$userID"
-                )
-                    .also {
+                ).also {
                         sendNotification(it)
                     }
             }
@@ -140,8 +144,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun sendMessage(senderId: String, receiverId: String, message: String, time: String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
-
         val hashMap: HashMap<String, String> = HashMap()
+
         hashMap["senderID"] = senderId
         hashMap["receiverID"] = receiverId
         hashMap["message"] = message

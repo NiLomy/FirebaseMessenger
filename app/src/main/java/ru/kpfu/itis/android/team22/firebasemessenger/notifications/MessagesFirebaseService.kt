@@ -19,10 +19,8 @@ import kotlin.random.Random
 private const val CHANNEL_ID = "messages_channel"
 
 class MessagesFirebaseService : FirebaseMessagingService() {
-
     companion object {
         var sharedPref: SharedPreferences? = null
-
         var token: String?
             get() {
                 return sharedPref?.getString("token", "")
@@ -41,7 +39,8 @@ class MessagesFirebaseService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val intent = Intent(this, MainActivity::class.java)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
 
         createNotificationChannel(notificationManager)
@@ -73,7 +72,4 @@ class MessagesFirebaseService : FirebaseMessagingService() {
         }
         notificationManager.createNotificationChannel(channel)
     }
-
 }
-
-

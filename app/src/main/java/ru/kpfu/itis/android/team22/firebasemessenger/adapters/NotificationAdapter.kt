@@ -1,6 +1,7 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.adapters
 
 import android.app.Dialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.NavController
@@ -16,8 +17,9 @@ class NotificationAdapter(
     private val glide: RequestManager,
     private val controller: NavController,
     private val userId: String,
-    private val dialog: Dialog,
     private val currentUser: FirebaseUser?,
+    private val context: Context,
+    private val dialog: Dialog,
 ) : RecyclerView.Adapter<NotificationItem>() {
 
     override fun onCreateViewHolder(
@@ -32,8 +34,9 @@ class NotificationAdapter(
         glide = glide,
         controller = controller,
         userId = userId,
-        dialog = dialog,
-        currentUser = currentUser
+        currentUser = currentUser,
+        context = context,
+        dialog = dialog
     )
 
     override fun onBindViewHolder(holder: NotificationItem, position: Int) {

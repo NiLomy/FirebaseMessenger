@@ -9,7 +9,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.notifications.Constants.Com
 import ru.kpfu.itis.android.team22.firebasemessenger.notifications.Constants.Companion.SERVER_KEY
 
 interface NotificationAPI {
-
     @Headers("Authorization: key=$SERVER_KEY", "Content-Type:$CONTENT_TYPE")
     @POST("fcm/send")
     suspend fun postNotification(
