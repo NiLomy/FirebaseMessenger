@@ -70,7 +70,7 @@ class NotificationItem(
                     friendsList.add(userIdentifier)
                     PushNotification(
                         NotificationData("You have a new friend!", currentUser!!.displayName!! + " just added you to his friends."),
-                        "/topics/friend_${user.userId}"
+                        "/topics/friend_$userIdentifier"
                     )
                         .also {
                             sendNotification(it)
