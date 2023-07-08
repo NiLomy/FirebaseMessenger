@@ -16,23 +16,21 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSetting
 class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog) {
     private var _binding: FragmentSettingsDialogBinding? = null
     private val binding get() = _binding!!
-
-    private var user : FirebaseUser? = null
+    private var currentUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsDialogBinding.bind(view)
-        user = FirebaseAuth.getInstance().currentUser
-        setOnClickListener()
+        currentUser = FirebaseAuth.getInstance().currentUser
 
+        setOnClickListener()
     }
 
     private fun setOnClickListener() {
         binding.run {
             applyChangesButton.setOnClickListener {
                 var successful = true
-
-                user?.let {
+                currentUser?.let {
                     if (etNewPassword.text.isNotEmpty() || etConfirmNewPassword.text.isNotEmpty()) {
                         if (validatePasswords(
                                 etNewPassword.text.toString(), etConfirmNewPassword.text.toString()
@@ -43,7 +41,7 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
                                     if (!it.isSuccessful) successful = false
                                     else {
                                         val credential =
-                                            EmailAuthProvider.getCredential(user?.email.toString(), etNewPassword.text.toString())
+                                            EmailAuthProvider.getCredential(currentUser?.email.toString(), etNewPassword.text.toString())
                                         user?.reauthenticate(credential)?.addOnCompleteListener {
                                             if (it.isSuccessful) {
                                                 when (checkAndChangeEmail(etNewEmail)) {
@@ -84,31 +82,24 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
             showToast(getString(R.string.password_must_be_non_empty))
             return false
         }
-        else if (password.length < 6) {
+        if (password.length < 6) {
             showToast(getString(R.string.password_length_is_to_short))
             return false
         }
-        else if (confirmPassword.isEmpty()) {
+        if (confirmPassword.isEmpty()) {
             showToast(getString(R.string.confirm_password))
             return false
         }
-        else if (password != confirmPassword) {
+        if (password != confirmPassword) {
             showToast(getString(R.string.passwords_dont_match))
             return false
         }
-        else return true
-
+        return true
     }
 
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
-
-    private val NO_EMAIL_CODE = 1
-
-    private val FAIL_EMAIL_CODE = -1
-
-    private val SUCCESS_EMAIL_CODE = 0
 
     private fun checkAndChangeEmail(et : EditText) : Int{
         if (et.text.isEmpty()) return NO_EMAIL_CODE
@@ -128,5 +119,11 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
         }
         return if (fail) FAIL_EMAIL_CODE
         else SUCCESS_EMAIL_CODE
+    }
+    
+    companion object {
+      const val NO_EMAIL_CODE = 1
+      const val FAIL_EMAIL_CODE = 1
+      const val SUCCESS_EMAIL_CODE = 1
     }
 }

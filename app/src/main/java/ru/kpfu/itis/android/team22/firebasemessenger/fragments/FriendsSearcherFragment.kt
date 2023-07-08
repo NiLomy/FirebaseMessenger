@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.AddableUserAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentFriendsSearcherBinding
@@ -48,6 +49,10 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
 
     private fun getUsersList() {
         val firebase: FirebaseUser? = Firebase.auth.currentUser
+
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/friend_${firebase?.uid}")
+
+
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
 
@@ -83,10 +88,10 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             AddableUserAdapter(
                 list = userList,
                 glide = Glide.with(this),
-                context = it,
                 controller = findNavController(),
                 userId = getString(R.string.user_id_tag),
-                currentUser = user
+                currentUser = user,
+                context = it
             )
         }
         binding.rvUser.adapter = adapter

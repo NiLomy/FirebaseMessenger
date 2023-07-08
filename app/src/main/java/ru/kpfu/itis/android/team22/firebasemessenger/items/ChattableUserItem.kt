@@ -25,7 +25,6 @@ class ChattableUserItem(
     fun onBind(user: User) {
         binding.run {
             userName.text = user.userName
-
             glide
                 .load(user.profileImage)
                 .transform(CenterCrop())
@@ -33,14 +32,19 @@ class ChattableUserItem(
                 .error(R.drawable.error)
                 .apply(options)
                 .into(ivImage)
+            setOnClickListeners(user.userId)
+        }
+    }
 
+    private fun setOnClickListeners(userIdentifier: String) {
+        with(binding) {
             ib.setOnClickListener {
-                val bundle: Bundle = bundleOf("id" to user.userId)
+                val bundle: Bundle = bundleOf("id" to userIdentifier)
                 controller.navigate(R.id.nav_from_friends_list_to_chat, bundle)
             }
 
             root.setOnClickListener {
-                val bundle: Bundle = bundleOf(userId to user.userId, "from" to "friends")
+                val bundle: Bundle = bundleOf(userId to userIdentifier, "from" to "friends")
                 controller.navigate(R.id.nav_from_friends_list_to_user_profile, bundle)
             }
         }

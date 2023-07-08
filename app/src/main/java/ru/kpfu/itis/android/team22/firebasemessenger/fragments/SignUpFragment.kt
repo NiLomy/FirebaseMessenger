@@ -17,16 +17,12 @@ import com.google.firebase.ktx.Firebase
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpBinding
 
-
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     private var auth: FirebaseAuth? = null
     private var context: Context? = null
     private var firebaseUser: FirebaseUser? = null
-
-    private val DEFAULT_IMG_URL =
-        "https://firebasestorage.googleapis.com/v0/b/fir-messenger-187aa.appspot.com/o/default.png?alt=media&token=cfe96231-9136-485e-932a-bcf2f1e7fdb9"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,11 +31,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         context = requireContext().applicationContext
 
         firebaseUser = auth?.currentUser
-
         if (firebaseUser != null) {
             findNavController().navigate(R.id.nav_from_signup_to_container)
         }
-
         setUp()
     }
 
@@ -100,20 +94,18 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 ?.addOnCompleteListener(fragmentActivity) { task ->
                     if (task.isSuccessful) {
                         val user: FirebaseUser? = auth?.currentUser
-
-                        saveUserToFirebaseUser(user, email, userName)
-
                         val userId: String = user?.uid ?: ""
-
                         val databaseReference =
                             FirebaseDatabase.getInstance().getReference("Users").child(userId)
-
                         val hashMap: HashMap<String, Any> = HashMap()
+
                         hashMap["userId"] = userId
                         hashMap["userName"] = userName
                         hashMap["profileImage"] = DEFAULT_IMG_URL
                         hashMap["friendsList"] = ArrayList<String>()
                         hashMap["notificationsList"] = ArrayList<String>()
+
+                        saveUserToFirebaseUser(user, email, userName)
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
                         val errorMessage: String? = task.exception?.message
@@ -132,8 +124,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             .setPhotoUri(Uri.parse(DEFAULT_IMG_URL))
             .build()
 
-        user!!.updateProfile(profileUpdates)
-        user.updateEmail(email)
+        user?.updateProfile(profileUpdates)
+        user?.updateEmail(email)
     }
 
     private fun saveUserDataToDatabase(
@@ -153,12 +145,12 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun showSnackbar(message: String) {
-        val rootView = view ?: return // Проверка, что view не равно null
+        val rootView = view ?: return // Checking that view is not null
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showSnackbarCustomPos(message: String, view: View) {
-        val rootView = this.view ?: return // Проверка, что view не равно null
+        val rootView = this.view ?: return // Checking that view is not null
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
             .setAnchorView(view)
             .show()
@@ -167,5 +159,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        const val DEFAULT_IMG_URL =
+            "https://firebasestorage.googleapis.com/v0/b/fir-messenger-187aa.appspot.com/o/default.png?alt=media&token=47bdc05f-ce9f-4d8b-bd3f-f2be197bafae"
     }
 }
