@@ -113,6 +113,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         hashMap["userName"] = userName
                         hashMap["profileImage"] = DEFAULT_IMG_URL
                         hashMap["friendsList"] = ArrayList<String>()
+                        hashMap["notificationsList"] = ArrayList<String>()
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
                         val errorMessage: String? = task.exception?.message
@@ -142,7 +143,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    showSnackbarCustomPos(getString(R.string.registration_success), binding.tvAnchor)
+                    showSnackbarCustomPos(
+                        getString(R.string.registration_success),
+                        binding.tvAnchor
+                    )
                     findNavController().navigate(R.id.nav_from_signup_to_container)
                 }
             }

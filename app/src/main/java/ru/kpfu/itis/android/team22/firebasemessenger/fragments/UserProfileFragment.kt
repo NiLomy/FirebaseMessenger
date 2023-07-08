@@ -93,18 +93,18 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
                         currentUserid
                     )
                 }
-            val list: ArrayList<String> = ArrayList()
+            val friendsList: ArrayList<String> = ArrayList()
             databaseReference?.child("friendsList")
                 ?.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        list.clear()
+                        friendsList.clear()
                         for (dataSnapShot: DataSnapshot in snapshot.children) {
                             val id = dataSnapShot.getValue(String::class.java)
-                            if (!list.contains(id)) {
-                                id?.let { it1 -> list.add(it1) }
+                            if (!friendsList.contains(id)) {
+                                id?.let { it1 -> friendsList.add(it1) }
                             }
                         }
-                        if (list.contains(userID)) {
+                        if (friendsList.contains(userID)) {
                             ibFriend.setImageResource(R.drawable.ic_remove_user)
                         } else {
                             ibFriend.setImageResource(R.drawable.ic_add_friend)
@@ -116,13 +116,38 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
                     }
                 })
 
+            val notificationsList: ArrayList<String> = ArrayList()
+            val anotherUserDatabaseReference = userID?.let {
+                FirebaseDatabase.getInstance().getReference("Users").child(it)
+            }
+            anotherUserDatabaseReference?.child("notificationsList")
+                ?.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        notificationsList.clear()
+                        for (dataSnapShot: DataSnapshot in snapshot.children) {
+                            val id = dataSnapShot.getValue(String::class.java)
+                            if (id != null) {
+                                notificationsList.add(id)
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+
             ibFriend.setOnClickListener {
-                if (!list.contains(userID)) {
-                    userID?.let { userId -> list.add(userId) }
+                if (!friendsList.contains(userID)) {
+                    userID?.let { userId -> friendsList.add(userId) }
+                    currentUser?.uid?.let { it1 -> notificationsList.add(it1) }
                 } else {
-                    userID?.let { userId -> list.remove(userId) }
+                    userID?.let { userId -> friendsList.remove(userId) }
                 }
-                databaseReference?.child("friendsList")?.setValue(list)
+                databaseReference?.child("friendsList")?.setValue(friendsList)
+                anotherUserDatabaseReference?.child("notificationsList")
+                    ?.setValue(notificationsList)
             }
         }
     }

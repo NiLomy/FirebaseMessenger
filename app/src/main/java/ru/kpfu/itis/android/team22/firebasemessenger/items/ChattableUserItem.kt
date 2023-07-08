@@ -14,7 +14,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 class ChattableUserItem(
     private val binding: ItemFriendToChatBinding,
     private val glide: RequestManager,
-    private val onItemClick: (User) -> Unit,
     private val controller: NavController,
     private val userId: String,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -39,7 +38,7 @@ class ChattableUserItem(
             }
 
             root.setOnClickListener {
-                val bundle : Bundle = bundleOf(userId to user.userId, "from" to "friends")
+                val bundle: Bundle = bundleOf(userId to user.userId, "from" to "friends")
                 controller.navigate(R.id.nav_from_friends_list_to_user_profile, bundle)
             }
         }
