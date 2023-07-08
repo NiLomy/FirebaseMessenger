@@ -1,9 +1,6 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.adapters
 
 import android.content.Context
-import android.net.Uri
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +12,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,12 +19,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
-import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -115,7 +109,7 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
 
     override fun getItemViewType(position: Int): Int {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        return if (list[position].senderID == firebaseUser!!.uid) {
+        return if (list[position].senderID == firebaseUser?.uid) {
             RECIEVED_MSG
         } else {
             SEND_MSG

@@ -23,19 +23,18 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentMessage
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
-    private var _binding: FragmentMessagesBinding? = null
+    private var binding: FragmentMessagesBinding? = null
     // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
 
     //TODO почему-то если испольщовать не null binding то ->
     //TODO крашится приложение, когда добавляешь кого-то в друзья при переходе в профиль из чата
-//    private val binding get() = _binding!!
     private var adapter: UserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMessagesBinding.bind(view)
+        binding = FragmentMessagesBinding.bind(view)
         context = requireContext().applicationContext
 
         setUpSearchBar()
@@ -43,7 +42,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     }
 
     private fun setUpSearchBar() {
-        _binding?.sv?.setOnQueryTextListener(object :
+        binding?.sv?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -65,9 +64,9 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
             }
         }
         if (filteredList.isEmpty()) {
-            _binding?.tvNoResults?.visibility = View.VISIBLE
+            binding?.tvNoResults?.visibility = View.VISIBLE
         } else {
-            _binding?.tvNoResults?.visibility = View.GONE
+            binding?.tvNoResults?.visibility = View.GONE
         }
         adapter?.filter(filteredList)
     }
@@ -85,7 +84,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
                 findNavController().navigate(R.id.nav_from_container_to_chat, bundle)
             }
         )
-        _binding?.rvUser?.adapter = adapter
+        binding?.rvUser?.adapter = adapter
     }
 
     private fun getUsersList() {
@@ -118,6 +117,6 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }
