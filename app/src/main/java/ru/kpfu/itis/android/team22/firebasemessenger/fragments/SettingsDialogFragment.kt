@@ -41,14 +41,16 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
                             it.updatePassword(etNewPassword.text.toString())
                                 .addOnCompleteListener {
                                     if (!it.isSuccessful) successful = false
-                                    if (it.isSuccessful) {
+                                    else {
                                         val credential =
                                             EmailAuthProvider.getCredential(user?.email.toString(), etNewPassword.text.toString())
                                         user?.reauthenticate(credential)?.addOnCompleteListener {
                                             if (it.isSuccessful) {
-                                                checkAndChangeEmail(etNewEmail)
+                                                when (checkAndChangeEmail(etNewEmail)) {
+                                                    FAIL_EMAIL_CODE -> successful = false
+                                                }
                                             }
-                                            else if (!it.isSuccessful) showToast("Impossible")
+                                            else  showToast("Impossible")
                                         }
                                     }
                                 }
@@ -57,7 +59,14 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
                         }
                     }
                     else {
-                        checkAndChangeEmail(etNewEmail)
+                        when (checkAndChangeEmail(etNewEmail)) {
+                            FAIL_EMAIL_CODE -> successful = false
+                            NO_EMAIL_CODE -> {
+                                showToast("Nothing changed...")
+                                dismiss()
+                            }
+                            else -> {}
+                        }
                     }
                 }
 
@@ -92,8 +101,6 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
     }
 
     private fun showToast(message: String) {
-        /*val rootView = view ?: return // Проверка, что view не равно null
-        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()*/
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
