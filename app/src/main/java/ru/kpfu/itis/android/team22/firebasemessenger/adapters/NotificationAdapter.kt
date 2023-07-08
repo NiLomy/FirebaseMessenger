@@ -1,31 +1,30 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.adapters
 
-import android.content.Context
+import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.google.firebase.auth.FirebaseUser
-import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemUserToAddBinding
+import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemProfileNotificationBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
-import ru.kpfu.itis.android.team22.firebasemessenger.items.AddableUserItem
+import ru.kpfu.itis.android.team22.firebasemessenger.items.NotificationItem
 
-class AddableUserAdapter(
+class NotificationAdapter(
     private var list: ArrayList<User>,
     private val glide: RequestManager,
-    private val context: Context,
     private val controller: NavController,
     private val userId: String,
+    private val dialog: Dialog,
     private val currentUser: FirebaseUser?,
-) : RecyclerView.Adapter<AddableUserItem>() {
+) : RecyclerView.Adapter<NotificationItem>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AddableUserItem = AddableUserItem(
-        binding = ItemUserToAddBinding.inflate(
+    ): NotificationItem = NotificationItem(
+        binding = ItemProfileNotificationBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false,
@@ -33,19 +32,15 @@ class AddableUserAdapter(
         glide = glide,
         controller = controller,
         userId = userId,
-        currentUser = currentUser,
+        dialog = dialog,
+        currentUser = currentUser
     )
 
-    override fun onBindViewHolder(holder: AddableUserItem, position: Int) {
+    override fun onBindViewHolder(holder: NotificationItem, position: Int) {
         holder.onBind(list[position])
     }
 
     override fun getItemCount(): Int {
         return list.size
-    }
-
-    fun filter(newList: ArrayList<User>) {
-        list = newList
-        notifyDataSetChanged()
     }
 }

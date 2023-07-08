@@ -56,6 +56,9 @@
         <action
             android:id="@+id/nav_from_container_to_friends_list"
             app:destination="@id/friendsListFragment" />
+        <action
+            android:id="@+id/nav_from_container_to_user_profile"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -125,6 +128,9 @@
         <action
             android:id="@+id/nav_from_user_profile_to_friends_list"
             app:destination="@id/friendsListFragment" />
+        <action
+            android:id="@+id/nav_from_user_profile_to_container"
+            app:destination="@id/containerFragment" />
     </fragment>
 
 </navigation>

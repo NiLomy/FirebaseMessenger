@@ -12,7 +12,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.items.ChattableUserItem
 class ChattableUserAdapter(
     private var list: ArrayList<User>,
     private val glide: RequestManager,
-    private val onItemClick: (User) -> Unit,
     private val controller: NavController,
     private val userId: String,
 ) : RecyclerView.Adapter<ChattableUserItem>() {
@@ -27,7 +26,6 @@ class ChattableUserAdapter(
             false,
         ),
         glide = glide,
-        onItemClick = onItemClick,
         controller = controller,
         userId = userId,
     )
@@ -40,7 +38,7 @@ class ChattableUserAdapter(
         return list.size
     }
 
-    fun filter(newList : ArrayList<User>) {
+    fun filter(newList: ArrayList<User>) {
         list = newList
         notifyDataSetChanged()
     }
