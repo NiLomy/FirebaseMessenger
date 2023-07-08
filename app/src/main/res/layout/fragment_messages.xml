@@ -34,6 +34,7 @@
         android:queryHint="Enter friend's name"
         android:background="@drawable/custom_input"
         android:layout_marginTop="5dp"
+        app:iconifiedByDefault="false"
         app:layout_constraintBottom_toTopOf="@+id/rv_user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

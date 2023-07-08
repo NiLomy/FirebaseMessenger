@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -64,6 +65,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         val context = requireContext().applicationContext
                         Glide.with(context)
                             .load(user?.profileImage)
+                            .transform(CenterCrop())
                             .placeholder(R.drawable.loading)
                             .error(R.drawable.error)
                             .into(ivProfilePicture)
@@ -78,30 +80,37 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun setClickListeners() {
-        binding?.ivProfilePicture?.setOnClickListener {
-            binding?.ivProfilePicture!!.isEnabled = false
-            openGallery()
-            binding?.ivProfilePicture!!.isEnabled = true
-        }
-
-        binding?.fabToContainer?.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_settings_to_container)
-        }
-
-        binding?.applyChangesButton?.setOnClickListener {
-            binding?.applyChangesButton!!.isEnabled = false
-            currUser?.run {
-                if (profilePictureUri != null) {
-                    updateNameAndImage(
-                        binding?.etNewName?.text.toString(),
-                        profilePictureUri!!,
-                        databaseReference
-                    )
-                } else {
-                    updateName(binding?.etNewName?.text.toString(), databaseReference)
-                }
+        binding?.run {
+            ivProfilePicture.setOnClickListener {
+                binding?.ivProfilePicture!!.isEnabled = false
+                openGallery()
+                binding?.ivProfilePicture!!.isEnabled = true
             }
-            binding?.applyChangesButton!!.isEnabled = true
+
+            fabToContainer.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_settings_to_container)
+            }
+
+            applyChangesButton.setOnClickListener {
+                binding?.applyChangesButton!!.isEnabled = false
+                currUser?.run {
+                    if (profilePictureUri != null) {
+                        updateNameAndImage(
+                            binding?.etNewName?.text.toString(),
+                            profilePictureUri!!,
+                            databaseReference
+                        )
+                    } else {
+                        updateName(binding?.etNewName?.text.toString(), databaseReference)
+                    }
+                }
+                applyChangesButton!!.isEnabled = true
+            }
+            changeEmailPassword.setOnClickListener {
+                val frag = SettingsDialogFragment()
+                frag.show(parentFragmentManager, "data_change")
+            }
+
         }
     }
 
@@ -136,6 +145,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
                         makeToast("Success!")
                         findNavController().navigate(R.id.nav_from_settings_to_container)
+                        binding?.applyChangesButton!!.isEnabled = true
                     }
             }.addOnFailureListener{
                 makeToast("Something went wrong...")
@@ -159,6 +169,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val context = requireContext().applicationContext
             Glide.with(context)
                 .load(profilePictureUri)
+                .transform(CenterCrop())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.error)
                 .into(binding!!.ivProfilePicture)

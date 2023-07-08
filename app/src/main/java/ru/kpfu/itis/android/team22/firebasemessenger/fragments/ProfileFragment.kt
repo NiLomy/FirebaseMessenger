@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -64,6 +66,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         val context = requireContext().applicationContext
                         Glide.with(context)
                             .load(user?.profileImage)
+                            .transform(CenterCrop())
                             .placeholder(R.drawable.loading)
                             .error(R.drawable.error)
                             .into(ivImage)
