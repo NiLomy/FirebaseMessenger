@@ -1,6 +1,7 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.items
 
 import android.os.Bundle
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +14,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemUserToAddBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import ru.kpfu.itis.android.team22.firebasemessenger.notifications.NotificationData
+import ru.kpfu.itis.android.team22.firebasemessenger.notifications.PushNotification
+import ru.kpfu.itis.android.team22.firebasemessenger.notifications.RetrofitInstance
 
 class AddableUserItem(
     private val binding: ItemUserToAddBinding,
@@ -93,12 +101,23 @@ class AddableUserItem(
                 })
 
             ib.setOnClickListener {
+                val notificationTitle = if (friendsList.contains(user.userId)) "Friend removed" else "New friend"
+
                 if (!friendsList.contains(user.userId)) {
                     friendsList.add(user.userId)
                     currentUser?.uid?.let { it1 -> notificationsList.add(it1) }
                 } else {
                     friendsList.remove(user.userId)
                 }
+
+                PushNotification(
+                    NotificationData(notificationTitle, currentUser!!.displayName!!),
+                    "/topics/friend_${user.userId}"
+                )
+                    .also {
+                        sendNotification(it)
+                    }
+
                 databaseReference?.child("friendsList")?.setValue(friendsList)
                 anotherUserDatabaseReference.child("notificationsList").setValue(notificationsList)
             }
@@ -109,4 +128,18 @@ class AddableUserItem(
             }
         }
     }
+
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.api.postNotification(notification)
+                if (response.isSuccessful) {
+                    Log.d("PUSH", "Response: ${Gson().toJson(response)}")
+                } else {
+                    Log.e("PUSH", response.errorBody()!!.string())
+                }
+            } catch (e: Exception) {
+                Log.e("PUSH", e.toString())
+            }
+        }
 }
