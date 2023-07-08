@@ -3,7 +3,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -15,10 +14,10 @@ import ru.kpfu.itis.android.team22.firebasemessenger.items.AddableUserItem
 class AddableUserAdapter(
     private var list: ArrayList<User>,
     private val glide: RequestManager,
-    private val context: Context,
     private val controller: NavController,
     private val userId: String,
     private val currentUser: FirebaseUser?,
+    private val context: Context,
 ) : RecyclerView.Adapter<AddableUserItem>() {
 
     override fun onCreateViewHolder(
@@ -34,6 +33,7 @@ class AddableUserAdapter(
         controller = controller,
         userId = userId,
         currentUser = currentUser,
+        context = context,
     )
 
     override fun onBindViewHolder(holder: AddableUserItem, position: Int) {

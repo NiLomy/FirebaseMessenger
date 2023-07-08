@@ -5,6 +5,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <TextView
+        android:id="@+id/tv_profile"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorGreen"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:fontFamily="@font/archivo_regular"
+        android:paddingStart="32dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="16dp"
+        android:text="@string/profile"
+        android:textColor="@color/colorWhite"
+        android:textSize="27sp"
+        android:translationZ="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toTopOf="@id/iv_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageView
@@ -13,7 +30,7 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

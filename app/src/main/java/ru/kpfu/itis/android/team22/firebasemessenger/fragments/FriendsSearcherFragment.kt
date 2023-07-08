@@ -88,10 +88,10 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             AddableUserAdapter(
                 list = userList,
                 glide = Glide.with(this),
-                context = it,
                 controller = findNavController(),
                 userId = getString(R.string.user_id_tag),
-                currentUser = user
+                currentUser = user,
+                context = it
             )
         }
         binding.rvUser.adapter = adapter

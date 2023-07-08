@@ -5,7 +5,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.kpfu.itis.android.team22.firebasemessenger.notifications.Constants.Companion.BASE_URL
 
 class RetrofitInstance {
-
     companion object {
         private val retrofit by lazy {
             Retrofit.Builder()

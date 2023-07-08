@@ -16,20 +16,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private var auth: FirebaseAuth? = null
-    private var firebaseUser: FirebaseUser? = null
+    private var currentUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _binding = FragmentLoginBinding.bind(view)
         auth = Firebase.auth
+        currentUser = auth?.currentUser
 
-        firebaseUser = auth?.currentUser
-
-        if (firebaseUser != null) {
+        if (currentUser != null) {
             findNavController().navigate(R.id.nav_from_login_to_container)
         }
-
         setUp()
     }
 
@@ -77,7 +74,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun showSnackbarCustomPos(message: String, view: View) {
-        val rootView = this.view ?: return // Проверка, что view не равно null
+        val rootView = this.view ?: return // Checking that view is not null
         Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
             .setAnchorView(view)
             .show()

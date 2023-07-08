@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,21 +27,16 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var binding: FragmentSettingsBinding? = null
-    // Так нужно, иначе будут баги с вылетом
-//    private val binding get() = _binding!!
-
     private var databaseReference: DatabaseReference? = null
-    private var currUser: FirebaseUser? = null
+    private var currentUser: FirebaseUser? = null
     private var profilePictureUri: Uri? = null
-    private val PICK_IMAGE_REQUEST = 1
 
-    // TODO ("Обновлять userName у FirebaseUser")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSettingsBinding.bind(view)
-        currUser = FirebaseAuth.getInstance().currentUser
+        currentUser = FirebaseAuth.getInstance().currentUser
 
-        databaseReference = currUser?.uid?.let {
+        databaseReference = currentUser?.uid?.let {
             FirebaseDatabase.getInstance().getReference("Users").child(it)
         }
 
@@ -49,25 +45,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun initFields() {
-        databaseReference = currUser?.uid?.let {
+        databaseReference = currentUser?.uid?.let {
             FirebaseDatabase.getInstance().getReference("Users").child(it)
         }
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
-
                 binding?.run {
                     etNewName.setText(user?.userName)
-
                     if (isAdded) {
-                        val context = requireContext().applicationContext
-                        Glide.with(context)
-                            .load(user?.profileImage)
-                            .transform(CenterCrop())
-                            .placeholder(R.drawable.loading)
-                            .error(R.drawable.error)
-                            .into(ivProfilePicture)
+                        loadDrawableImage(user, ivProfilePicture)
                     }
                 }
             }
@@ -78,12 +66,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         })
     }
 
+    private fun loadDrawableImage(user: User?, ivProfilePicture: ImageView) {
+        val context = requireContext().applicationContext
+        Glide.with(context)
+            .load(user?.profileImage)
+            .transform(CenterCrop())
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.error)
+            .into(ivProfilePicture)
+    }
+
     private fun setClickListeners() {
         binding?.run {
             ivProfilePicture.setOnClickListener {
-                binding?.ivProfilePicture!!.isEnabled = false
+                binding?.ivProfilePicture?.isEnabled = false
                 openGallery()
-                binding?.ivProfilePicture!!.isEnabled = true
+                binding?.ivProfilePicture?.isEnabled = true
             }
 
             fabToContainer.setOnClickListener {
@@ -91,8 +89,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
             applyChangesButton.setOnClickListener {
-                binding?.applyChangesButton!!.isEnabled = false
-                currUser?.run {
+                binding?.applyChangesButton?.isEnabled = false
+                currentUser?.run {
                     if (profilePictureUri != null) {
                         updateNameAndImage(
                             binding?.etNewName?.text.toString(),
@@ -103,8 +101,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         updateName(binding?.etNewName?.text.toString(), databaseReference)
                     }
                 }
-                applyChangesButton!!.isEnabled = true
+                applyChangesButton.isEnabled = true
             }
+
             changeEmailPassword.setOnClickListener {
                 val frag = SettingsDialogFragment()
                 frag.show(parentFragmentManager, "data_change")
@@ -120,7 +119,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     ) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference
-        val userUid = currUser?.uid
+        val userUid = currentUser?.uid
         val avatarRef = storageRef.child("avatars/$userUid.jpg")
 
         avatarRef.putFile(profilePictureUri)
@@ -134,7 +133,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             .setDisplayName(newName)
                             .build()
 
-                        currUser?.updateProfile(profileUpdates)
+                        currentUser?.updateProfile(profileUpdates)
 
                         val hashMap = readUserInfo(databaseReference)
                         newName.let {
@@ -147,10 +146,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         findNavController().navigate(R.id.nav_from_settings_to_container)
                         binding?.applyChangesButton!!.isEnabled = true
                     }
-            }.addOnFailureListener{
+            }.addOnFailureListener {
                 makeToast("Something went wrong...")
                 findNavController().navigate(R.id.nav_from_settings_to_container)
-            }.addOnFailureListener{
+            }.addOnFailureListener {
                 makeToast("Failed to update...")
                 findNavController().navigate(R.id.nav_from_settings_to_container)
             }
@@ -166,13 +165,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             profilePictureUri = data.data
-            val context = requireContext().applicationContext
+            loadUriImage(profilePictureUri)
+        }
+    }
+
+    private fun loadUriImage(uri: Uri?) {
+        val context = requireContext().applicationContext
+        binding?.ivProfilePicture?.let {
             Glide.with(context)
-                .load(profilePictureUri)
+                .load(uri)
                 .transform(CenterCrop())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.error)
-                .into(binding!!.ivProfilePicture)
+                .into(it)
         }
     }
 
@@ -193,7 +198,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 .setDisplayName(newName)
                 .build()
 
-            currUser?.updateProfile(profileUpdates)
+            currentUser?.updateProfile(profileUpdates)
 
             makeToast("Success!")
             findNavController().navigate(R.id.nav_from_settings_to_container)
@@ -225,7 +230,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         binding = null
+    }
+
+    companion object {
+        const val PICK_IMAGE_REQUEST = 1
     }
 }

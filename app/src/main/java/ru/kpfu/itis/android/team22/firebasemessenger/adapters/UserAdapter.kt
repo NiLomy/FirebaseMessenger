@@ -35,7 +35,7 @@ class UserAdapter(
         return list.size
     }
 
-    fun filter(newList : ArrayList<User>) {
+    fun filter(newList: ArrayList<User>) {
         list = newList
         notifyDataSetChanged()
     }
