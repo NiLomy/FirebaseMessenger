@@ -34,7 +34,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var profilePictureUri: Uri? = null
     private val PICK_IMAGE_REQUEST = 1
 
-    // TODO ("Добавить смену параля через FirebaseUser.updatePassword()?)
     // TODO ("Обновлять userName у FirebaseUser")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -132,6 +131,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setPhotoUri(Uri.parse(url))
+                            .setDisplayName(newName)
                             .build()
 
                         currUser?.updateProfile(profileUpdates)
@@ -188,6 +188,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         } else {
             hashMap["userName"] = newName
             databaseReference?.updateChildren(hashMap as Map<String, Any>)
+
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(newName)
+                .build()
+
+            currUser?.updateProfile(profileUpdates)
+
             makeToast("Success!")
             findNavController().navigate(R.id.nav_from_settings_to_container)
         }
