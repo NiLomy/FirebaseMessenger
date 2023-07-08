@@ -70,7 +70,7 @@ class AddableUserItem(
                     currentUser?.uid?.let { currentUserId -> notificationsList.add(currentUserId) }
                     PushNotification(
                         NotificationData("You have a new friend!", currentUser!!.displayName!! + " just added you to his friends."),
-                        "/topics/friend_${user.userId}"
+                        "/topics/friend_$userIdentifier"
                     )
                         .also {
                             sendNotification(it)
@@ -79,7 +79,7 @@ class AddableUserItem(
                     friendsList.remove(userIdentifier)
                     PushNotification(
                         NotificationData("Bad news...", currentUser!!.displayName!! + " just removed you from his friends."),
-                        "/topics/friend_${user.userId}"
+                        "/topics/friend_$userIdentifier"
                     )
                         .also {
                             sendNotification(it)
