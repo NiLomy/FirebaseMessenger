@@ -63,8 +63,8 @@
         android:background="@drawable/circle_white"
         android:shadowDx="2"
         android:shadowDy="2"
-        android:translationZ="5dp"
-        android:elevation="5dp"
+        android:translationZ="2dp"
+        android:elevation="2dp"
         android:shadowRadius="10"
         android:shadowColor="@color/colorText"
         app:cardElevation="5dp"
@@ -75,27 +75,29 @@
 
     <ImageButton
         android:id="@+id/ib_gallery"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="32dp"
-        android:translationZ="5dp"
-        android:elevation="5dp"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginEnd="27dp"
         android:layout_marginBottom="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ib_notifications"
-        android:background="@drawable/baseline_add_photo_alternate_24"/>
+        android:background="@drawable/baseline_add_photo_alternate_24"
+        android:elevation="2dp"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toTopOf="@id/friends_button"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/friends_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        android:text="@string/friends"
         android:elevation="1dp"
         android:gravity="center"
-        android:src="@drawable/baseline_people_24"
+        android:drawableStart="@drawable/baseline_people_24"
+        android:drawablePadding="16dp"
         android:translationZ="1dp"
         android:background="@drawable/custom_button_3"
         android:padding="10dp"
@@ -103,16 +105,18 @@
         app:layout_constraintTop_toBottomOf="@id/ivImage"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ib_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        android:text="@string/notifications"
         android:elevation="1dp"
         android:gravity="center"
-        android:src="@drawable/ic_notifications"
+        android:drawableStart="@drawable/ic_notifications"
+        android:drawablePadding="16dp"
         android:translationZ="1dp"
         android:background="@drawable/custom_button_3"
         android:padding="10dp"

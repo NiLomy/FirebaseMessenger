@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    app:layout_constraintHeight_max="wrap">
+    app:layout_constraintHeight_max="wrap"
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,13 +46,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="#8F8F8F" />
-
             <LinearLayout
                 android:id="@+id/rebooking_back_button_ll"
                 android:layout_width="match_parent"
@@ -59,7 +53,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/clear_all_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -69,19 +63,10 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="@string/clear_all"
                     android:textAlignment="center"
-                    android:textColor="#FF6363"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textSize="16dp"
+                    android:background="@drawable/custom_button_3"/>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight=".01"
-                    android:background="#8F8F8F" />
-
-                <TextView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/cancel_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -91,9 +76,8 @@
                     android:fontFamily="@font/roboto_light"
                     android:text="@string/cancel"
                     android:textAlignment="center"
-                    android:textColor="#7BC5FF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textSize="16dp"
+                    android:background="@drawable/custom_button_3"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

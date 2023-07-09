@@ -27,12 +27,13 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var context: Context? = null
     // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
     private var adapter: UserAdapter? = null
+    private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMessagesBinding.bind(view)
-        context = requireContext().applicationContext
+        context = requireContext()
 
         setUpSearchBar()
         getUsersList()
@@ -42,10 +43,12 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         binding?.sv?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                searchText = query
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                searchText = newText
                 newText?.let { filter(it) }
                 return false
             }
@@ -137,6 +140,8 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
             }
         )
         binding?.rvUser?.adapter = adapter
+        binding?.sv?.setQuery(searchText, false)
+        searchText?.let { filter(it) }
     }
 
     override fun onDestroyView() {

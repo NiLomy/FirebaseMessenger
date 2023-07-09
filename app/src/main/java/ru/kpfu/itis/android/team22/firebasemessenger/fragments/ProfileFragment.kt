@@ -63,7 +63,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 binding?.run {
                     userName.text = user?.userName
                     if (isAdded) {
-                        val context = requireContext().applicationContext
+                        val context = requireContext()
                         IconUploader.loadDrawableImage(context, user, ivImage)
                     }
                 }
@@ -177,7 +177,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val context = requireContext().applicationContext
+            val context = requireContext()
             profilePictureUri = data.data!!
             binding?.ivImage?.let {
                 IconUploader.loadUriImage(context, profilePictureUri, it)
@@ -230,9 +230,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     }
                 }
                 if (list.isEmpty()) {
-                    binding?.ibNotifications?.setImageResource(R.drawable.ic_notifications)
+                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notifications,0,0, 0)
                 } else {
-                    binding?.ibNotifications?.setImageResource(R.drawable.ic_has_notifications)
+                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_has_notifications,0,0, 0)
                 }
             }
 
