@@ -68,7 +68,6 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
         val currentUser: FirebaseUser? = Firebase.auth.currentUser
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/friend_${currentUser?.uid}")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

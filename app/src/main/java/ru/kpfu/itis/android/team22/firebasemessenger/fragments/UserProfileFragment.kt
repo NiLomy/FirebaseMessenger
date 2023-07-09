@@ -47,6 +47,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
                 val context = requireContext().applicationContext
                 val user = snapshot.getValue(User::class.java)
                 binding?.ivImage?.let { IconUploader.loadDrawableImage(context, user, it) }
+                binding?.tvUserName?.text = user?.userName
             }
 
             override fun onCancelled(error: DatabaseError) {
