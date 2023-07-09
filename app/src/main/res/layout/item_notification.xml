@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:fontFamily="@font/gilroy_bold"
+        android:fontFamily="@font/roboto_medium"
         tools:text="Sender msg"
         android:textSize="14sp"
         android:layout_toEndOf="@id/iv_sender_img" />
@@ -31,7 +31,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textSize="11sp"
-        android:fontFamily="@font/gilroy_light"
+        android:fontFamily="@font/roboto_regular"
         android:layout_toEndOf="@id/iv_sender_img"
         android:layout_below="@id/tv_sender_name"
         tools:text="Message" />

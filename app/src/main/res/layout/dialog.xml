@@ -18,6 +18,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:text="Notifications"
+            android:fontFamily="@font/roboto_light"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
@@ -28,17 +29,6 @@
             android:layout_above="@+id/back_ll"
             android:orientation="vertical"
             android:padding="5dp">
-
-            <TextView
-                android:id="@+id/rebooking_single_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="dummy"
-                android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textSize="17sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_notifications"
@@ -76,7 +66,8 @@
                     android:layout_weight=".49"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="Clear All"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="@string/clear_all"
                     android:textAlignment="center"
                     android:textColor="#FF6363"
                     android:textSize="17sp"
@@ -97,7 +88,8 @@
                     android:layout_weight=".5"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="Cancle"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="@string/cancel"
                     android:textAlignment="center"
                     android:textColor="#7BC5FF"
                     android:textSize="17sp"

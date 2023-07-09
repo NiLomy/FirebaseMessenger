@@ -49,4 +49,6 @@
     <string name="added_you_to_friends">" added you to friends."</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear_all">Clear all</string>
 </resources>
