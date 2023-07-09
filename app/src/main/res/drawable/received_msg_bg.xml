@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/colorItemRight"/>
-    <corners android:bottomLeftRadius="0dp" android:topLeftRadius="15dp" android:bottomRightRadius="15dp" android:topRightRadius="15dp"/>
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Прямоугольник -->
+    <item android:left="4dp">
+        <shape>
+            <solid android:color="@color/colorItemLeft"/>
+            <corners android:bottomLeftRadius="0dp" android:topLeftRadius="15dp" android:bottomRightRadius="15dp" android:topRightRadius="15dp"/>
+        </shape>
+    </item>
+
+    <!-- Треугольник -->
+    <item>
+        <rotate
+            android:fromDegrees="45"
+            android:pivotX="0%"
+            android:pivotY="100%" >
+            <shape android:shape="rectangle">
+                <solid android:color="@color/colorItemLeft" /> <!-- Цвет треугольника -->
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
