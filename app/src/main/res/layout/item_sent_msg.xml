@@ -38,7 +38,7 @@
             android:layout_marginVertical="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="4dp"
-            android:fontFamily="@font/gilroy_light"
+            android:fontFamily="@font/exo2_medium"
             android:textColor="@color/colorText"
             android:textSize="16sp"
 

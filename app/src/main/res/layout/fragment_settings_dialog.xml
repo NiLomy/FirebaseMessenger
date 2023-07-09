@@ -2,8 +2,47 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/name"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_new_name"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/custom_mail"
+        android:drawablePadding="12dp"
+        android:hint="@string/enter_new_email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:textColor="@color/colorText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        android:layout_marginTop="8dp"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/email"
+        android:textSize="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_new_name" />
+
 
     <EditText
         android:id="@+id/et_new_email"
@@ -17,10 +56,21 @@
         android:padding="12dp"
         android:textColor="@color/colorText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_email"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
         android:text=""/>
+
+    <TextView
+        android:id="@+id/tv_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/password"
+        android:textSize="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_new_email" />
+
     <EditText
         android:id="@+id/et_new_password"
         android:layout_width="240dp"
@@ -32,10 +82,9 @@
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="@color/colorText"
-        app:layout_constraintTop_toBottomOf="@id/et_new_email"
+        app:layout_constraintTop_toBottomOf="@id/tv_password"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
         android:text=""/>
     <EditText
         android:id="@+id/et_confirm_new_password"
@@ -51,17 +100,19 @@
         app:layout_constraintTop_toBottomOf="@id/et_new_password"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
         android:text=""/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/apply_changes_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/apply_changes"
+        android:background="@drawable/custom_button_3"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="@+id/et_confirm_new_password"
         app:layout_constraintStart_toStartOf="@+id/et_confirm_new_password"
         app:layout_constraintTop_toBottomOf="@+id/et_confirm_new_password"
-        android:backgroundTint="@color/colorPrimary"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
