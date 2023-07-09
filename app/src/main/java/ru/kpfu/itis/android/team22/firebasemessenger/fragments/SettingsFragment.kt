@@ -79,11 +79,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     if (profilePictureUri != null) {
                         updateNameAndImage(
                             binding?.etNewName?.text.toString(),
-                            profilePictureUri!!,
-                            databaseReference
+                            profilePictureUri!!
                         )
                     } else {
-                        updateName(binding?.etNewName?.text.toString(), databaseReference)
+                        updateName(binding?.etNewName?.text.toString())
                     }
                 }
                 applyChangesButton.isEnabled = true
@@ -98,8 +97,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun updateNameAndImage(
         newName: String,
-        profilePictureUri: Uri,
-        databaseReference: DatabaseReference?
+        profilePictureUri: Uri
     ) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference
@@ -156,7 +154,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun updateName(
-        newName: String, databaseReference: DatabaseReference?
+        newName: String
     ) {
         val hashMap = readUserInfo(databaseReference)
 
