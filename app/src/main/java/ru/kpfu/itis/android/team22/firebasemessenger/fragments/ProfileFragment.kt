@@ -63,7 +63,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 binding?.run {
                     userName.text = user?.userName
                     if (isAdded) {
-                        val context = requireContext().applicationContext
+                        val context = requireContext()
                         IconUploader.loadDrawableImage(context, user, ivImage)
                     }
                 }
@@ -177,7 +177,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val context = requireContext().applicationContext
+            val context = requireContext()
             profilePictureUri = data.data!!
             binding?.ivImage?.let {
                 IconUploader.loadUriImage(context, profilePictureUri, it)

@@ -37,7 +37,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFriendsSearcherBinding.bind(view)
         auth = Firebase.auth
-        context = requireContext().applicationContext
+        context = requireContext()
 
         binding?.rvUser?.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {

@@ -33,7 +33,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMessagesBinding.bind(view)
-        context = requireContext().applicationContext
+        context = requireContext()
 
         setUpSearchBar()
         getUsersList()

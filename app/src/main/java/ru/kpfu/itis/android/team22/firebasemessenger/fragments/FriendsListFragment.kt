@@ -30,7 +30,7 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFriendsListBinding.bind(view)
-        context = requireContext().applicationContext
+        context = requireContext()
 
         setUpButtons()
         setUpSearchBar()
