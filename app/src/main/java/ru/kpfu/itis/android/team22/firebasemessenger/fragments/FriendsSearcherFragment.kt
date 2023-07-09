@@ -24,16 +24,16 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     private var binding: FragmentFriendsSearcherBinding? = null
-    private var adapter: AddableUserAdapter? = null
-    private var context: Context? = null
-    private val userList: ArrayList<User> = ArrayList()
     private var auth: FirebaseAuth? = null
+    private var context: Context? = null
+    private var adapter: AddableUserAdapter? = null
+    private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFriendsSearcherBinding.bind(view)
-        context = requireContext().applicationContext
         auth = Firebase.auth
+        context = requireContext().applicationContext
 
         setUpButtons()
         setUpSearchBar()

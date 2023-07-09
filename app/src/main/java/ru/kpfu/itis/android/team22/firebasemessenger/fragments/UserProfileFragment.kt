@@ -23,9 +23,9 @@ import ru.kpfu.itis.android.team22.firebasemessenger.utils.NotificationSender
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
     private var binding: FragmentUserProfileBinding? = null
     private var auth: FirebaseAuth? = null
-    private var databaseReference: DatabaseReference? = null
     private var userID: String? = null
     private var destination: String? = null
+    private var databaseReference: DatabaseReference? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -25,8 +25,8 @@ import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var binding: FragmentSettingsBinding? = null
-    private var databaseReference: DatabaseReference? = null
     private var currentUser: FirebaseUser? = null
+    private var databaseReference: DatabaseReference? = null
     private var profilePictureUri: Uri? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -31,10 +31,9 @@ import java.time.LocalDateTime
 class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var binding: FragmentChatBinding? = null
     private var currentUser: FirebaseUser? = null
-    private var reference: DatabaseReference? = null
     private var userID: String? = null
-    private var mMessageList = ArrayList<Message>()
     private var adapter: MessageAdapter? = null
+    private var mMessageList = ArrayList<Message>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,7 +73,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun setUserInfo() {
         userID = arguments?.getString("id")
-        reference = userID?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
+        val reference = userID?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
 
         reference?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
