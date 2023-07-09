@@ -89,7 +89,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             auth?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(fragmentActivity) { task ->
                     if (task.isSuccessful) {
-                        val userId: String = currentUser?.uid ?: ""
+                        val user: FirebaseUser? = auth?.currentUser
+                        val userId: String = user?.uid ?: ""
                         val databaseReference =
                             FirebaseDatabase.getInstance().getReference("Users").child(userId)
                         val hashMap: HashMap<String, Any> = HashMap()
@@ -101,7 +102,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         hashMap["notificationsList"] = ArrayList<String>()
                         hashMap["chatsList"] = ArrayList<String>()
 
-                        saveUserToFirebaseUser(currentUser, email, userName)
+                        saveUserToFirebaseUser(user, email, userName)
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
                         val errorMessage: String? = task.exception?.message

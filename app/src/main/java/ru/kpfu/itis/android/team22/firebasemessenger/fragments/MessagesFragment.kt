@@ -70,6 +70,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
 
     private fun getUsersList() {
         val currentUser: FirebaseUser? = Firebase.auth.currentUser
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
         val currentUserDatabaseReference: DatabaseReference? =
@@ -77,7 +78,6 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
                 databaseReference.child(it).child("chatsList")
             }
         val chatsList: ArrayList<String> = getUsersToChatList(currentUserDatabaseReference)
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
