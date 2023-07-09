@@ -30,6 +30,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     private var auth: FirebaseAuth? = null
     private var context: Context? = null
     private var adapter: AddableUserAdapter? = null
+    private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,17 +107,20 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             )
         }
         binding?.rvUser?.adapter = adapter
+        binding?.sv?.setQuery(searchText, false)
+        searchText?.let { filter(it) }
     }
 
     private fun setUpSearchBar() {
         binding?.sv?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                searchText = query
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { filter(it) }
+                searchText = newText
                 return false
             }
         })
