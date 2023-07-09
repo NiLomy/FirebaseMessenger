@@ -10,7 +10,8 @@
     <color name="colorDarkGray">#464646</color>
     <color name="colorTextBackground">#c3c1b4</color>
     <color name="colorItemLeft">#E6E4E4</color>
-    <color name="colorItemRight">#813fd7</color>
+    <color name="colorItemRight">#3f51b5</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorLightGray">#CDCDCD</color>
 </resources>
