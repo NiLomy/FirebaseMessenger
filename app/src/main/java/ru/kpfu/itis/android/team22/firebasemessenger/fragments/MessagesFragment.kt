@@ -25,9 +25,6 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var binding: FragmentMessagesBinding? = null
     // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
-
-    //TODO почему-то если испольщовать не null binding то ->
-    //TODO крашится приложение, когда добавляешь кого-то в друзья при переходе в профиль из чата
     private var adapter: UserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
@@ -73,8 +70,6 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
 
     private fun getUsersList() {
         val currentUser: FirebaseUser? = Firebase.auth.currentUser
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
-
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
         val currentUserDatabaseReference: DatabaseReference? =
@@ -82,6 +77,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
                 databaseReference.child(it).child("chatsList")
             }
         val chatsList: ArrayList<String> = getUsersToChatList(currentUserDatabaseReference)
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/msg_${currentUser?.uid}")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

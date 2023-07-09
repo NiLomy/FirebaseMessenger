@@ -21,15 +21,14 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentFriends
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
-    private var _binding: FragmentFriendsListBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentFriendsListBinding? = null
     private var adapter: ChattableUserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentFriendsListBinding.bind(view)
+        binding = FragmentFriendsListBinding.bind(view)
         context = requireContext().applicationContext
 
         setUpButtons()
@@ -38,17 +37,19 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     }
 
     private fun setUpButtons() {
-        binding.backButton.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_friends_list_to_container)
-        }
+        binding?.run {
+            backButton.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_friends_list_to_container)
+            }
 
-        binding.buttonFindFriends.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_friends_list_to_friends_searcher)
+            buttonFindFriends.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_friends_list_to_friends_searcher)
+            }
         }
     }
 
     private fun setUpSearchBar() {
-        binding.sv.setOnQueryTextListener(object :
+        binding?.sv?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -70,9 +71,9 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
             }
         }
         if (filteredList.isEmpty()) {
-            binding.tvNoResults.visibility = View.VISIBLE
+            binding?.tvNoResults?.visibility = View.VISIBLE
         } else {
-            binding.tvNoResults.visibility = View.GONE
+            binding?.tvNoResults?.visibility = View.GONE
         }
         adapter?.filter(filteredList)
     }
@@ -104,7 +105,6 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
@@ -140,11 +140,11 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
             controller = findNavController(),
             userId = getString(R.string.user_id_tag)
         )
-        binding.rvUser.adapter = adapter
+        binding?.rvUser?.adapter = adapter
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

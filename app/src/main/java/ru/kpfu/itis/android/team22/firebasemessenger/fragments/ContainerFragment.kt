@@ -7,17 +7,16 @@ import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentContainerBinding
 
 class ContainerFragment : Fragment(R.layout.fragment_container) {
-    private var _binding: FragmentContainerBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentContainerBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentContainerBinding.bind(view)
+        binding = FragmentContainerBinding.bind(view)
 
-        val bottomNavView = binding.bnv
+        val bottomNavView = binding?.bnv
 
         handleNavigation(MessagesFragment())
-        bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
+        bottomNavView?.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.item_messages -> {
                     handleNavigation(MessagesFragment())
@@ -41,6 +40,6 @@ class ContainerFragment : Fragment(R.layout.fragment_container) {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        binding = null
     }
 }
