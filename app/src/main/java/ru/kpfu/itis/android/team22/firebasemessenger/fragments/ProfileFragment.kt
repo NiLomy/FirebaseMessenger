@@ -230,9 +230,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     }
                 }
                 if (list.isEmpty()) {
-                    binding?.ibNotifications?.setImageResource(R.drawable.ic_notifications)
+                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notifications,0,0, 0)
                 } else {
-                    binding?.ibNotifications?.setImageResource(R.drawable.ic_has_notifications)
+                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_has_notifications,0,0, 0)
                 }
             }
 
