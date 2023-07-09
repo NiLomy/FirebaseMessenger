@@ -44,7 +44,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
     private fun loadUserInfo(databaseReference: DatabaseReference) {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val context = requireContext().applicationContext
+                val context = requireContext()
                 val user = snapshot.getValue(User::class.java)
                 binding?.ivImage?.let { IconUploader.loadDrawableImage(context, user, it) }
                 binding?.tvUserName?.text = user?.userName

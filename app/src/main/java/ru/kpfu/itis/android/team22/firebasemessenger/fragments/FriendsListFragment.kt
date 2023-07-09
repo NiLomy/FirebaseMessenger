@@ -24,12 +24,13 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     private var binding: FragmentFriendsListBinding? = null
     private var adapter: ChattableUserAdapter? = null
     private var context: Context? = null
+    private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFriendsListBinding.bind(view)
-        context = requireContext().applicationContext
+        context = requireContext()
 
         setUpButtons()
         setUpSearchBar()
@@ -52,10 +53,12 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
         binding?.sv?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                searchText = query
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                searchText = newText
                 newText?.let { filter(it) }
                 return false
             }
@@ -141,6 +144,8 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
             userId = getString(R.string.user_id_tag)
         )
         binding?.rvUser?.adapter = adapter
+        binding?.sv?.setQuery(searchText, false)
+        searchText?.let { filter(it) }
     }
 
     override fun onDestroyView() {
