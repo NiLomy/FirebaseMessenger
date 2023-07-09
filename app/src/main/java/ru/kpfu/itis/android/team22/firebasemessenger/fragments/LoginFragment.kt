@@ -13,14 +13,13 @@ import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentLoginBinding? = null
     private var auth: FirebaseAuth? = null
     private var currentUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLoginBinding.bind(view)
+        binding = FragmentLoginBinding.bind(view)
         auth = Firebase.auth
         currentUser = auth?.currentUser
 
@@ -31,24 +30,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun setUp() {
-        val etEmail = binding.etEmail
-        val etPassword = binding.etPassword
-        val btnLogin = binding.btnLogin
-        val btnSignUp = binding.btnSignUp
+        binding?.run {
+            btnLogin.setOnClickListener {
+                val email = etEmail.text.toString()
+                val password = etPassword.text.toString()
 
-        btnLogin.setOnClickListener {
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-
-            if (validateEmailAndPassword(email, password)) {
-                signInWithEmailAndPassword(email, password)
-            } else {
-                showSnackbar(getString(R.string.something_went_wrong))
+                if (validateEmailAndPassword(email, password)) {
+                    signInWithEmailAndPassword(email, password)
+                } else {
+                    showSnackbar(getString(R.string.something_went_wrong))
+                }
             }
-        }
 
-        btnSignUp.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_login_to_signup)
+            btnSignUp.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_login_to_signup)
+            }
         }
     }
 
@@ -60,7 +56,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         auth?.signInWithEmailAndPassword(email, password)
             ?.addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    showSnackbarCustomPos(getString(R.string.login_success), binding.tvAnchor)
+                    binding?.tvAnchor?.let {
+                        showSnackbarCustomPos(getString(R.string.login_success), it)
+                    }
                     findNavController().navigate(R.id.nav_from_login_to_container)
                 } else {
                     showSnackbar(getString(R.string.invalid_credentials))
@@ -70,7 +68,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+        binding?.root?.let { Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show() }
     }
 
     private fun showSnackbarCustomPos(message: String, view: View) {
@@ -82,6 +80,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        binding = null
     }
 }

@@ -3,16 +3,12 @@ package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -22,19 +18,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.MessageAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentChatBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 import ru.kpfu.itis.android.team22.firebasemessenger.notifications.MessagesFirebaseService
-import ru.kpfu.itis.android.team22.firebasemessenger.notifications.NotificationData
-import ru.kpfu.itis.android.team22.firebasemessenger.notifications.PushNotification
-import ru.kpfu.itis.android.team22.firebasemessenger.notifications.RetrofitInstance
+import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
+import ru.kpfu.itis.android.team22.firebasemessenger.utils.NotificationSender
 import java.time.LocalDateTime
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
@@ -54,8 +45,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         initFirebaseToken()
         setUserInfo()
         setOnClickListeners()
-        currentUser?.uid?.let {
-                currentUserId -> userID?.let { userId -> updateChat(currentUserId, userId) }
+        currentUser?.uid?.let { currentUserId ->
+            userID?.let { userId -> updateChat(currentUserId, userId) }
         }
     }
 
@@ -91,54 +82,55 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                val context = requireContext().applicationContext
                 val user = snapshot.getValue(User::class.java)
                 binding?.tvUserName?.text = user?.userName
-                binding?.ivProfileImage?.let { loadImage(user, it) }
+                binding?.ivProfileImage?.let { IconUploader.loadDrawableImage(context, user, it) }
             }
         })
     }
 
-    private fun loadImage(user: User?, ivProfilePicture: ImageView) {
-        val context = requireContext().applicationContext
-        Glide.with(context)
-            .load(user?.profileImage)
-            .transform(CenterCrop())
-            .placeholder(R.drawable.loading)
-            .error(R.drawable.error)
-            .into(ivProfilePicture)
-    }
-
-
     private fun setOnClickListeners() {
-        binding?.btnSendMsg?.setOnClickListener {
-            val message: String = binding!!.etSendMsg.text.toString()
+        binding?.run {
+            btnSendMsg.setOnClickListener {
+                val message: String = etSendMsg.text.toString()
 
-            if (message.isEmpty()) {
-                binding?.root?.let { root -> Snackbar.make(root, "Message is empty!", Snackbar.LENGTH_SHORT).show() }
-                binding?.etSendMsg?.setText("")
-            } else {
-                currentUser?.uid?.let {
-                        currentUserId -> userID?.let {
-                        userId -> sendMessage(currentUserId, userId, message, LocalDateTime.now().toString())
+                if (message.isEmpty()) {
+                    Snackbar.make(root, "Message is empty!", Snackbar.LENGTH_SHORT).show()
+                    etSendMsg.setText("")
+                } else {
+                    currentUser?.uid?.let { currentUserId ->
+                        userID?.let { userId ->
+                            sendMessage(
+                                currentUserId,
+                                userId,
+                                message,
+                                LocalDateTime.now().toString()
+                            )
                         }
-                }
-                binding?.etSendMsg?.setText("")
-                PushNotification(
-                    NotificationData(getString(R.string.messages), currentUser!!.displayName!! + ": " + message),
-                    "/topics/msg_$userID"
-                ).also {
-                        sendNotification(it)
                     }
+                    etSendMsg.setText("")
+                    val title = getString(R.string.messages)
+                    val msg = ": $message"
+                    userID?.let { userId ->
+                        NotificationSender.generateMessageNotification(
+                            currentUser,
+                            userId,
+                            title,
+                            msg
+                        )
+                    }
+                }
             }
-        }
 
-        binding!!.backButton.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_chat_to_container)
-        }
+            backButton.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_chat_to_container)
+            }
 
-        binding!!.ivProfileImage.setOnClickListener {
-            val bundle: Bundle = bundleOf(getString(R.string.user_id_tag) to userID)
-            findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
+            ivProfileImage.setOnClickListener {
+                val bundle: Bundle = bundleOf(getString(R.string.user_id_tag) to userID)
+                findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
+            }
         }
     }
 
@@ -189,7 +181,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
                 }
-
             })
     }
 
@@ -238,18 +229,4 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         binding = null
         adapter = null
     }
-
-    private fun sendNotification(notification: PushNotification) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitInstance.api.postNotification(notification)
-                if (response.isSuccessful) {
-                    Log.d("PUSH", "Response: ${Gson().toJson(response)}")
-                } else {
-                    response.errorBody()?.string()?.let { Log.e("PUSH", it) }
-                }
-            } catch (e: Exception) {
-                Log.e("PUSH", e.toString())
-            }
-        }
 }

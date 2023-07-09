@@ -23,14 +23,12 @@ import de.hdodenhof.circleimageview.CircleImageView
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.Message
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class MessageAdapter(private val context: Context, private val list: ArrayList<Message>) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
-
-    private val options: RequestOptions = RequestOptions
-        .diskCacheStrategyOf(DiskCacheStrategy.ALL)
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvMsg: TextView = view.findViewById(R.id.tv_msg)
@@ -39,7 +37,7 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return if (viewType == RECIEVED_MSG) {
+        return if (viewType == RECEIVED_MSG) {
             createReceivedViewHolder(parent)
         } else {
             createSentViewHolder(parent)
@@ -67,8 +65,8 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
     }
 
     private fun bindMessageDetails(holder: ViewHolder, message: Message) {
-        holder.tvMsg.text = message.message
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        holder.tvMsg.text = message.message
         holder.tvTime.text = LocalDateTime.parse(message.time).format(formatter)
     }
 
@@ -83,7 +81,7 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
         authorRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(User::class.java)
-                user?.let { loadImage(holder, it.profileImage) }
+                IconUploader.loadDrawableImage(context, user, holder.ivUserImage)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -92,29 +90,17 @@ class MessageAdapter(private val context: Context, private val list: ArrayList<M
         })
     }
 
-    private fun loadImage(holder: ViewHolder, profileImage: String?) {
-        Glide
-            .with(context)
-            .load(profileImage)
-            .transform(CenterCrop())
-            .placeholder(R.drawable.loading)
-            .error(R.drawable.error)
-            .apply(options)
-            .into(holder.ivUserImage)
-
-    }
-
     override fun getItemViewType(position: Int): Int {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         return if (list[position].senderID == firebaseUser?.uid) {
-            RECIEVED_MSG
+            RECEIVED_MSG
         } else {
             SEND_MSG
         }
     }
 
     companion object {
-        const val SEND_MSG = 0
-        const val RECIEVED_MSG = 1
+        private const val SEND_MSG = 0
+        private const val RECEIVED_MSG = 1
     }
 }

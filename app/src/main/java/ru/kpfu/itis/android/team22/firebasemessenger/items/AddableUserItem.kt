@@ -2,7 +2,6 @@ package ru.kpfu.itis.android.team22.firebasemessenger.items
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -17,16 +16,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.ItemUserToAddBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
-import ru.kpfu.itis.android.team22.firebasemessenger.notifications.NotificationData
-import ru.kpfu.itis.android.team22.firebasemessenger.notifications.PushNotification
-import ru.kpfu.itis.android.team22.firebasemessenger.notifications.RetrofitInstance
+import ru.kpfu.itis.android.team22.firebasemessenger.utils.NotificationSender
 
 class AddableUserItem(
     private val binding: ItemUserToAddBinding,
@@ -68,22 +61,13 @@ class AddableUserItem(
                 if (!friendsList.contains(userIdentifier)) {
                     friendsList.add(userIdentifier)
                     currentUser?.uid?.let { currentUserId -> notificationsList.add(currentUserId) }
-                    PushNotification(
-                        NotificationData("You have a new friend!", currentUser!!.displayName!! + " just added you to his friends."),
-                        "/topics/friend_$userIdentifier"
-                    )
-                        .also {
-                            sendNotification(it)
-                        }
+                    NotificationSender.generateFriendAddingNotification(currentUser, userIdentifier)
                 } else {
                     friendsList.remove(userIdentifier)
-                    PushNotification(
-                        NotificationData("Bad news...", currentUser!!.displayName!! + " just removed you from his friends."),
-                        "/topics/friend_$userIdentifier"
+                    NotificationSender.generateFriendRemovingNotification(
+                        currentUser,
+                        userIdentifier
                     )
-                        .also {
-                            sendNotification(it)
-                        }
                 }
 
                 databaseReference?.child("friendsList")?.setValue(friendsList)
@@ -97,20 +81,6 @@ class AddableUserItem(
         }
     }
 
-    private fun sendNotification(notification: PushNotification) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitInstance.api.postNotification(notification)
-                if (response.isSuccessful) {
-                    Log.d("PUSH", "Response: ${Gson().toJson(response)}")
-                } else {
-                    Log.e("PUSH", response.errorBody()!!.string())
-                }
-            } catch (e: Exception) {
-                Log.e("PUSH", e.toString())
-            }
-        }
-        
     private fun getDatabaseReference(userIdentifier: String): DatabaseReference {
         return FirebaseDatabase.getInstance().getReference("Users").child(
             userIdentifier

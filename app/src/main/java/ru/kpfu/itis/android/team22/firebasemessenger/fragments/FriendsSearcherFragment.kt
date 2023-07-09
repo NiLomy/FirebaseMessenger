@@ -23,8 +23,7 @@ import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentFriends
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
-    private var _binding: FragmentFriendsSearcherBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentFriendsSearcherBinding? = null
     private var adapter: AddableUserAdapter? = null
     private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
@@ -32,7 +31,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentFriendsSearcherBinding.bind(view)
+        binding = FragmentFriendsSearcherBinding.bind(view)
         context = requireContext().applicationContext
         auth = Firebase.auth
 
@@ -42,22 +41,20 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     }
 
     private fun setUpButtons() {
-        binding.backButton.setOnClickListener {
+        binding?.backButton?.setOnClickListener {
             findNavController().navigate(R.id.nav_from_friends_searcher_to_friends_list)
         }
     }
 
     private fun getUsersList() {
         val currentUser: FirebaseUser? = Firebase.auth.currentUser
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/friend_${currentUser?.uid}")
-
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users")
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/friend_${currentUser?.uid}")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
-
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user: User? = dataSnapshot.getValue(User::class.java)
                     if (user?.userId != currentUser?.uid) {
@@ -72,7 +69,6 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
@@ -92,11 +88,11 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
                 context = it
             )
         }
-        binding.rvUser.adapter = adapter
+        binding?.rvUser?.adapter = adapter
     }
 
     private fun setUpSearchBar() {
-        binding.sv.setOnQueryTextListener(object :
+        binding?.sv?.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -118,15 +114,15 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
             }
         }
         if (filteredList.isEmpty()) {
-            binding.tvNoResults.visibility = View.VISIBLE
+            binding?.tvNoResults?.visibility = View.VISIBLE
         } else {
-            binding.tvNoResults.visibility = View.GONE
+            binding?.tvNoResults?.visibility = View.GONE
         }
         adapter?.filter(filteredList)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

@@ -22,7 +22,7 @@
             android:layout_height="80dp"
             android:elevation="@dimen/cardview_default_elevation"
             android:fontFamily="@font/archivo_regular"
-            android:text="@string/friends_list"
+            android:text="@string/search_friends"
             android:textColor="@color/colorWhite"
             android:textSize="27dp"
             android:translationZ="@dimen/cardview_compat_inset_shadow"

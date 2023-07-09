@@ -6,12 +6,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -24,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSettingsBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var binding: FragmentSettingsBinding? = null
@@ -45,17 +43,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun initFields() {
-        databaseReference = currentUser?.uid?.let {
-            FirebaseDatabase.getInstance().getReference("Users").child(it)
-        }
-
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
                 binding?.run {
                     etNewName.setText(user?.userName)
                     if (isAdded) {
-                        loadDrawableImage(user, ivProfilePicture)
+                        val context = requireContext().applicationContext
+                        IconUploader.loadDrawableImage(context, user, ivProfilePicture)
                     }
                 }
             }
@@ -64,16 +59,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun loadDrawableImage(user: User?, ivProfilePicture: ImageView) {
-        val context = requireContext().applicationContext
-        Glide.with(context)
-            .load(user?.profileImage)
-            .transform(CenterCrop())
-            .placeholder(R.drawable.loading)
-            .error(R.drawable.error)
-            .into(ivProfilePicture)
     }
 
     private fun setClickListeners() {
@@ -108,7 +93,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 val frag = SettingsDialogFragment()
                 frag.show(parentFragmentManager, "data_change")
             }
-
         }
     }
 
@@ -127,15 +111,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 avatarRef.downloadUrl
                     .addOnSuccessListener { downloadUri ->
                         val url = downloadUri.toString()
-
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setPhotoUri(Uri.parse(url))
                             .setDisplayName(newName)
                             .build()
+                        val hashMap = readUserInfo(databaseReference)
 
                         currentUser?.updateProfile(profileUpdates)
 
-                        val hashMap = readUserInfo(databaseReference)
                         newName.let {
                             if (it.isNotEmpty()) hashMap["userName"] = it
                         }
@@ -144,7 +127,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
                         makeToast("Success!")
                         findNavController().navigate(R.id.nav_from_settings_to_container)
-                        binding?.applyChangesButton!!.isEnabled = true
+                        binding?.applyChangesButton?.isEnabled = true
                     }
             }.addOnFailureListener {
                 makeToast("Something went wrong...")
@@ -164,20 +147,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            val context = requireContext().applicationContext
             profilePictureUri = data.data
-            loadUriImage(profilePictureUri)
-        }
-    }
-
-    private fun loadUriImage(uri: Uri?) {
-        val context = requireContext().applicationContext
-        binding?.ivProfilePicture?.let {
-            Glide.with(context)
-                .load(uri)
-                .transform(CenterCrop())
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error)
-                .into(it)
+            binding?.ivProfilePicture?.let {
+                IconUploader.loadUriImage(context, profilePictureUri, it)
+            }
         }
     }
 
@@ -234,6 +208,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     companion object {
-        const val PICK_IMAGE_REQUEST = 1
+        private const val PICK_IMAGE_REQUEST = 1
     }
 }

@@ -4,14 +4,12 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -25,20 +23,18 @@ import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.NotificationAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentProfileBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
+import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentProfileBinding? = null
     private var auth: FirebaseAuth? = null
     private var currentUser: FirebaseUser? = null
-    private var databaseReference: DatabaseReference? = null
     private var context: Context? = null
-    private var adapter: NotificationAdapter? = null
     private val notificationsList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentProfileBinding.bind(view)
+        binding = FragmentProfileBinding.bind(view)
         context = requireContext()
         auth = Firebase.auth
         currentUser = auth?.currentUser
@@ -48,17 +44,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun initFields() {
-        databaseReference = currentUser?.uid?.let {
+        val databaseReference = currentUser?.uid?.let {
             FirebaseDatabase.getInstance().getReference("Users").child(it)
         }
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
-                binding.run {
+                binding?.run {
                     userName.text = user?.userName
                     if (isAdded) {
-                        loadImage(user, ivImage)
+                        val context = requireContext().applicationContext
+                        IconUploader.loadDrawableImage(context, user, ivImage)
                     }
                 }
             }
@@ -69,50 +66,42 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         })
     }
 
-    private fun loadImage(user: User?, ivProfilePicture: ImageView) {
-        val context = requireContext().applicationContext
-        Glide.with(context)
-            .load(user?.profileImage)
-            .transform(CenterCrop())
-            .placeholder(R.drawable.loading)
-            .error(R.drawable.error)
-            .into(ivProfilePicture)
-    }
-
     private fun setUpButtons() {
-        binding.friendsButton.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_container_to_friends_list)
-        }
-
-        binding.fabSettings.setOnClickListener {
-            findNavController().navigate(R.id.nav_from_container_to_settings)
-        }
-
-        binding.btnLogOut.setOnClickListener {
-            auth?.signOut()
-            findNavController().navigate(R.id.nav_from_container_to_login)
-        }
-
-        binding.ibNotifications.setOnClickListener {
-            val dialog = Dialog(requireContext())
-            dialog.setContentView(R.layout.dialog)
-            val btn = dialog.findViewById<View>(R.id.cancel_btn)
-            val clr = dialog.findViewById<View>(R.id.clear_all_btn)
-            val rv = dialog.findViewById<RecyclerView>(R.id.rv_notifications)
-
-            setUpNotifications(rv, dialog)
-            btn.setOnClickListener {
-                dialog.dismiss()
+        binding?.run {
+            friendsButton.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_container_to_friends_list)
             }
-            clr.setOnClickListener {
-                val list2: ArrayList<String> = ArrayList()
-                currentUser?.uid?.let { currentUserId ->
-                    FirebaseDatabase.getInstance().getReference("Users").child(currentUserId)
-                        .child("notificationsList")
-                        .setValue(list2)
+
+            fabSettings.setOnClickListener {
+                findNavController().navigate(R.id.nav_from_container_to_settings)
+            }
+
+            btnLogOut.setOnClickListener {
+                auth?.signOut()
+                findNavController().navigate(R.id.nav_from_container_to_login)
+            }
+
+            ibNotifications.setOnClickListener {
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(R.layout.dialog)
+                val btn = dialog.findViewById<View>(R.id.cancel_btn)
+                val clr = dialog.findViewById<View>(R.id.clear_all_btn)
+                val rv = dialog.findViewById<RecyclerView>(R.id.rv_notifications)
+
+                setUpNotifications(rv, dialog)
+                btn.setOnClickListener {
+                    dialog.dismiss()
                 }
+                clr.setOnClickListener {
+                    val list2: ArrayList<String> = ArrayList()
+                    currentUser?.uid?.let { currentUserId ->
+                        FirebaseDatabase.getInstance().getReference("Users").child(currentUserId)
+                            .child("notificationsList")
+                            .setValue(list2)
+                    }
+                }
+                dialog.show()
             }
-            dialog.show()
         }
     }
 
@@ -158,9 +147,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     }
                 }
                 if (list.isEmpty()) {
-                    binding.ibNotifications.setImageResource(R.drawable.ic_notifications)
+                    binding?.ibNotifications?.setImageResource(R.drawable.ic_notifications)
                 } else {
-                    binding.ibNotifications.setImageResource(R.drawable.ic_has_notifications)
+                    binding?.ibNotifications?.setImageResource(R.drawable.ic_has_notifications)
                 }
             }
 
@@ -177,7 +166,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             return
         }
 
-        adapter = context?.let {
+        val adapter = context?.let {
             NotificationAdapter(
                 list = notificationsList,
                 glide = Glide.with(this),

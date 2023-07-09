@@ -1,6 +1,5 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -18,27 +17,24 @@ import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSignUpBinding
 
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
-    private var _binding: FragmentSignUpBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentSignUpBinding? = null
     private var auth: FirebaseAuth? = null
-    private var context: Context? = null
-    private var firebaseUser: FirebaseUser? = null
+    private var currentUser: FirebaseUser? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSignUpBinding.bind(view)
+        binding = FragmentSignUpBinding.bind(view)
         auth = Firebase.auth
-        context = requireContext().applicationContext
 
-        firebaseUser = auth?.currentUser
-        if (firebaseUser != null) {
+        currentUser = auth?.currentUser
+        if (currentUser != null) {
             findNavController().navigate(R.id.nav_from_signup_to_container)
         }
         setUp()
     }
 
     private fun setUp() {
-        with(binding) {
+        binding?.run {
             btnSignUp.setOnClickListener {
                 onSignUpClicked(
                     etName.text.toString(),
@@ -93,8 +89,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             auth?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(fragmentActivity) { task ->
                     if (task.isSuccessful) {
-                        val user: FirebaseUser? = auth?.currentUser
-                        val userId: String = user?.uid ?: ""
+                        val userId: String = currentUser?.uid ?: ""
                         val databaseReference =
                             FirebaseDatabase.getInstance().getReference("Users").child(userId)
                         val hashMap: HashMap<String, Any> = HashMap()
@@ -106,13 +101,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                         hashMap["notificationsList"] = ArrayList<String>()
                         hashMap["chatsList"] = ArrayList<String>()
 
-                        saveUserToFirebaseUser(user, email, userName)
+                        saveUserToFirebaseUser(currentUser, email, userName)
                         saveUserDataToDatabase(databaseReference, hashMap)
                     } else {
                         val errorMessage: String? = task.exception?.message
                         if (errorMessage != null) {
                             showSnackbar(errorMessage)
-                            binding.etEmail.error = errorMessage
+                            binding?.etEmail?.error = errorMessage
                         }
                     }
                 }
@@ -136,10 +131,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         databaseReference.setValue(hashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    showSnackbarCustomPos(
-                        getString(R.string.registration_success),
-                        binding.tvAnchor
-                    )
+                    binding?.tvAnchor?.let {
+                        showSnackbarCustomPos(getString(R.string.registration_success), it)
+                    }
                     findNavController().navigate(R.id.nav_from_signup_to_container)
                 }
             }
@@ -159,11 +153,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        binding = null
     }
 
     companion object {
-        const val DEFAULT_IMG_URL =
+        private const val DEFAULT_IMG_URL =
             "https://firebasestorage.googleapis.com/v0/b/fir-messenger-187aa.appspot.com/o/default.png?alt=media&token=47bdc05f-ce9f-4d8b-bd3f-f2be197bafae"
     }
 }
