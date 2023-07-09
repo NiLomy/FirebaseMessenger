@@ -77,6 +77,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile) {
                     }
 
                     "friends" -> findNavController().navigate(R.id.nav_from_user_profile_to_friends_list)
+                    "search" -> findNavController().navigate(R.id.nav_from_user_profile_to_friends_searcher)
                 }
             }
 

@@ -1,8 +1,12 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -12,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,6 +24,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.NotificationAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentProfileBinding
@@ -28,9 +34,12 @@ import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var binding: FragmentProfileBinding? = null
     private var auth: FirebaseAuth? = null
+    private var databaseReference: DatabaseReference? = null
     private var currentUser: FirebaseUser? = null
     private var context: Context? = null
     private val notificationsList: ArrayList<User> = ArrayList()
+    private lateinit var profilePictureUri: Uri
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +53,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun initFields() {
-        val databaseReference = currentUser?.uid?.let {
+        databaseReference = currentUser?.uid?.let {
             FirebaseDatabase.getInstance().getReference("Users").child(it)
         }
 
@@ -102,7 +111,81 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
                 dialog.show()
             }
+
+            ibGallery.setOnClickListener {
+                binding?.ibGallery?.isEnabled = false
+                openGallery()
+            }
         }
+    }
+
+    private fun updateProfilePicture() {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val userUid = currentUser?.uid
+        val avatarRef = storageRef.child("avatars/$userUid.jpg")
+
+        avatarRef.putFile(profilePictureUri)
+            .addOnSuccessListener {
+                avatarRef.downloadUrl
+                    .addOnSuccessListener { downloadUri ->
+                        val url = downloadUri.toString()
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setPhotoUri(Uri.parse(url))
+                            .build()
+                        val hashMap = readUserInfo(databaseReference)
+
+                        currentUser?.updateProfile(profileUpdates)
+
+                        hashMap["profileImage"] = url
+
+                        this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
+                        makeToast("Success!")
+                    }
+            }.addOnFailureListener {
+                makeToast("Something went wrong...")
+            }.addOnFailureListener {
+                makeToast("Failed to update...")
+            }
+    }
+
+    private fun readUserInfo(databaseReference: DatabaseReference?): HashMap<String, String> {
+        val hashMap: HashMap<String, String> = HashMap()
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user: User? = snapshot.getValue(User::class.java)
+                user?.run {
+                    hashMap["profileImage"] = this.profileImage
+                    hashMap["userId"] = this.userId
+                    hashMap["userName"] = this.userName
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                makeToast(error.message)
+            }
+        })
+        return hashMap
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            val context = requireContext().applicationContext
+            profilePictureUri = data.data!!
+            binding?.ivImage?.let {
+                IconUploader.loadUriImage(context, profilePictureUri, it)
+            }
+            makeToast("Updating your profile picture. Please wait.")
+            updateProfilePicture()
+        }
+        binding?.ibGallery?.isEnabled = true
     }
 
     private fun setUpNotifications(rv: RecyclerView, dialog: Dialog) {
@@ -179,5 +262,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun makeToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
     }
 }

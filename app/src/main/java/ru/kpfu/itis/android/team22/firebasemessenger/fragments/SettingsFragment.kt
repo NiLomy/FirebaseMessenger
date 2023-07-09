@@ -1,10 +1,6 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -17,17 +13,14 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentSettingsBinding
 import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
-import ru.kpfu.itis.android.team22.firebasemessenger.utils.IconUploader
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var binding: FragmentSettingsBinding? = null
     private var currentUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
-    private var profilePictureUri: Uri? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,10 +41,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 val user: User? = snapshot.getValue(User::class.java)
                 binding?.run {
                     etNewName.setText(user?.userName)
-                    if (isAdded) {
-                        val context = requireContext().applicationContext
-                        IconUploader.loadDrawableImage(context, user, ivProfilePicture)
-                    }
                 }
             }
 
@@ -63,12 +52,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun setClickListeners() {
         binding?.run {
-            ivProfilePicture.setOnClickListener {
-                binding?.ivProfilePicture?.isEnabled = false
-                openGallery()
-                binding?.ivProfilePicture?.isEnabled = true
-            }
-
             fabToContainer.setOnClickListener {
                 findNavController().navigate(R.id.nav_from_settings_to_container)
             }
@@ -76,15 +59,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             applyChangesButton.setOnClickListener {
                 binding?.applyChangesButton?.isEnabled = false
                 currentUser?.run {
-                    if (profilePictureUri != null) {
-                        updateNameAndImage(
-                            binding?.etNewName?.text.toString(),
-                            profilePictureUri!!,
-                            databaseReference
-                        )
-                    } else {
-                        updateName(binding?.etNewName?.text.toString(), databaseReference)
-                    }
+                    updateName(binding?.etNewName?.text.toString())
                 }
                 applyChangesButton.isEnabled = true
             }
@@ -96,67 +71,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun updateNameAndImage(
-        newName: String,
-        profilePictureUri: Uri,
-        databaseReference: DatabaseReference?
-    ) {
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
-        val userUid = currentUser?.uid
-        val avatarRef = storageRef.child("avatars/$userUid.jpg")
-
-        avatarRef.putFile(profilePictureUri)
-            .addOnSuccessListener {
-                avatarRef.downloadUrl
-                    .addOnSuccessListener { downloadUri ->
-                        val url = downloadUri.toString()
-                        val profileUpdates = UserProfileChangeRequest.Builder()
-                            .setPhotoUri(Uri.parse(url))
-                            .setDisplayName(newName)
-                            .build()
-                        val hashMap = readUserInfo(databaseReference)
-
-                        currentUser?.updateProfile(profileUpdates)
-
-                        newName.let {
-                            if (it.isNotEmpty()) hashMap["userName"] = it
-                        }
-                        hashMap["profileImage"] = url
-
-                        this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
-                        makeToast("Success!")
-                        findNavController().navigate(R.id.nav_from_settings_to_container)
-                        binding?.applyChangesButton?.isEnabled = true
-                    }
-            }.addOnFailureListener {
-                makeToast("Something went wrong...")
-                findNavController().navigate(R.id.nav_from_settings_to_container)
-            }.addOnFailureListener {
-                makeToast("Failed to update...")
-                findNavController().navigate(R.id.nav_from_settings_to_container)
-            }
-    }
-
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            val context = requireContext().applicationContext
-            profilePictureUri = data.data
-            binding?.ivProfilePicture?.let {
-                IconUploader.loadUriImage(context, profilePictureUri, it)
-            }
-        }
-    }
-
     private fun updateName(
-        newName: String, databaseReference: DatabaseReference?
+        newName: String
     ) {
         val hashMap = readUserInfo(databaseReference)
 
@@ -205,9 +121,5 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
-    }
-
-    companion object {
-        private const val PICK_IMAGE_REQUEST = 1
     }
 }

@@ -75,7 +75,7 @@ class AddableUserItem(
             }
 
             root.setOnClickListener {
-                val bundle: Bundle = bundleOf(userId to userIdentifier, "from" to "friends")
+                val bundle: Bundle = bundleOf(userId to userIdentifier, "from" to "search")
                 controller.navigate(R.id.nav_from_friends_searcher_to_user_profile, bundle)
             }
         }
