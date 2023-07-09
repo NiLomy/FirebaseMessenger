@@ -141,7 +141,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
                         this.databaseReference?.updateChildren(hashMap as Map<String, Any>)
                         makeToast("Success!")
-                        binding?.ibGallery?.isEnabled = true
                     }
             }.addOnFailureListener {
                 makeToast("Something went wrong...")
@@ -186,6 +185,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             makeToast("Updating your profile picture. Please wait.")
             updateProfilePicture()
         }
+        binding?.ibGallery?.isEnabled = true
     }
 
     private fun setUpNotifications(rv: RecyclerView, dialog: Dialog) {
