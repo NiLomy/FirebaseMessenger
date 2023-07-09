@@ -24,9 +24,9 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var binding: FragmentMessagesBinding? = null
+    private var context: Context? = null
     // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
     private var adapter: UserAdapter? = null
-    private var context: Context? = null
     private val userList: ArrayList<User> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
