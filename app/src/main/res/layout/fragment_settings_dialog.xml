@@ -24,7 +24,7 @@
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/custom_mail"
         android:drawablePadding="12dp"
-        android:hint="@string/enter_new_email"
+        android:hint="@string/enter_new_name"
         android:inputType="textEmailAddress"
         android:padding="12dp"
         android:fontFamily="@font/roboto_light"
