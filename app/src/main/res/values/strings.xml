@@ -26,8 +26,7 @@
     <string name="messages">Messages</string>
     <string name="profile">Profile</string>
     <string name="log_out">Log out</string>
-    <string name="enter_new_name">Enter New Name</string>
-    <string name="new_profile_picture">New Profile Picture</string>
+    <string name="enter_new_name">Enter new name</string>
     <string name="browse_gallery">Browse gallery</string>
     <string name="apply_changes">Apply Changes</string>
     <string name="label_settings">Settings</string>
@@ -43,9 +42,9 @@
     <string name="profile_picture">Profile picture</string>
     <string name="user_id_tag">USER_ID</string>
     <string name="change_acc_data">Change account data</string>
-    <string name="enter_new_email">Enter New Email</string>
-    <string name="enter_new_password">Enter New Password</string>
-    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="enter_new_email">Enter new email</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm password</string>
     <string name="added_you_to_friends">" added"\n"you to friends."</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -53,4 +52,5 @@
     <string name="clear_all">Clear all</string>
     <string name="notifications">Notifications</string>
     <string name="file_positions">positions</string>
+    <string name="you_have_new_message">You have a new message!</string>
 </resources>

@@ -82,7 +82,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
 
             fabSettings.setOnClickListener {
-                findNavController().navigate(R.id.nav_from_container_to_settings)
+                val frag = SettingsDialogFragment()
+                frag.show(parentFragmentManager, "data_change")
             }
 
             btnLogOut.setOnClickListener {
@@ -92,7 +93,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             ibNotifications.setOnClickListener {
                 val dialog = Dialog(requireContext())
-                dialog.setContentView(R.layout.dialog)
+                dialog.setContentView(R.layout.notifications_dialog)
                 val btn = dialog.findViewById<View>(R.id.cancel_btn)
                 val clr = dialog.findViewById<View>(R.id.clear_all_btn)
                 val rv = dialog.findViewById<RecyclerView>(R.id.rv_notifications)

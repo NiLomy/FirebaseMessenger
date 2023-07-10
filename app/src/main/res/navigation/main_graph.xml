@@ -51,9 +51,6 @@
             android:id="@+id/nav_from_container_to_chat"
             app:destination="@id/chatFragment" />
         <action
-            android:id="@+id/nav_from_container_to_settings"
-            app:destination="@id/settingsFragment" />
-        <action
             android:id="@+id/nav_from_container_to_friends_list"
             app:destination="@id/friendsListFragment" />
         <action
@@ -74,15 +71,6 @@
         <action
             android:id="@+id/nav_from_chat_to_friends_list"
             app:destination="@id/friendsListFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="ru.kpfu.itis.android.team22.firebasemessenger.fragments.SettingsFragment"
-        android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings">
-        <action
-            android:id="@+id/nav_from_settings_to_container"
-            app:destination="@id/containerFragment" />
     </fragment>
     <fragment
         android:id="@+id/friendsListFragment"
