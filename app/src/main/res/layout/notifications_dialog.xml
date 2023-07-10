@@ -6,20 +6,20 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    app:layout_constraintHeight_max="wrap"
-    android:padding="8dp">
+    android:padding="8dp"
+    app:layout_constraintHeight_max="wrap">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:fontFamily="@font/roboto_light"
             android:gravity="center"
             android:text="@string/notifications"
-            android:fontFamily="@font/roboto_light"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
@@ -57,30 +57,29 @@
                     android:id="@+id/clear_all_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight=".49"
+                    android:background="@drawable/custom_button_3"
+                    android:fontFamily="@font/roboto_light"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:fontFamily="@font/roboto_light"
                     android:text="@string/clear_all"
                     android:textAlignment="center"
-                    android:textSize="16dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/custom_button_3"/>
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/cancel_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight=".5"
+                    android:background="@drawable/custom_button_3"
+                    android:fontFamily="@font/roboto_light"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:fontFamily="@font/roboto_light"
                     android:text="@string/cancel"
                     android:textAlignment="center"
-                    android:layout_margin="5dp"
-                    android:textSize="16dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/custom_button_3"/>
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
