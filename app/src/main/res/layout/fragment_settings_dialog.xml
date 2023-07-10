@@ -22,7 +22,7 @@
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/custom_mail"
+        android:drawableStart="@drawable/custom_name"
         android:drawablePadding="12dp"
         android:hint="@string/enter_new_name"
         android:inputType="text"
