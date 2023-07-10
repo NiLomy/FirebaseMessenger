@@ -42,6 +42,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private val APP_POSITIONS = "positions"
     private val PREF_CHAT_POS = "chatPos"
 
+    private var justEntered = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences = activity?.getSharedPreferences(APP_POSITIONS, Context.MODE_PRIVATE)
@@ -62,6 +64,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentChatBinding.bind(view)
         currentUser = FirebaseAuth.getInstance().currentUser
+        rvPos?.let{binding?.rvMessages?.layoutManager?.scrollToPosition(it)}
 
         setStatusBarColor()
         initFirebaseToken()
@@ -212,6 +215,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val pos = mMessageList.size
                 mMessageList.clear()
                 for (dataSnapShot: DataSnapshot in snapshot.children) {
                     val message = dataSnapShot.getValue(Message::class.java)
@@ -223,7 +227,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     }
                 }
                 initAdapter()
-                rvPos?.let { binding?.rvMessages?.layoutManager?.scrollToPosition(it) }
+                if (justEntered) {
+                    rvPos?. let {binding?.rvMessages?.layoutManager?.scrollToPosition(it)}
+                    justEntered = false
+                } else {
+                    binding?.rvMessages?.layoutManager?.scrollToPosition(pos)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

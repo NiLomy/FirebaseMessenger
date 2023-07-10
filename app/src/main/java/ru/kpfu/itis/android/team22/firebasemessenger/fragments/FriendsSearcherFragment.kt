@@ -1,11 +1,13 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -28,6 +30,28 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     private var adapter: AddableUserAdapter? = null
     private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
+
+    private var rvPos : Int? = null
+    private var preferences : SharedPreferences? = null
+    private val APP_POSITIONS = "positions"
+    private val PREF_FRIEND_SRCH_POS = "friendsSearchPos"
+    private val PREF_ADD_FRIEND_POS = "addFriendsPos"
+    private var justEntered = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        preferences = activity?.getSharedPreferences(APP_POSITIONS, Context.MODE_PRIVATE)
+        rvPos = preferences?.getInt(PREF_FRIEND_SRCH_POS, 0)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val layoutManager = binding?.rvUser?.layoutManager as LinearLayoutManager
+        val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
+        preferences?.edit()
+            ?.putInt(PREF_FRIEND_SRCH_POS, pos)
+            ?.apply()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +87,15 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
                     }
                 }
                 initAdapter()
+                if (justEntered) {
+                    justEntered = false
+                    rvPos?.let {
+                        binding?.rvUser?.layoutManager?.scrollToPosition(it)
+                    }
+                } else {
+                    val pos = preferences?.getInt(PREF_ADD_FRIEND_POS, 0)
+                    pos?.let {binding?.rvUser?.layoutManager?.scrollToPosition(it)}
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -84,7 +117,8 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
                 controller = findNavController(),
                 userId = getString(R.string.user_id_tag),
                 currentUser = user,
-                context = it
+                context = it,
+                rv = binding?.rvUser
             )
         }
         binding?.rvUser?.adapter = adapter

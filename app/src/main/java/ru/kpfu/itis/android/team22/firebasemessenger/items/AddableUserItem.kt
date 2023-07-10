@@ -1,10 +1,12 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.items
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -28,9 +30,14 @@ class AddableUserItem(
     private val userId: String,
     private val currentUser: FirebaseUser?,
     private val context: Context,
+    private val rv : RecyclerView?
 ) : RecyclerView.ViewHolder(binding.root) {
     private val options: RequestOptions = RequestOptions
         .diskCacheStrategyOf(DiskCacheStrategy.ALL)
+
+    private var preferences : SharedPreferences? = null
+    private val APP_POSITIONS = "positions"
+    private val PREF_ADD_FRIEND_POS = "addFriendsPos"
 
     fun onBind(user: User) {
         binding.run {
@@ -58,6 +65,16 @@ class AddableUserItem(
                 getNotificationsList(anotherUserDatabaseReference)
 
             ib.setOnClickListener {
+                val lManager = rv?.layoutManager as LinearLayoutManager?
+                val pos = lManager?.findFirstCompletelyVisibleItemPosition()
+
+                preferences = context.getSharedPreferences(APP_POSITIONS, Context.MODE_PRIVATE)
+                pos?.let {
+                    preferences?.edit()
+                        ?.putInt(PREF_ADD_FRIEND_POS, it)
+                        ?.apply()
+                }
+
                 if (!friendsList.contains(userIdentifier)) {
                     friendsList.add(userIdentifier)
                     currentUser?.uid?.let { currentUserId -> notificationsList.add(currentUserId) }

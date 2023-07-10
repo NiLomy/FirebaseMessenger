@@ -125,6 +125,7 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
                     }
                 }
                 initAdapter()
+                rvPos?.let {binding?.rvUser?.layoutManager?.scrollToPosition(it)}
             }
 
             override fun onCancelled(error: DatabaseError) {
