@@ -64,10 +64,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 applyChangesButton.isEnabled = true
             }
 
-            changeEmailPassword.setOnClickListener {
-                val frag = SettingsDialogFragment()
-                frag.show(parentFragmentManager, "data_change")
-            }
+
         }
     }
 
