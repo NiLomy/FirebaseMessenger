@@ -35,22 +35,21 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var rvPos : Int? = null
     private var preferences : SharedPreferences? = null
     private val APP_POSITIONS = "positions"
+    private val PREF_MESSAGE_POS = "messagePos"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences = activity?.getSharedPreferences(APP_POSITIONS, Context.MODE_PRIVATE)
-        rvPos = preferences?.getInt("messagePos", 0)
+        rvPos = preferences?.getInt(PREF_MESSAGE_POS, 0)
     }
 
     override fun onPause() {
         super.onPause()
         val layoutManager = binding?.rvUser?.layoutManager as LinearLayoutManager
         val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
-        Toast.makeText(context, pos.toString(), Toast.LENGTH_SHORT).show()
         preferences?.edit()
-            ?.putInt("messagePos", pos)
+            ?.putInt(PREF_MESSAGE_POS, pos)
             ?.apply()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

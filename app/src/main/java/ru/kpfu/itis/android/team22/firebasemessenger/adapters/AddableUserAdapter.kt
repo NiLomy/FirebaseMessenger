@@ -18,6 +18,7 @@ class AddableUserAdapter(
     private val userId: String,
     private val currentUser: FirebaseUser?,
     private val context: Context,
+    private val rv : RecyclerView?
 ) : RecyclerView.Adapter<AddableUserItem>() {
 
     override fun onCreateViewHolder(
@@ -34,6 +35,7 @@ class AddableUserAdapter(
         userId = userId,
         currentUser = currentUser,
         context = context,
+        rv = rv
     )
 
     override fun onBindViewHolder(holder: AddableUserItem, position: Int) {

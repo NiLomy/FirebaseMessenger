@@ -51,5 +51,6 @@
     <string name="cancel">Cancel</string>
     <string name="clear_all">Clear all</string>
     <string name="notifications">Notifications</string>
+    <string name="file_positions">positions</string>
     <string name="you_have_new_message">You have a new message!</string>
 </resources>
