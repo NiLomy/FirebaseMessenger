@@ -81,10 +81,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val context = requireContext()
-                val user = snapshot.getValue(User::class.java)
-                binding?.tvUserName?.text = user?.userName
-                binding?.ivProfileImage?.let { IconUploader.loadDrawableImage(context, user, it) }
+                if (isAdded) {
+                    val context = requireContext()
+                    val user = snapshot.getValue(User::class.java)
+                    binding?.tvUserName?.text = user?.userName
+                    binding?.ivProfileImage?.let { IconUploader.loadDrawableImage(context, user, it) }
+                }
             }
         })
     }
