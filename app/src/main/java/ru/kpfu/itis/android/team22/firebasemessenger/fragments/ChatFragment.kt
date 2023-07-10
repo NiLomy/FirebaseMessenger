@@ -111,7 +111,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                         }
                     }
                     etSendMsg.setText("")
-                    val title = getString(R.string.messages)
+                    val title = getString(R.string.you_have_new_message)
                     val msg = ": $message"
                     userID?.let { userId ->
                         NotificationSender.generateMessageNotification(

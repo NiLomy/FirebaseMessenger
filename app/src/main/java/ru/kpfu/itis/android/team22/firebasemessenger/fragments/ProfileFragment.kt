@@ -82,7 +82,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
 
             fabSettings.setOnClickListener {
-                findNavController().navigate(R.id.nav_from_container_to_settings)
+                val frag = SettingsDialogFragment()
+                frag.show(parentFragmentManager, "data_change")
             }
 
             btnLogOut.setOnClickListener {
