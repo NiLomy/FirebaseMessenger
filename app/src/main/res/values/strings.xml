@@ -52,4 +52,5 @@
     <string name="cancel">Cancel</string>
     <string name="clear_all">Clear all</string>
     <string name="notifications">Notifications</string>
+    <string name="file_positions">positions</string>
 </resources>

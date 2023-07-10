@@ -1,6 +1,7 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -34,6 +36,27 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var userID: String? = null
     private var adapter: MessageAdapter? = null
     private var mMessageList = ArrayList<Message>()
+
+    private var rvPos : Int? = null
+    private var preferences : SharedPreferences? = null
+    private val APP_POSITIONS = "positions"
+    private val PREF_CHAT_POS = "chatPos"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        preferences = activity?.getSharedPreferences(APP_POSITIONS, Context.MODE_PRIVATE)
+        rvPos = preferences?.getInt(PREF_CHAT_POS, 0)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val layoutManager = binding?.rvMessages?.layoutManager as LinearLayoutManager
+        val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
+        preferences?.edit()
+            ?.putInt(PREF_CHAT_POS, pos)
+            ?.apply()
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -200,6 +223,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     }
                 }
                 initAdapter()
+                rvPos?.let { binding?.rvMessages?.layoutManager?.scrollToPosition(it) }
             }
 
             override fun onCancelled(error: DatabaseError) {

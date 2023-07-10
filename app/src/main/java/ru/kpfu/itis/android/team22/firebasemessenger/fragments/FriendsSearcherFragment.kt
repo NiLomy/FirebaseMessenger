@@ -102,6 +102,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 searchText = newText
+                newText?.let { filter(it) }
                 return false
             }
         })
