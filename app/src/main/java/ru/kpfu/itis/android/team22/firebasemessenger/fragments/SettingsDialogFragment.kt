@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -81,7 +80,7 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
                 if (successful) {
                     showToast("Successfully changed!")
                     dismiss()
-                } else showToast("Something went wrong...")
+                }
             }
         }
     }
@@ -137,7 +136,7 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
             return false
         }
         if (password.length < 6) {
-            showToast(getString(R.string.password_length_is_to_short))
+            showToast(getString(R.string.password_length_is_too_short))
             return false
         }
         if (confirmPassword.isEmpty()) {
@@ -161,9 +160,13 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
         currentUser?.let { currentUser ->
             if (et.text.isNotEmpty()) {
                 try {
-                    // TODO: проверять, является ли вообще почтой
-                    currentUser.updateEmail(et.text.toString())
-                        .addOnCompleteListener { task -> if (!task.isSuccessful) fail = true }
+                    if (EMAIL_VALIDATION.toRegex().matches(et.text.toString())) {
+                        currentUser.updateEmail(et.text.toString())
+                            .addOnCompleteListener { task -> if (!task.isSuccessful) fail = true }
+                    } else {
+                        showToast("This is invalid email")
+                        fail = true
+                    }
                 } catch (e: FirebaseAuthUserCollisionException) {
                     showToast("This email is already used")
                     fail = true
@@ -178,5 +181,7 @@ class SettingsDialogFragment : DialogFragment(R.layout.fragment_settings_dialog)
         private const val NO_EMAIL_CODE = 1
         private const val FAIL_EMAIL_CODE = -1
         private const val SUCCESS_EMAIL_CODE = 0
+        private const val EMAIL_VALIDATION =
+            "(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
     }
 }

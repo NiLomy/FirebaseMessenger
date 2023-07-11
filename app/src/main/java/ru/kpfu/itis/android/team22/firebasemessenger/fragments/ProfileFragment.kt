@@ -231,9 +231,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     }
                 }
                 if (list.isEmpty()) {
-                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notifications,0,0, 0)
+                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_notifications,
+                        0,
+                        0,
+                        0
+                    )
                 } else {
-                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_has_notifications,0,0, 0)
+                    binding?.ibNotifications?.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_has_notifications,
+                        0,
+                        0,
+                        0
+                    )
                 }
             }
 

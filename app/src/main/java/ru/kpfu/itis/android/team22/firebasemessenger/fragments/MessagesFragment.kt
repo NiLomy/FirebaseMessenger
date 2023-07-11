@@ -27,15 +27,11 @@ import ru.kpfu.itis.android.team22.firebasemessenger.entities.User
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private var binding: FragmentMessagesBinding? = null
     private var context: Context? = null
-    // TODO: после регистрации нового пользователя вылетает приложение, проблема с binding'ом
     private var adapter: UserAdapter? = null
     private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
-
-    private var rvPos : Int? = null
-    private var preferences : SharedPreferences? = null
-    private val APP_POSITIONS = "positions"
-    private val PREF_MESSAGE_POS = "messagePos"
+    private var rvPos: Int? = null
+    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,5 +166,10 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    companion object {
+        private const val APP_POSITIONS = "positions"
+        private const val PREF_MESSAGE_POS = "messagePos"
     }
 }

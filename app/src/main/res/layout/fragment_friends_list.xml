@@ -22,44 +22,43 @@
             android:layout_height="80dp"
             android:elevation="@dimen/cardview_default_elevation"
             android:fontFamily="@font/roboto_black"
+            android:paddingStart="32dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="16dp"
             android:text="@string/friends"
             android:textColor="@color/colorWhite"
             android:textSize="27dp"
             android:translationZ="@dimen/cardview_compat_inset_shadow"
-            android:paddingStart="32dp"
-            android:paddingTop="32dp"
-            android:paddingBottom="16dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button_find_friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/find_friends"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/roboto_light"
+            android:text="@string/find_friends"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/custom_input"
         android:elevation="5dp"
         android:iconifiedByDefault="false"
         android:queryHint="Enter friend's name"
-        android:background="@drawable/custom_input"
-        android:layout_margin="5dp"
-        app:queryBackground="@null"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/friends_list_action_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/friends_list_action_bar"
+        app:queryBackground="@null" />
 
     <TextView
         android:id="@+id/tv_no_results"
@@ -76,11 +75,11 @@
         android:id="@+id/rv_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="15dp"
         android:clipToPadding="false"
-        android:paddingBottom="96dp"
+        android:paddingBottom="146dp"
         android:scrollbars="vertical"
-        android:layout_marginTop="5dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -100,8 +99,7 @@
         android:elevation="@dimen/cardview_default_elevation"
         android:src="@drawable/arrow_back_32"
         android:translationZ="@dimen/cardview_compat_inset_shadow"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.781" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -69,7 +69,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             return
         }
         if (password.length < 6) {
-            showSnackbar(getString(R.string.password_length_is_to_short))
+            showSnackbar(getString(R.string.password_length_is_too_short))
             return
         }
         if (confirmPassword.isEmpty()) {

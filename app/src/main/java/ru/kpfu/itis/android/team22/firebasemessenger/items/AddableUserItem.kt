@@ -30,14 +30,11 @@ class AddableUserItem(
     private val userId: String,
     private val currentUser: FirebaseUser?,
     private val context: Context,
-    private val rv : RecyclerView?
+    private val rv: RecyclerView?
 ) : RecyclerView.ViewHolder(binding.root) {
+    private var preferences: SharedPreferences? = null
     private val options: RequestOptions = RequestOptions
         .diskCacheStrategyOf(DiskCacheStrategy.ALL)
-
-    private var preferences : SharedPreferences? = null
-    private val APP_POSITIONS = "positions"
-    private val PREF_ADD_FRIEND_POS = "addFriendsPos"
 
     fun onBind(user: User) {
         binding.run {
@@ -152,5 +149,10 @@ class AddableUserItem(
                 list.add(id)
             }
         }
+    }
+
+    companion object {
+        private const val APP_POSITIONS = "positions"
+        private const val PREF_ADD_FRIEND_POS = "addFriendsPos"
     }
 }

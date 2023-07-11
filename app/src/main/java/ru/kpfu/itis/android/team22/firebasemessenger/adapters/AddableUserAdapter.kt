@@ -18,7 +18,7 @@ class AddableUserAdapter(
     private val userId: String,
     private val currentUser: FirebaseUser?,
     private val context: Context,
-    private val rv : RecyclerView?
+    private val rv: RecyclerView?
 ) : RecyclerView.Adapter<AddableUserItem>() {
 
     override fun onCreateViewHolder(

@@ -30,18 +30,14 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     private var adapter: AddableUserAdapter? = null
     private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
-
-    private var rvPos : Int? = null
-    private var preferences : SharedPreferences? = null
-    private val APP_POSITIONS = "positions"
-    private val PREF_FRIEND_SRCH_POS = "friendsSearchPos"
-    private val PREF_ADD_FRIEND_POS = "addFriendsPos"
+    private var rvPos: Int? = null
+    private var preferences: SharedPreferences? = null
     private var justEntered = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences = activity?.getSharedPreferences(APP_POSITIONS, Context.MODE_PRIVATE)
-        rvPos = preferences?.getInt(PREF_FRIEND_SRCH_POS, 0)
+        rvPos = preferences?.getInt(PREF_FRIEND_SEARCH_POS, 0)
     }
 
     override fun onPause() {
@@ -49,7 +45,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
         val layoutManager = binding?.rvUser?.layoutManager as LinearLayoutManager
         val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
         preferences?.edit()
-            ?.putInt(PREF_FRIEND_SRCH_POS, pos)
+            ?.putInt(PREF_FRIEND_SEARCH_POS, pos)
             ?.apply()
     }
 
@@ -94,7 +90,7 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
                     }
                 } else {
                     val pos = preferences?.getInt(PREF_ADD_FRIEND_POS, 0)
-                    pos?.let {binding?.rvUser?.layoutManager?.scrollToPosition(it)}
+                    pos?.let { binding?.rvUser?.layoutManager?.scrollToPosition(it) }
                 }
             }
 
@@ -161,5 +157,11 @@ class FriendsSearcherFragment : Fragment(R.layout.fragment_friends_searcher) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    companion object {
+        private const val APP_POSITIONS = "positions"
+        private const val PREF_FRIEND_SEARCH_POS = "friendsSearchPos"
+        private const val PREF_ADD_FRIEND_POS = "addFriendsPos"
     }
 }
