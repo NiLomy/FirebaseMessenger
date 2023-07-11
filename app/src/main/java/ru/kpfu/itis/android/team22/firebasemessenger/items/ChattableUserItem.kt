@@ -18,7 +18,6 @@ class ChattableUserItem(
     private val controller: NavController,
     private val userId: String,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     private val options: RequestOptions = RequestOptions
         .diskCacheStrategyOf(DiskCacheStrategy.ALL)
 

@@ -19,7 +19,7 @@
     <string name="user_name_must_be_non_empty">Имя пользователя не должно быть пустым</string>
     <string name="email_must_be_non_empty">Адрес электронной почты не должен быть пустым</string>
     <string name="password_must_be_non_empty">Пароль не должен быть пустым</string>
-    <string name="password_length_is_to_short">Пароль должен содержать не менее 6 символов</string>
+    <string name="password_length_is_too_short">Пароль должен содержать не менее 6 символов</string>
     <string name="confirm_password">Подтвердите пароль!</string>
     <string name="passwords_dont_match">Пароли не совпадают…</string>
     <string name="check_email">Пожалуйста, проверьте введенный адрес электронной почты</string>
@@ -52,5 +52,6 @@
     <string name="cancel">Отмена</string>
     <string name="clear_all">Очистить все</string>
     <string name="notifications">Уведомления</string>
+    <string name="file_positions">позиции</string>
     <string name="you_have_new_message">У тебя новое сообщение!</string>
 </resources>

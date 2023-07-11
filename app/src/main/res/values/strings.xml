@@ -18,7 +18,7 @@
     <string name="user_name_must_be_non_empty">User name must be non-empty</string>
     <string name="email_must_be_non_empty">Email must be non-empty</string>
     <string name="password_must_be_non_empty">Password must be non-empty</string>
-    <string name="password_length_is_to_short">Password must be longer than 6 characters</string>
+    <string name="password_length_is_too_short">Password must be longer than 6 characters</string>
     <string name="confirm_password">Confirm your password!</string>
     <string name="passwords_dont_match">Passwords don\'t match…</string>
     <string name="check_email">Please check your email input</string>

@@ -31,7 +31,6 @@ class NotificationItem(
     private val context: Context,
     private val dialog: Dialog,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     private val options: RequestOptions = RequestOptions
         .diskCacheStrategyOf(DiskCacheStrategy.ALL)
 

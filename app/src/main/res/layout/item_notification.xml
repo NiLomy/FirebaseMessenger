@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,29 +10,28 @@
         android:id="@+id/iv_sender_img"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        tools:background="@drawable/ic_launcher_background"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        tools:background="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/tv_sender_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/iv_sender_img"
         android:fontFamily="@font/roboto_medium"
-        tools:text="Sender msg"
         android:textSize="14sp"
-        android:layout_toEndOf="@id/iv_sender_img" />
+        tools:text="Sender msg" />
 
     <TextView
         android:id="@+id/tv_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tv_sender_name"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
         android:layout_toEndOf="@id/iv_sender_img"
-        android:layout_below="@id/tv_sender_name"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="11sp"
         tools:text="Message" />
-
 </RelativeLayout>

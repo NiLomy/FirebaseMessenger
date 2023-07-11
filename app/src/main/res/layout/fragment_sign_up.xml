@@ -12,8 +12,8 @@
         android:id="@+id/tv_anchor"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="120dp" />
+        android:layout_marginTop="120dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_background"
@@ -28,8 +28,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@mipmap/ic_launcher"
         android:layout_marginTop="15dp"
+        android:background="@mipmap/ic_launcher"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,14 +68,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/custom_name"
-            android:fontFamily="@font/roboto_light"
             android:drawablePadding="12dp"
+            android:fontFamily="@font/roboto_light"
             android:hint="@string/enter_name"
             android:inputType="text"
             android:padding="12dp"
-            android:textColor="@color/colorText"
-            />
-
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -96,13 +94,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/custom_mail"
-            android:fontFamily="@font/roboto_light"
             android:drawablePadding="12dp"
+            android:fontFamily="@font/roboto_light"
             android:hint="@string/enter_email"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:textColor="@color/colorText" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -113,10 +110,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:hintEnabled="false"
-        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til2">
+        app:layout_constraintTop_toBottomOf="@id/til2"
+        app:passwordToggleEnabled="true">
 
         <EditText
             android:id="@+id/et_password"
@@ -124,13 +121,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/custom_lock"
-            android:fontFamily="@font/roboto_light"
             android:drawablePadding="12dp"
+            android:fontFamily="@font/roboto_light"
             android:hint="@string/enter_password"
             android:inputType="textPassword"
             android:padding="12dp"
             android:textColor="@color/colorText" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -140,11 +136,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:passwordToggleEnabled="true"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til3">
+        app:layout_constraintTop_toBottomOf="@id/til3"
+        app:passwordToggleEnabled="true">
 
         <EditText
             android:id="@+id/et_confirm_password"
@@ -152,16 +148,13 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/custom_lock"
-            android:fontFamily="@font/roboto_light"
             android:drawablePadding="12dp"
+            android:fontFamily="@font/roboto_light"
             android:hint="@string/enter_confirm_password"
             android:inputType="textPassword"
             android:padding="12dp"
             android:textColor="@color/colorText" />
-
-
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_sign_up"

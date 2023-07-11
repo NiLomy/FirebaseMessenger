@@ -28,11 +28,8 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     private var context: Context? = null
     private var searchText: String? = null
     private val userList: ArrayList<User> = ArrayList()
-
-    private var rvPos : Int? = null
-    private var preferences : SharedPreferences? = null
-    private val APP_POSITIONS = "positions"
-    private val PREF_FRIEND_LST_POS = "friendsListPos"
+    private var rvPos: Int? = null
+    private var preferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,7 +122,7 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
                     }
                 }
                 initAdapter()
-                rvPos?.let {binding?.rvUser?.layoutManager?.scrollToPosition(it)}
+                rvPos?.let { binding?.rvUser?.layoutManager?.scrollToPosition(it) }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -174,5 +171,10 @@ class FriendsListFragment : Fragment(R.layout.fragment_friends_list) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    companion object {
+        private const val APP_POSITIONS = "positions"
+        private const val PREF_FRIEND_LST_POS = "friendsListPos"
     }
 }

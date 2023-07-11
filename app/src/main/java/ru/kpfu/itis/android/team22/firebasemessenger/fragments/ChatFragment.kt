@@ -36,12 +36,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var userID: String? = null
     private var adapter: MessageAdapter? = null
     private var mMessageList = ArrayList<Message>()
-
-    private var rvPos : Int? = null
-    private var preferences : SharedPreferences? = null
-    private val APP_POSITIONS = "positions"
-    private val PREF_CHAT_POS = "chatPos"
-
+    private var rvPos: Int? = null
+    private var preferences: SharedPreferences? = null
     private var justEntered = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +60,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentChatBinding.bind(view)
         currentUser = FirebaseAuth.getInstance().currentUser
-        rvPos?.let{binding?.rvMessages?.layoutManager?.scrollToPosition(it)}
+        rvPos?.let { binding?.rvMessages?.layoutManager?.scrollToPosition(it) }
 
         setStatusBarColor()
         initFirebaseToken()
@@ -99,7 +95,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun setUserInfo() {
         userID = arguments?.getString("id")
-        val reference = userID?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
+        val reference =
+            userID?.let { FirebaseDatabase.getInstance().getReference("Users").child(it) }
 
         reference?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -111,7 +108,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     val context = requireContext()
                     val user = snapshot.getValue(User::class.java)
                     binding?.tvUserName?.text = user?.userName
-                    binding?.ivProfileImage?.let { IconUploader.loadDrawableImage(context, user, it) }
+                    binding?.ivProfileImage?.let {
+                        IconUploader.loadDrawableImage(
+                            context,
+                            user,
+                            it
+                        )
+                    }
                 }
             }
         })
@@ -155,7 +158,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             }
 
             ivProfileImage.setOnClickListener {
-                val bundle: Bundle = bundleOf(getString(R.string.user_id_tag) to userID, "from" to "chat")
+                val bundle: Bundle =
+                    bundleOf(getString(R.string.user_id_tag) to userID, "from" to "chat")
                 findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
             }
         }
@@ -230,7 +234,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 }
                 initAdapter()
                 if (justEntered) {
-                    rvPos?. let {binding?.rvMessages?.layoutManager?.scrollToPosition(it)}
+                    rvPos?.let { binding?.rvMessages?.layoutManager?.scrollToPosition(it) }
                     justEntered = false
                 } else {
                     binding?.rvMessages?.layoutManager?.scrollToPosition(pos)
@@ -262,5 +266,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         super.onDestroy()
         binding = null
         adapter = null
+    }
+
+    companion object {
+        private const val APP_POSITIONS = "positions"
+        private const val PREF_CHAT_POS = "chatPos"
     }
 }
