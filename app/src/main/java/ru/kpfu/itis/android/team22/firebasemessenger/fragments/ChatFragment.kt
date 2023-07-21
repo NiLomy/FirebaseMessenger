@@ -1,8 +1,12 @@
 package ru.kpfu.itis.android.team22.firebasemessenger.fragments
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
@@ -14,12 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.storage.FirebaseStorage
 import ru.kpfu.itis.android.team22.firebasemessenger.R
 import ru.kpfu.itis.android.team22.firebasemessenger.adapters.MessageAdapter
 import ru.kpfu.itis.android.team22.firebasemessenger.databinding.FragmentChatBinding
@@ -131,7 +137,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 } else {
                     currentUser?.uid?.let { currentUserId ->
                         userID?.let { userId ->
-                            sendMessage(
+                            sendTextMessage(
                                 currentUserId,
                                 userId,
                                 message,
@@ -162,10 +168,78 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     bundleOf(getString(R.string.user_id_tag) to userID, "from" to "chat")
                 findNavController().navigate(R.id.nav_from_chat_to_user_profile, bundle)
             }
+
+            btnSendImg.setOnClickListener {
+                binding?.btnSendImg?.isEnabled = false
+                openGallery()
+            }
         }
     }
 
-    private fun sendMessage(senderId: String, receiverId: String, message: String, time: String) {
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            val context = requireContext()
+            val msgImageUri = data.data!!
+            currentUser?.uid?.let { currentUserId ->
+                userID?.let { userId ->
+                    sendImageMessage(
+                        currentUserId,
+                        userId,
+                        msgImageUri,
+                        LocalDateTime.now().toString()
+                    )
+                }
+            }
+        }
+        binding?.btnSendImg?.isEnabled = true
+    }
+
+    private fun sendImageMessage(senderId: String, receiverId: String, msgImageUri: Uri, time: String) {
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
+        val hashMap: HashMap<String, String> = HashMap()
+
+        hashMap["senderID"] = senderId
+        hashMap["receiverID"] = receiverId
+        hashMap["time"] = time
+        hashMap["msgType"] = "image"
+
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val userUid = currentUser?.uid
+        val avatarRef = storageRef.child("chat_images/$userUid${LocalDateTime.now()}.jpg")
+
+        makeToast("Sending image...")
+        avatarRef.putFile(msgImageUri)
+            .addOnSuccessListener {
+                avatarRef.downloadUrl
+                    .addOnSuccessListener { downloadUri ->
+                        val url = downloadUri.toString()
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setPhotoUri(Uri.parse(url))
+                            .build()
+
+                        currentUser?.updateProfile(profileUpdates)
+
+                        hashMap["message"] = url
+                        reference.child("Messages").push().setValue(hashMap)
+                        updateChatsLists(senderId, receiverId)
+                        makeToast("Success!")
+                    }
+            }.addOnFailureListener {
+                makeToast("Something went wrong...")
+            }.addOnFailureListener {
+                makeToast("Failed to update...")
+            }
+    }
+
+    private fun sendTextMessage(senderId: String, receiverId: String, message: String, time: String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().reference
         val hashMap: HashMap<String, String> = HashMap()
 
@@ -173,6 +247,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         hashMap["receiverID"] = receiverId
         hashMap["message"] = message
         hashMap["time"] = time
+        hashMap["msgType"] = "text"
 
         reference.child("Messages").push().setValue(hashMap)
         updateChatsLists(senderId, receiverId)
@@ -268,8 +343,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         adapter = null
     }
 
+    private fun makeToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
         private const val APP_POSITIONS = "positions"
         private const val PREF_CHAT_POS = "chatPos"
+        private const val PICK_IMAGE_REQUEST = 1
     }
 }

@@ -4,5 +4,6 @@ data class Message(
     var senderID: String = "",
     var receiverID: String = "",
     var message: String = "",
-    var time: String = ""
+    var time: String = "",
+    var type: String = ""
 )
